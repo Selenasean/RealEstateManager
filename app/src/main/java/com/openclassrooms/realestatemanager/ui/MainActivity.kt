@@ -26,7 +26,8 @@ class MainActivity : AppCompatActivity() {
     private fun setRecyclerView() {
          val recyclerView: RecyclerView = binding.recyclerView
         recyclerView.setLayoutManager(LinearLayoutManager(this))
-        val adapter = MainAdapter(realEstateList)
+        val adapter = MainAdapter()
+        adapter.submitList(realEstateList)
         recyclerView.adapter = adapter
     }
 

@@ -11,7 +11,8 @@
         android:id="@+id/recycler_view"
         android:layout_width="280dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start" />
+        android:layout_gravity="start"
+        tools:listitem="@layout/realestate_item"/>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_detail_container"
