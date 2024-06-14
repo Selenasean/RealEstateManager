@@ -1,7 +1,7 @@
 package com.openclassrooms.realestatemanager.domain
 
 data class RealEstate(
-    val id: Int,
+    val id: String,
     val title: String,
     val priceTag: Int,
 
