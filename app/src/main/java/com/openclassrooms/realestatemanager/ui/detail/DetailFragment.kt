@@ -1,14 +1,13 @@
-package com.openclassrooms.realestatemanager.ui
+package com.openclassrooms.realestatemanager.ui.detail
 
-import android.content.Context
 import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
+import com.openclassrooms.realestatemanager.domain.RealEstate
 
 class DetailFragment : Fragment() {
 
@@ -17,6 +16,7 @@ class DetailFragment : Fragment() {
     }
 
     private val viewModel: DetailViewModel by viewModels()
+
 
 
     override fun onCreateView(
