@@ -5,27 +5,27 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.openclassrooms.realestatemanager.data.model.RealEstate
+import com.openclassrooms.realestatemanager.data.model.RealEstateDb
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RealEstateDao {
 
     @Insert
-    fun createRealEstate(realEstate: RealEstate)
+    fun createRealEstate(realEstate: RealEstateDb) : Long
 
     @Delete
-    fun deleteRealEstate(realEstate: RealEstate)
+    fun deleteRealEstate(realEstate: RealEstateDb)
 
     @Update
-    fun updateRealEstate(realEstate: RealEstate)
+    fun updateRealEstate(realEstate: RealEstateDb)
 
     //TODO: update state sold etcc
 
     @Query("SELECT * FROM realEstates")
-    fun getAllRealEstates(): Flow<List<RealEstate>>
+    fun getAllRealEstates(): Flow<List<RealEstateDb>>
 
     @Query("SELECT * FROM realEstates WHERE uid = :realEstateId")
-    fun getOneRealEstate(realEstateId: Int): Flow<RealEstate>
+    fun getOneRealEstate(realEstateId: Long): Flow<RealEstateDb>
 
 }

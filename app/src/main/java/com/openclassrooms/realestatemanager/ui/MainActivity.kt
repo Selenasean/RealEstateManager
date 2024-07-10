@@ -3,12 +3,8 @@ package com.openclassrooms.realestatemanager.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding
-import com.openclassrooms.realestatemanager.domain.RealEstate
-import com.openclassrooms.realestatemanager.ui.detail.DetailFragment
-import com.openclassrooms.realestatemanager.ui.list.ListEstateFragment
+import com.openclassrooms.realestatemanager.ui.list_and_details.ListEstateFragment
 
 class MainActivity : AppCompatActivity() {
 

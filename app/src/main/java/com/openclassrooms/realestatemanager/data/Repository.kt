@@ -1,39 +1,44 @@
 package com.openclassrooms.realestatemanager.data
 
+import com.openclassrooms.realestatemanager.data.model.RealEstateDb
 import com.openclassrooms.realestatemanager.domain.RealEstate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
-class Repository {
+class Repository(private val appdatabase : AppDataBase) {
 
-    private val realEstateList: List<RealEstate> = listOf(
-        RealEstate("0", "Pistache", 1000),
-        RealEstate("1", "Fraise", 1100),
-        RealEstate("2", "Ananas", 2000),
-        RealEstate("3", "Fruit de la Passion", 12000),
-        RealEstate("4", "Pomme", 800),
-        RealEstate("5", "Durian", 9000)
-    )
 
-    suspend fun getList(): List<RealEstate>{
+    /**
+     * Get all RealEstates
+     */
+    fun getAllRealEstates() : Flow<List<RealEstate>>{
 
-        return realEstateList
+        return  appdatabase.realEstateDao().getAllRealEstates().map {realEstateDbs ->
+            realEstateDbs.map {
+                RealEstate(
+                    id = it.uid,
+                    title = it.name,
+                    priceTag = it.price,
+                    type = it.type
+                )
+            }
+        }
     }
 
-    suspend fun getOne(id: String): RealEstate?{
-        return realEstateList.find { realEstate -> realEstate.id == id }
+    /**
+     * Get One RealEstates
+     */
+    fun getOneRealEstates(realEstateId : Long) : Flow<RealEstate>{
+        return appdatabase.realEstateDao().getOneRealEstate(realEstateId).map{ realEstateDb ->
+            RealEstate(
+                realEstateDb.uid,
+                realEstateDb.name,
+                realEstateDb.price,
+                realEstateDb.type
+            )
+        }
+
     }
-
-     fun getAllRealEstates(): Flow<List<RealEstate>> {
-
-        return flow { emit(realEstateList) }
-    }
-
-    fun getOneRealEstate(id: String): Flow<RealEstate?>{
-        val estate = realEstateList.find { realEstate -> realEstate.id == id }
-        return flow { emit(estate) }
-    }
-
-
 
 }

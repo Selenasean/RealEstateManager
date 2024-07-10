@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "photos",
     foreignKeys = [ForeignKey(
-        entity = RealEstate::class,
+        entity = RealEstateDb::class,
         parentColumns = ["uid"],
         childColumns = ["realEstateId"]
     )]

@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui
+package com.openclassrooms.realestatemanager.ui.list_and_details
 
 
 import android.view.LayoutInflater
@@ -8,12 +8,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
+import com.openclassrooms.realestatemanager.data.model.RealEstateDb
 import com.openclassrooms.realestatemanager.databinding.RealestateItemBinding
 import com.openclassrooms.realestatemanager.domain.RealEstate
 
 
-class MainAdapter(private val clickedListener: (id: String) -> Unit) :
-    ListAdapter<RealEstate, MainAdapter.ViewHolder>(
+class ListAdapter(private val clickedListener: (id: Long) -> Unit) :
+    ListAdapter<RealEstate, com.openclassrooms.realestatemanager.ui.list_and_details.ListAdapter.ViewHolder>(
         DIFF_CALLBACK
     ) {
 
