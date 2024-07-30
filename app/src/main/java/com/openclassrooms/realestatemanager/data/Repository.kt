@@ -19,6 +19,7 @@ class Repository(private val appdatabase : AppDataBase) {
                 RealEstate(
                     id = it.uid,
                     title = it.name,
+                    city = it.city,
                     priceTag = it.price,
                     type = it.type
                 )
@@ -34,6 +35,7 @@ class Repository(private val appdatabase : AppDataBase) {
             RealEstate(
                 realEstateDb.uid,
                 realEstateDb.name,
+                realEstateDb.city,
                 realEstateDb.price,
                 realEstateDb.type
             )

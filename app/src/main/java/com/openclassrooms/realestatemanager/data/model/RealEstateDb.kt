@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.data.model
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
 
 @Entity(tableName = "realEstates",
     foreignKeys = [ForeignKey(
@@ -13,18 +14,19 @@ import androidx.room.PrimaryKey
 )
 data class RealEstateDb(
 
-    @PrimaryKey(autoGenerate = true) val uid: Long = 0 ,
+    @PrimaryKey(autoGenerate = true) val uid: Long = 0,
 
     val type: BuildingType,
     val price: Float,
     val name : String,
-//    val surface: Int,
-//    val rooms: Int,
-//    val description: String,
-//    val address: String,
-//    val nearbyBusiness : String?,
-//    val status: Status,
-//    val dateCreated: LocalDateTime,
-//    val dateOfSale: LocalDateTime?,
+    val surface: Int,
+    val rooms: Int,
+    val description: String,
+    val address: String,
+    val city : String,
+    val nearbyBusiness : String?,
+    val status: Status,
+    val dateCreated: LocalDateTime,
+    val dateOfSale: LocalDateTime?,
     val realEstateAgentId: Long
 )

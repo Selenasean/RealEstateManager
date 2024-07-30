@@ -53,6 +53,9 @@ class ListAdapter(private val clickedListener: (id: Long) -> Unit) :
         fun bind(realEstate: RealEstate) {
             //set text
             binding.nameTv.text = realEstate.title
+            binding.cityTv.text = realEstate.city
+            binding.buildingTypeTv.text = realEstate.type.name
+            binding.priceTv.text = realEstate.priceTag.toString().plus("€")
         }
 
         init {

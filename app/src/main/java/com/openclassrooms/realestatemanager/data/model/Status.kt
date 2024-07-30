@@ -1,9 +1,9 @@
 package com.openclassrooms.realestatemanager.data.model
 
-enum class Status(state: String) {
-    SOLD("Sold"),
-    ON_SALE("Currently on sale"),
-    FOR_SALE("For sale")
-}
+import com.openclassrooms.realestatemanager.R
 
-//TODO : trad des strings
+enum class Status(state: String) {
+    SOLD(R.string.sold.toString()),
+    ON_SALE(R.string.on_sale.toString()),
+    FOR_SALE(R.string.for_sale.toString())
+}

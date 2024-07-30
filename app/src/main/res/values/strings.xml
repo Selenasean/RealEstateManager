@@ -1,3 +1,15 @@
 <resources>
+    //APP NAME
     <string name="app_name">Real Estate Manager</string>
+
+    //FOR BUILDING TYPE
+    <string name="house">House</string>
+    <string name="apartment">Apartment</string>
+    <string name="vila">Vila</string>
+
+    //FOR STATUS
+    <string name="sold">Sold</string>
+    <string name="on_sale">Currently on sale</string>
+    <string name="for_sale">For sale</string>
+
 </resources>
