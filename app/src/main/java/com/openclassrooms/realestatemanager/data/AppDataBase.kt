@@ -11,8 +11,7 @@ import com.openclassrooms.realestatemanager.data.dao.PhotoDao
 import com.openclassrooms.realestatemanager.data.dao.RealEstateAgentDao
 import com.openclassrooms.realestatemanager.data.dao.RealEstateDao
 import com.openclassrooms.realestatemanager.data.model.BuildingType
-import com.openclassrooms.realestatemanager.data.model.Converters
-import com.openclassrooms.realestatemanager.data.model.Photo
+import com.openclassrooms.realestatemanager.data.model.PhotoDb
 import com.openclassrooms.realestatemanager.data.model.RealEstateDb
 import com.openclassrooms.realestatemanager.data.model.RealEstateAgent
 import com.openclassrooms.realestatemanager.data.model.Status
@@ -23,11 +22,11 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 
 @Database(
-    entities = [Photo::class, RealEstateDb::class, RealEstateAgent::class],
+    entities = [PhotoDb::class, RealEstateDb::class, RealEstateAgent::class],
     version = 1,
     exportSchema = false
 )
-@TypeConverters(Converters::class)
+@TypeConverters(LocalDateTimeConverter::class)
 abstract class AppDataBase : RoomDatabase() {
 
     //DAO
@@ -60,10 +59,12 @@ abstract class AppDataBase : RoomDatabase() {
 
             applicationScope.launch {
                appDataBase.withTransaction {
+                   //fake agent
                    val agentId1 = appDataBase.realEstateAgentDao().createAgent(RealEstateAgent(name = "Patrick"))
                    val agentId2 = appDataBase.realEstateAgentDao().createAgent(RealEstateAgent(name = "Didier"))
                    val agentId3 = appDataBase.realEstateAgentDao().createAgent(RealEstateAgent(name = "Corinne"))
-                   appDataBase.realEstateDao().createRealEstate(
+                   //fake estate and associated photos
+                   val estateId1 = appDataBase.realEstateDao().createRealEstate(
                        RealEstateDb(
                            type = BuildingType.HOUSE,
                            price = 23000F,
@@ -78,6 +79,12 @@ abstract class AppDataBase : RoomDatabase() {
                            dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)),
                            dateOfSale = null,
                            realEstateAgentId = agentId1
+                       )
+                   )
+                   appDataBase.photoDao().createPhoto(
+                       PhotoDb(
+                           realEstateId = estateId1,
+                           urlPhoto = "https://images.unsplash.com/photo-1504615755583-2916b52192a3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8aG91c2V8ZW58MHx8MHx8fDA%3D"
                        )
                    )
                    appDataBase.realEstateDao().createRealEstate(

@@ -1,9 +1,9 @@
-package com.openclassrooms.realestatemanager.data.model
+package com.openclassrooms.realestatemanager.data
 
 import androidx.room.TypeConverter
 import java.time.LocalDateTime
 
-class Converters {
+class LocalDateTimeConverter {
     @TypeConverter
     fun fromTimestamp(value: String?): LocalDateTime? {
         return value?.let { LocalDateTime.parse(it) }
@@ -13,4 +13,7 @@ class Converters {
     fun dateToTimestamp(date: LocalDateTime?): String? {
         return date?.toString()
     }
+
+
+    //TODO : switch localdatetime en instant
 }

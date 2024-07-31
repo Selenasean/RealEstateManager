@@ -8,4 +8,5 @@ data class RealEstate(
     val city : String,
     val priceTag: Float,
     val type: BuildingType,
+    val photos : List<Photo>
 )

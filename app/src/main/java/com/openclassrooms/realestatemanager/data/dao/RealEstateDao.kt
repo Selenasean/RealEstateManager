@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.openclassrooms.realestatemanager.data.model.PhotoDb
 import com.openclassrooms.realestatemanager.data.model.RealEstateDb
 import kotlinx.coroutines.flow.Flow
 
@@ -20,12 +21,13 @@ interface RealEstateDao {
     @Update
     fun updateRealEstate(realEstate: RealEstateDb)
 
+    @Query("SELECT * FROM realEstates INNER JOIN photos ON realEstates.uid = photos.realEstateId")
+    fun getAllRealEstates(): Flow<Map<RealEstateDb, List<PhotoDb>>>
+
+
+    @Query("SELECT * FROM realEstates INNER JOIN photos ON realEstates.uid = photos.realEstateId WHERE uid = :realEstateId ")
+    fun getOneRealEstate(realEstateId: Long): Flow<Map<RealEstateDb, List<PhotoDb>>>
+
     //TODO: update state sold etcc
-
-    @Query("SELECT * FROM realEstates")
-    fun getAllRealEstates(): Flow<List<RealEstateDb>>
-
-    @Query("SELECT * FROM realEstates WHERE uid = :realEstateId")
-    fun getOneRealEstate(realEstateId: Long): Flow<RealEstateDb>
 
 }

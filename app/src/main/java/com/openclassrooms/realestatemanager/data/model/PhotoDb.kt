@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey
         childColumns = ["realEstateId"]
     )]
 )
-data class Photo(
+data class PhotoDb(
     @PrimaryKey(autoGenerate = true) val uid: Long = 0 ,
 
     val realEstateId: Long,
