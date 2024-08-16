@@ -20,13 +20,14 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.ZoneOffset
 
 @Database(
     entities = [PhotoDb::class, RealEstateDb::class, RealEstateAgent::class],
     version = 1,
     exportSchema = false
 )
-@TypeConverters(LocalDateTimeConverter::class)
+@TypeConverters(InstantConverter::class)
 abstract class AppDataBase : RoomDatabase() {
 
     //DAO
@@ -76,7 +77,8 @@ abstract class AppDataBase : RoomDatabase() {
                            city = "Serris",
                            nearbyBusiness = "Boulangerie, écoles",
                            status = Status.FOR_SALE,
-                           dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)),
+                           dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
+                               ZoneOffset.UTC),
                            dateOfSale = null,
                            realEstateAgentId = agentId1
                        )
@@ -99,7 +101,8 @@ abstract class AppDataBase : RoomDatabase() {
                            city = "Versailles",
                            nearbyBusiness = "centre commercial, écoles, musés",
                            status = Status.FOR_SALE,
-                           dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)),
+                           dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
+                               ZoneOffset.UTC),
                            dateOfSale = null,
                            realEstateAgentId = agentId1
                        )
@@ -116,7 +119,8 @@ abstract class AppDataBase : RoomDatabase() {
                            city = "Créteil",
                            nearbyBusiness = "Metro, centre commercial, écoles",
                            status = Status.FOR_SALE,
-                           dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)),
+                           dateCreated =LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
+                               ZoneOffset.UTC),
                            dateOfSale = null,
                            realEstateAgentId = agentId2
                        )
@@ -133,7 +137,8 @@ abstract class AppDataBase : RoomDatabase() {
                            city = "Orly",
                            nearbyBusiness = "Boulangerie, écoles, aeroport",
                            status = Status.FOR_SALE,
-                           dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)),
+                           dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
+                               ZoneOffset.UTC),
                            dateOfSale = null,
                            realEstateAgentId = agentId2
                        )
@@ -150,7 +155,8 @@ abstract class AppDataBase : RoomDatabase() {
                            city = "Montlignon",
                            nearbyBusiness = "Boulangerie, écoles, forêt et parc",
                            status = Status.FOR_SALE,
-                           dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)),
+                           dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
+                               ZoneOffset.UTC),
                            dateOfSale = null,
                            realEstateAgentId = agentId3
                        )
@@ -167,7 +173,8 @@ abstract class AppDataBase : RoomDatabase() {
                            city = "Montreuil",
                            nearbyBusiness = null,
                            status = Status.FOR_SALE,
-                           dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)),
+                           dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
+                               ZoneOffset.UTC),
                            dateOfSale = null,
                            realEstateAgentId = agentId3
                        )

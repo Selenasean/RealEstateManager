@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
+import coil.Coil
+import coil.load
 import com.openclassrooms.realestatemanager.data.model.RealEstateDb
 import com.openclassrooms.realestatemanager.databinding.RealestateItemBinding
 import com.openclassrooms.realestatemanager.domain.RealEstate
@@ -56,6 +58,12 @@ class ListAdapter(private val clickedListener: (id: Long) -> Unit) :
             binding.cityTv.text = realEstate.city
             binding.buildingTypeTv.text = realEstate.type.name
             binding.priceTv.text = realEstate.priceTag.toString().plus("€")
+            if (realEstate.photos.isNotEmpty()) {
+                binding.imageRealestate.load(realEstate.photos[0].urlPhoto) {
+                    crossfade(true)
+                }
+            }
+
         }
 
         init {

@@ -21,11 +21,11 @@ interface RealEstateDao {
     @Update
     fun updateRealEstate(realEstate: RealEstateDb)
 
-    @Query("SELECT * FROM realEstates INNER JOIN photos ON realEstates.uid = photos.realEstateId")
+    @Query("SELECT * FROM realEstates LEFT JOIN photos ON realEstates.uid = photos.realEstateId")
     fun getAllRealEstates(): Flow<Map<RealEstateDb, List<PhotoDb>>>
 
 
-    @Query("SELECT * FROM realEstates INNER JOIN photos ON realEstates.uid = photos.realEstateId WHERE uid = :realEstateId ")
+    @Query("SELECT * FROM realEstates LEFT JOIN photos ON realEstates.uid = photos.realEstateId WHERE realEstates.uid = :realEstateId ")
     fun getOneRealEstate(realEstateId: Long): Flow<Map<RealEstateDb, List<PhotoDb>>>
 
     //TODO: update state sold etcc

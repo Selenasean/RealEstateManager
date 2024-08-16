@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.data.model
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.time.Instant
 import java.time.LocalDateTime
 
 @Entity(tableName = "realEstates",
@@ -26,7 +27,7 @@ data class RealEstateDb(
     val city : String,
     val nearbyBusiness : String?,
     val status: Status,
-    val dateCreated: LocalDateTime,
-    val dateOfSale: LocalDateTime?,
+    val dateCreated: Instant,
+    val dateOfSale: Instant?,
     val realEstateAgentId: Long
 )
