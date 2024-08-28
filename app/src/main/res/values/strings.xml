@@ -9,7 +9,17 @@
 
     //FOR STATUS
     <string name="sold">Sold</string>
-    <string name="on_sale">Currently on sale</string>
     <string name="for_sale">For sale</string>
+
+    //DETAIL FRAGMENT
+    <string name="media">Photos</string>
+    <string name="description_detail">Description</string>
+    <string name="surface">Surface</string>
+    <string name="number_room">Number of rooms</string>
+    <string name="number_bathroom">Number of bathrooms</string>
+    <string name="number_bedroom">Number of bedrooms</string>
+    <string name="location_string">Location</string>
+    <string name="no_item_selected">Select a real estate to see details</string>
+
 
 </resources>

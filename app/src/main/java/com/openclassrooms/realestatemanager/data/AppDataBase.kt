@@ -71,7 +71,9 @@ abstract class AppDataBase : RoomDatabase() {
                            price = 23000F,
                            name = "Pistache",
                            surface = 170,
-                           rooms = 3,
+                           rooms = 5,
+                           bathrooms = 1,
+                           bedrooms = 3,
                            description = "Superbe maison dans le bourg de Serris, 3 chambres, cuisine toute équipée, salle de bain moderne. Dispose d'un garage d'une superficie de 50m². S'étale sur 2 étages, un toilette par étage. Parfait pour jeune couple !",
                            address = "22 rue Emile Cloud",
                            city = "Serris",
@@ -86,7 +88,26 @@ abstract class AppDataBase : RoomDatabase() {
                    appDataBase.photoDao().createPhoto(
                        PhotoDb(
                            realEstateId = estateId1,
-                           urlPhoto = "https://images.unsplash.com/photo-1504615755583-2916b52192a3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8aG91c2V8ZW58MHx8MHx8fDA%3D"
+                           urlPhoto = "https://images.unsp" +
+                                   "lash.com/photo-1504615755583-2916b52192a3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8aG91c2V8ZW58MHx8MHx8fDA%3D"
+                       )
+                   )
+                   appDataBase.photoDao().createPhoto(
+                       PhotoDb(
+                           realEstateId = estateId1,
+                           urlPhoto = "https://plus.unsplash.com/premium_photo-1661778773089-8718bcedb39e?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                       )
+                   )
+                   appDataBase.photoDao().createPhoto(
+                       PhotoDb(
+                           realEstateId = estateId1,
+                           urlPhoto = "https://images.unsplash.com/photo-1514053026555-49ce8886ae41?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                       )
+                   )
+                   appDataBase.photoDao().createPhoto(
+                       PhotoDb(
+                           realEstateId = estateId1,
+                           urlPhoto = "https://plus.unsplash.com/premium_photo-1683888725059-b912dda58ba0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                        )
                    )
                    appDataBase.realEstateDao().createRealEstate(
@@ -95,7 +116,9 @@ abstract class AppDataBase : RoomDatabase() {
                            price = 380000F,
                            name = "Fruit de la Passion",
                            surface = 300,
-                           rooms = 8,
+                           rooms = 10,
+                           bathrooms = 2,
+                           bedrooms = 8,
                            description = "Superbe vila dans le bourg de Versailles, 8 chambres, cuisine toute équipée, 2 salles de bain modernes. Dispose d'un garage d'une superficie de 50m². S'étale sur 2 étages, un toilette par étage.",
                            address = "2 avenue de Paris",
                            city = "Versailles",
@@ -113,7 +136,9 @@ abstract class AppDataBase : RoomDatabase() {
                            price = 150000F,
                            name = "Ananas",
                            surface = 80,
-                           rooms = 3,
+                           rooms = 5,
+                           bathrooms = 1,
+                           bedrooms = 3,
                            description = "Superbe appartement au centre de Créteil, 3 chambres, cuisine toute équipée, salle de bain moderne. Au 2e étage d'un bâtiment des années 80, avec ascenseur. Parfait pour jeune couple !",
                            address = "24 avenue du Marechal de Lattre de Tassigny",
                            city = "Créteil",
@@ -131,7 +156,9 @@ abstract class AppDataBase : RoomDatabase() {
                            price = 350000F,
                            name = "Fraise",
                            surface = 100,
-                           rooms = 4,
+                           rooms = 6,
+                           bathrooms = 1,
+                           bedrooms = 4,
                            description = "Superbe maison dans le bourg d'Orly, 4 chambres, cuisine toute équipée, salle de bain moderne. Dispose d'un garage d'une superficie de 50m². S'étale sur 2 étages, un toilette par étage. Parfait pour jeune couple !",
                            address = "3bis rue Roger Salengro",
                            city = "Orly",
@@ -149,7 +176,9 @@ abstract class AppDataBase : RoomDatabase() {
                            price = 580000F,
                            name = "Pomme",
                            surface = 450,
-                           rooms = 11,
+                           rooms = 13,
+                           bathrooms = 3,
+                           bedrooms = 11,
                            description = "Superbe vila dans le bourg de Montlignon, 11 chambres, cuisine toute équipée, 3 salles de bain modernes. Dispose d'un garage d'une superficie de 80m². S'étale sur 2 étages, un toilette par étage.",
                            address = "18 allée de la Chasse",
                            city = "Montlignon",
@@ -167,7 +196,9 @@ abstract class AppDataBase : RoomDatabase() {
                            price = 120000F,
                            name = "Abricot",
                            surface = 50,
-                           rooms = 2,
+                           rooms = 4,
+                           bathrooms = 1,
+                           bedrooms = 2,
                            description = "Superbe appartement dans le centre de Montreuil, 2 chambres, cuisine toute équipée, salle de bain moderne. Au 4e étage avec ascensseur. Parfait pour jeune couple !",
                            address = "9 rue Parmentier",
                            city = "Montreuil",

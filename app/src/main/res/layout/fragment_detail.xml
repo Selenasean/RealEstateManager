@@ -1,14 +1,296 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.list_and_details.DetailFragment">
 
-    <TextView
-        android:id="@+id/textview_detail"
+    <!-- TEXTVIEW IF THERE IS NOTHING TO DISPLAY -->
+    <LinearLayout
+        android:id="@+id/no_item_lyt_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        tools:visibility="gone">
+
+<!--        <ImageView-->
+<!--            android:id="@+id/img_no_item"-->
+<!--            android:layout_width="200dp"-->
+<!--            android:layout_height="200dp"/>-->
+
+        <TextView
+            android:id="@+id/no_item_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_item_selected"/>
+
+    </LinearLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintlayout_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_height="match_parent">
+
+        <!-- PHOTO PART -->
+        <TextView
+            android:id="@+id/textview_detail_media"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/media"
+            android:textColor="@color/md_theme_onPrimaryContainer"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/images_rv"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="15dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textview_detail_media"
+            tools:listitem="@layout/image_item" />
+
+        <!-- DESCRIPTION PART -->
+        <TextView
+            android:id="@+id/description_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/description_detail"
+            android:textColor="@color/md_theme_onPrimaryContainer"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/images_rv"
+            app:layout_constraintBottom_toTopOf="@id/description_content"/>
+
+        <TextView
+            android:id="@+id/description_content"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
+            android:ellipsize="end"
+            android:scrollHorizontally="true"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/description_tv"
+            tools:ignore="UnusedAttribute"
+            tools:text="@tools:sample/lorem/random" />
+
+        <!-- BOTTOM PART-->
+        <LinearLayout
+            android:id="@+id/linear_lyt_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/description_content">
+
+            <!-- ATTRIBUTES -->
+            <LinearLayout
+                android:id="@+id/lyt_attributes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical">
+
+                <!-- SURFACE -->
+                <LinearLayout
+                    android:id="@+id/lyt_surface_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/surface_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/surface_icon" />
+
+                    <TextView
+                        android:id="@+id/surface_tv"
+                        android:layout_width="180dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/surface" />
+
+                    <TextView
+                        android:id="@+id/surface_value_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="200m²" />
+
+                </LinearLayout>
+
+                <!-- ROOMS -->
+                <LinearLayout
+                    android:id="@+id/lyt_rooms_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/room_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/house_icon" />
+
+                    <TextView
+                        android:id="@+id/room_tv"
+                        android:layout_width="180dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/number_room" />
+
+                    <TextView
+                        android:id="@+id/rooms_value_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="6" />
+
+                </LinearLayout>
+
+                <!-- BATHROOM -->
+                <LinearLayout
+                    android:id="@+id/lyt_bathroom_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/bathroom_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/bathroom_icon" />
+
+                    <TextView
+                        android:id="@+id/bathroom_tv"
+                        android:layout_width="180dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/number_bathroom" />
+
+                    <TextView
+                        android:id="@+id/bathrooms_value_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="2" />
+                </LinearLayout>
+
+                <!-- BEDROOMS -->
+                <LinearLayout
+                    android:id="@+id/lyt_bedroom_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/bedroom_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/bedroom_icon" />
+                    <TextView
+                        android:id="@+id/bedroom_tv"
+                        android:layout_width="180dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/number_bedroom"/>
+
+                    <TextView
+                        android:id="@+id/bedrooms_value_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="4"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- LOCATION -->
+            <LinearLayout
+                android:id="@+id/lyt_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/location_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/location_icon" />
+
+                <TextView
+                    android:id="@+id/city_tv"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/location_string"/>
+
+                <TextView
+                    android:id="@+id/location_value_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineBreakWordStyle="phrase"
+                    android:layout_marginEnd="20dp"
+                    tools:text="3 Rue des Hetres, 23456 Icijnfidnfiosdnvfoqsgjpov,glsqigfnjkscvhuidfqjngifdnguifddignkdfgjkfdvfuu"
+                    tools:targetApi="tiramisu" />
+
+            </LinearLayout>
+
+            <!-- MAP -->
+            <LinearLayout
+                android:id="@+id/lyt_map"
+                android:layout_marginTop="20dp"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/map_snapshot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@null"
+                    android:scaleType="centerCrop"
+                    tools:src="@tools:sample/backgrounds/scenic"/>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </FrameLayout>

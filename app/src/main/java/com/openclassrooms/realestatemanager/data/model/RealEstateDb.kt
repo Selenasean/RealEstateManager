@@ -22,6 +22,8 @@ data class RealEstateDb(
     val name : String,
     val surface: Int,
     val rooms: Int,
+    val bathrooms : Int,
+    val bedrooms : Int,
     val description: String,
     val address: String,
     val city : String,
