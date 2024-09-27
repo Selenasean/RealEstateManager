@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="margin_extra_medium">20dp</dimen>
+    <dimen name="margin_medium">10dp</dimen>
+    <dimen name="text_size_big">20sp</dimen>
+
+    <dimen name="padding_medium_medium">15dp</dimen>
+    <dimen name="padding_big">24dp</dimen>
+
+    <dimen name="edit_tv_height_medium">50dp</dimen>
+    <dimen name="icon_size_small">24dp</dimen>
+</resources>

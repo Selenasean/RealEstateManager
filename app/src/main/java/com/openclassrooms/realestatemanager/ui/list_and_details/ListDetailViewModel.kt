@@ -28,6 +28,7 @@ class ListDetailViewModel(private val repository : Repository) : ViewModel() {
 
     fun onRealEstateClick(id: Long) {
         mutableStateFlow.value = id
+
     }
 
     val listState: LiveData<List<ItemState>> = repository.getAllRealEstates().combine(mutableStateFlow) { listRealEstate, idSelected ->

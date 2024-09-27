@@ -20,6 +20,17 @@
     <string name="number_bedroom">Number of bedrooms</string>
     <string name="location_string">Location</string>
     <string name="no_item_selected">Select a real estate to see details</string>
+    <string name="price">Price</string>
+    <string name="filter">Filter</string>
+    <string name="create">Create</string>
+    <string name="details">Details</string>
+
+    //CREATE FRAGMENT
+    <string name="create_title">Create your real estate</string>
+    <string name="content_description_rv">A list of real estate\'s photos</string>
+    <string name="title_tv">Name your real estate :</string>
+    <string name="address_tv">Enter the address :</string>
+    <string name="city_tv">City :</string>
 
 
 </resources>

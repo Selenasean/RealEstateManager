@@ -1,10 +1,16 @@
 package com.openclassrooms.realestatemanager.ui.list_and_details
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
@@ -12,13 +18,14 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.slidingpanelayout.widget.SlidingPaneLayout
+import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentEstateListBinding
 import com.openclassrooms.realestatemanager.domain.RealEstate
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
 
 class ListEstateFragment : Fragment() {
 
-    companion object{
+    companion object {
         fun newInstance() = ListEstateFragment()
     }
 
@@ -31,6 +38,7 @@ class ListEstateFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         return FragmentEstateListBinding.inflate(inflater, container, false).root
 
     }
@@ -43,21 +51,61 @@ class ListEstateFragment : Fragment() {
             viewLifecycleOwner,
             ListOnBackPressCallback(slidingPaneLayout)
         )
+        //to implement the menu on topAppBar
+        binding.topAppBar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.app_bar_create -> {
+                    Log.i("listEstateFragment", "create OK")
+                    true
+                }
+                R.id.app_bar_filter -> {
+                    Log.i("listEstateFragment", "filter")
+                     true
+                }
+                else -> false
+            }
+        }
+
 
         viewModel.listState.observe(viewLifecycleOwner, Observer { listItemState ->
-            val listRealEstate : List<RealEstate> = listItemState.map { itemState ->
-                itemState.realEstate
+            val listRealEstate: List<RealEstate> = listItemState.map { itemState ->
+                RealEstate(
+                    id = itemState.realEstate.id,
+                    isSelected = itemState.isSelected,
+                    title = itemState.realEstate.title,
+                    city = itemState.realEstate.city,
+                    priceTag = itemState.realEstate.priceTag,
+                    type = itemState.realEstate.type,
+                    photos = itemState.realEstate.photos,
+                    surface = itemState.realEstate.surface,
+                    rooms = itemState.realEstate.rooms,
+                    bathrooms = itemState.realEstate.bathrooms,
+                    bedrooms = itemState.realEstate.bedrooms,
+                    description = itemState.realEstate.description,
+                    address = itemState.realEstate.address
+                )
             }
-            render(listRealEstate)
+            render(listRealEstate, binding)
         })
         setRecyclerView(binding, slidingPaneLayout)
     }
 
-    private fun render(listRealEstate: List<RealEstate>) {
+
+    private fun render(listRealEstate: List<RealEstate>, binding:FragmentEstateListBinding) {
         adapter.submitList(listRealEstate)
+
+        //TODO: change background color of the item selected
+//        for(item in listRealEstate){
+//            if(item.isSelected){
+//                findViewById<>
+//            }
+//        }
     }
 
-    private fun setRecyclerView(binding: FragmentEstateListBinding, slidingPaneLayout: SlidingPaneLayout) {
+    private fun setRecyclerView(
+        binding: FragmentEstateListBinding,
+        slidingPaneLayout: SlidingPaneLayout
+    ) {
         val recyclerView: RecyclerView = binding.recyclerView
         recyclerView.setLayoutManager(LinearLayoutManager(context))
         adapter = ListAdapter(clickedListener = { id: Long ->
@@ -79,7 +127,7 @@ class ListOnBackPressCallback(
     private val slidingPaneLayout: SlidingPaneLayout
 ) : OnBackPressedCallback(slidingPaneLayout.isSlideable && slidingPaneLayout.isOpen),
     SlidingPaneLayout.PanelSlideListener {
-    override fun handleOnBackPressed()  {
+    override fun handleOnBackPressed() {
         slidingPaneLayout.closePane()
     }
 

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/create_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_big"
+        android:gravity="center"
+        android:text="@string/create_title"
+        android:textColor="@color/md_theme_secondary"
+        android:textSize="@dimen/text_size_big"
+        android:textStyle="bold"
+        />
+
+    <LinearLayout
+        android:id="@+id/lyt_container_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_extra_medium"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/icon_size_small"
+            android:layout_height="@dimen/icon_size_small"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:src="@drawable/create_icon"
+            app:tint="@color/md_theme_secondary" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/title_edit_tv"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_tv_height_medium"
+                android:drawableStart="@drawable/create_icon"
+                android:drawablePadding="@dimen/margin_medium"
+                android:hint="@string/title_tv"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lyt_container_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_extra_medium"
+        android:gravity="center"
+        android:orientation="horizontal"
+       >
+
+        <ImageView
+            android:layout_width="@dimen/icon_size_small"
+            android:layout_height="@dimen/icon_size_small"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:src="@drawable/house_icon"
+            app:tint="@color/md_theme_secondary" />
+
+
+        <EditText
+            android:id="@+id/address_edit_tv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_tv_height_medium"
+            android:hint="@string/address_tv"
+            android:inputType="text" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lyt_container_city"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_extra_medium"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/icon_size_small"
+            android:layout_height="@dimen/icon_size_small"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:src="@drawable/location_icon"
+            app:tint="@color/md_theme_secondary" />
+
+        <EditText
+            android:id="@+id/city_edit_tv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_tv_height_medium"
+            android:hint="@string/city_tv" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

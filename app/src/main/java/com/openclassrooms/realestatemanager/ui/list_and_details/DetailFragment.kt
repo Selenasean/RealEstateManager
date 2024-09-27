@@ -46,18 +46,18 @@ class DetailFragment : Fragment() {
             Log.i("detailFragment", realEstate.photos.size.toString())
             adapter.submitList(realEstate.photos)
             binding.cityTv.text = realEstate.city
-            binding.surfaceValueTv.text = realEstate.surface.toString()
-            binding.roomsValueTv.text = realEstate.rooms.toString()
-            binding.bedroomsValueTv.text = realEstate.bedrooms.toString()
-            binding.bathroomsValueTv.text = realEstate.bathrooms.toString()
+            binding.lytAttributes.surfaceValueTv.text = realEstate.surface.toString()
+            binding.lytAttributes.roomsValueTv.text = realEstate.rooms.toString()
+            binding.lytAttributes.bedroomsValueTv.text = realEstate.bedrooms.toString()
+            binding.lytAttributes.bathroomsValueTv.text = realEstate.bathrooms.toString()
             binding.descriptionContent.text = realEstate.description
+            binding.locationValueTv.text = realEstate.address
         }
 
     }
 
     private fun setRecyclerView(binding: FragmentDetailBinding) {
         val recyclerView = binding.imagesRv
-//        recyclerView.layoutManager = LinearLayoutManager(context)
         adapter = PhotosAdapter()
         recyclerView.adapter = adapter
     }

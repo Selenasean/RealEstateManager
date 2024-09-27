@@ -4,6 +4,7 @@ import com.openclassrooms.realestatemanager.data.model.BuildingType
 
 data class RealEstate(
     val id: Long,
+    val isSelected : Boolean = false,
     val title: String,
     val city : String,
     val priceTag: Float,

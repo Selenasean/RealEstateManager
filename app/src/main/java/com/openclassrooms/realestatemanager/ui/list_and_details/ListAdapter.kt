@@ -4,12 +4,15 @@ package com.openclassrooms.realestatemanager.ui.list_and_details
 import android.view.LayoutInflater
 
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import coil.Coil
 import coil.load
+import com.openclassrooms.realestatemanager.AppApplication
+import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.data.model.RealEstateDb
 import com.openclassrooms.realestatemanager.databinding.RealestateItemBinding
 import com.openclassrooms.realestatemanager.domain.RealEstate
@@ -62,6 +65,11 @@ class ListAdapter(private val clickedListener: (id: Long) -> Unit) :
                 binding.imageRealestate.load(realEstate.photos[0].urlPhoto) {
                     crossfade(true)
                 }
+            }
+            if(realEstate.isSelected){
+                binding.realestateContainer.setBackgroundColor(ContextCompat.getColor(AppApplication.appContext, R.color.md_theme_primaryContainer))
+            }else{
+                binding.realestateContainer.setBackgroundColor(ContextCompat.getColor(AppApplication.appContext, R.color.md_theme_background))
             }
 
         }

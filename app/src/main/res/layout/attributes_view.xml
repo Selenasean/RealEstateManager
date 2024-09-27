@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- ATTRIBUTES -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/lyt_attributes"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+    android:orientation="vertical">
+
+    <!-- PRICE -->
+    <LinearLayout
+        android:id="@+id/lyt_price_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/price_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="@null"
+            android:src="@drawable/price_icon" />
+
+        <TextView
+            android:id="@+id/price_tv"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:text="@string/price" />
+
+        <TextView
+            android:id="@+id/price_value_tv"
+            tools:text="20000 €"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <!-- SURFACE -->
+    <LinearLayout
+        android:id="@+id/lyt_surface_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/surface_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="@null"
+            android:src="@drawable/surface_icon" />
+
+        <TextView
+            android:id="@+id/surface_tv"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:text="@string/surface" />
+
+        <TextView
+            android:id="@+id/surface_value_tv"
+            tools:text="200m²"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <!-- ROOMS -->
+    <LinearLayout
+        android:id="@+id/lyt_rooms_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/room_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="@null"
+            android:src="@drawable/house_icon" />
+
+        <TextView
+            android:id="@+id/room_tv"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:text="@string/number_room" />
+
+        <TextView
+            android:id="@+id/rooms_value_tv"
+            tools:text="6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <!-- BATHROOM -->
+    <LinearLayout
+        android:id="@+id/lyt_bathroom_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/bathroom_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="@null"
+            android:src="@drawable/bathroom_icon" />
+
+        <TextView
+            android:id="@+id/bathroom_tv"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:text="@string/number_bathroom" />
+
+        <TextView
+            android:id="@+id/bathrooms_value_tv"
+            tools:text="2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <!-- BEDROOMS -->
+    <LinearLayout
+        android:id="@+id/lyt_bedroom_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/bedroom_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="@null"
+            android:src="@drawable/bedroom_icon" />
+
+        <TextView
+            android:id="@+id/bedroom_tv"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:text="@string/number_bedroom" />
+
+        <TextView
+            android:id="@+id/bedrooms_value_tv"
+            tools:text="4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout>
+
