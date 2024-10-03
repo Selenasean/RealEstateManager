@@ -29,6 +29,7 @@ data class RealEstateDb(
     val city : String,
     val nearbyBusiness : String?,
     val status: Status,
+    val amenities : List<Amenity>,
     val dateCreated: Instant,
     val dateOfSale: Instant?,
     val realEstateAgentId: Long

@@ -4,6 +4,7 @@
     <dimen name="margin_extra_medium">20dp</dimen>
     <dimen name="margin_medium">10dp</dimen>
     <dimen name="text_size_big">20sp</dimen>
+    <dimen name="margin_extra">50dp</dimen>
 
     <dimen name="padding_medium_medium">15dp</dimen>
     <dimen name="padding_big">24dp</dimen>

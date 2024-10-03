@@ -14,10 +14,10 @@ import kotlinx.coroutines.flow.flowOf
 
 class ListDetailViewModel(private val repository : Repository) : ViewModel() {
 
-    private var mutableStateFlow = MutableStateFlow<Long?>(null)
+    private var selectedStateFlow = MutableStateFlow<Long?>(null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val detailState : LiveData<RealEstate?> = mutableStateFlow.flatMapLatest { id ->
+    val detailState : LiveData<RealEstate?> = selectedStateFlow.flatMapLatest { id ->
         if(id != null){
             repository.getOneRealEstates(id)
         }else{
@@ -27,11 +27,14 @@ class ListDetailViewModel(private val repository : Repository) : ViewModel() {
 
 
     fun onRealEstateClick(id: Long) {
-        mutableStateFlow.value = id
-
+        selectedStateFlow.value = id
     }
 
-    val listState: LiveData<List<ItemState>> = repository.getAllRealEstates().combine(mutableStateFlow) { listRealEstate, idSelected ->
+    fun onDetailClosed() {
+        selectedStateFlow.value = null
+    }
+
+    val listState: LiveData<List<ItemState>> = repository.getAllRealEstates().combine(selectedStateFlow) { listRealEstate, idSelected ->
              listRealEstate.map { realEstate ->
                  ItemState(
                      isSelected = realEstate.id == idSelected,

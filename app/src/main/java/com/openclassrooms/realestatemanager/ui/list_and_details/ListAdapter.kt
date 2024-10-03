@@ -9,27 +9,24 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
-import coil.Coil
 import coil.load
 import com.openclassrooms.realestatemanager.AppApplication
 import com.openclassrooms.realestatemanager.R
-import com.openclassrooms.realestatemanager.data.model.RealEstateDb
 import com.openclassrooms.realestatemanager.databinding.RealestateItemBinding
-import com.openclassrooms.realestatemanager.domain.RealEstate
 
 
 class ListAdapter(private val clickedListener: (id: Long) -> Unit) :
-    ListAdapter<RealEstate, com.openclassrooms.realestatemanager.ui.list_and_details.ListAdapter.ViewHolder>(
+    ListAdapter<ItemState, com.openclassrooms.realestatemanager.ui.list_and_details.ListAdapter.ViewHolder>(
         DIFF_CALLBACK
     ) {
 
     companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<RealEstate>() {
-            override fun areItemsTheSame(oldItem: RealEstate, newItem: RealEstate): Boolean {
-                return oldItem.id == newItem.id
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ItemState>() {
+            override fun areItemsTheSame(oldItem: ItemState, newItem: ItemState): Boolean {
+                return oldItem.realEstate.id == newItem.realEstate.id
             }
 
-            override fun areContentsTheSame(oldItem: RealEstate, newItem: RealEstate): Boolean {
+            override fun areContentsTheSame(oldItem: ItemState, newItem: ItemState): Boolean {
                 return oldItem == newItem
             }
 
@@ -55,21 +52,22 @@ class ListAdapter(private val clickedListener: (id: Long) -> Unit) :
     //CLASS VIEW HOLDER
     inner class ViewHolder(private val binding: RealestateItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(realEstate: RealEstate) {
+        fun bind(itemState: ItemState) {
+            val realestate = itemState.realEstate
             //set text
-            binding.nameTv.text = realEstate.title
-            binding.cityTv.text = realEstate.city
-            binding.buildingTypeTv.text = realEstate.type.name
-            binding.priceTv.text = realEstate.priceTag.toString().plus("€")
-            if (realEstate.photos.isNotEmpty()) {
-                binding.imageRealestate.load(realEstate.photos[0].urlPhoto) {
+            binding.nameTv.text = realestate.title
+            binding.cityTv.text = realestate.city
+            binding.buildingTypeTv.text = ContextCompat.getString(binding.root.context, realestate.type.displayName)
+            binding.priceTv.text = realestate.priceTag.toString().plus("€")
+            if (realestate.photos.isNotEmpty()) {
+                binding.imageRealestate.load(realestate.photos[0].urlPhoto) {
                     crossfade(true)
                 }
             }
-            if(realEstate.isSelected){
-                binding.realestateContainer.setBackgroundColor(ContextCompat.getColor(AppApplication.appContext, R.color.md_theme_primaryContainer))
+            if(itemState.isSelected){
+                binding.realestateContainer.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.md_theme_primaryContainer))
             }else{
-                binding.realestateContainer.setBackgroundColor(ContextCompat.getColor(AppApplication.appContext, R.color.md_theme_background))
+                binding.realestateContainer.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.md_theme_background))
             }
 
         }
@@ -79,7 +77,7 @@ class ListAdapter(private val clickedListener: (id: Long) -> Unit) :
                 val position = bindingAdapterPosition
                 //check if bindingAdapterPosition is valid
                 if(position != NO_POSITION){
-                    clickedListener(getItem(position).id)
+                    clickedListener(getItem(position).realEstate.id)
                 }
             }
         }

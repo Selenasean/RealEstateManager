@@ -10,6 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.openclassrooms.realestatemanager.data.dao.PhotoDao
 import com.openclassrooms.realestatemanager.data.dao.RealEstateAgentDao
 import com.openclassrooms.realestatemanager.data.dao.RealEstateDao
+import com.openclassrooms.realestatemanager.data.model.Amenity
 import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.data.model.PhotoDb
 import com.openclassrooms.realestatemanager.data.model.RealEstateDb
@@ -27,7 +28,7 @@ import java.time.ZoneOffset
     version = 1,
     exportSchema = false
 )
-@TypeConverters(InstantConverter::class)
+@TypeConverters(Converters::class)
 abstract class AppDataBase : RoomDatabase() {
 
     //DAO
@@ -35,7 +36,6 @@ abstract class AppDataBase : RoomDatabase() {
     abstract fun realEstateDao(): RealEstateDao
     abstract fun realEstateAgentDao(): RealEstateAgentDao
 
-    //TODO: prepopulate & add callback
 
     companion object {
         fun createAppDatabase(context: Context, applicationScope: CoroutineScope, databaseProvider:() -> AppDataBase): AppDataBase {
@@ -79,6 +79,7 @@ abstract class AppDataBase : RoomDatabase() {
                            city = "Serris",
                            nearbyBusiness = "Boulangerie, écoles",
                            status = Status.FOR_SALE,
+                           amenities = listOf(Amenity.BAKERY, Amenity.SCHOOL),
                            dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
                                ZoneOffset.UTC),
                            dateOfSale = null,
@@ -124,6 +125,7 @@ abstract class AppDataBase : RoomDatabase() {
                            city = "Versailles",
                            nearbyBusiness = "centre commercial, écoles, musés",
                            status = Status.FOR_SALE,
+                           amenities = listOf(Amenity.BAKERY, Amenity.SCHOOL, Amenity.SHOPPING_MALL),
                            dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
                                ZoneOffset.UTC),
                            dateOfSale = null,
@@ -144,6 +146,7 @@ abstract class AppDataBase : RoomDatabase() {
                            city = "Créteil",
                            nearbyBusiness = "Metro, centre commercial, écoles",
                            status = Status.FOR_SALE,
+                           amenities = listOf(Amenity.BAKERY, Amenity.SCHOOL, Amenity.SHOPPING_MALL, Amenity.STATION, Amenity.GYM),
                            dateCreated =LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
                                ZoneOffset.UTC),
                            dateOfSale = null,
@@ -164,6 +167,7 @@ abstract class AppDataBase : RoomDatabase() {
                            city = "Orly",
                            nearbyBusiness = "Boulangerie, écoles, aeroport",
                            status = Status.FOR_SALE,
+                           amenities = listOf(Amenity.BAKERY, Amenity.SCHOOL),
                            dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
                                ZoneOffset.UTC),
                            dateOfSale = null,
@@ -184,6 +188,7 @@ abstract class AppDataBase : RoomDatabase() {
                            city = "Montlignon",
                            nearbyBusiness = "Boulangerie, écoles, forêt et parc",
                            status = Status.FOR_SALE,
+                           amenities = listOf(Amenity.BAKERY, Amenity.SCHOOL),
                            dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
                                ZoneOffset.UTC),
                            dateOfSale = null,
@@ -204,6 +209,7 @@ abstract class AppDataBase : RoomDatabase() {
                            city = "Montreuil",
                            nearbyBusiness = null,
                            status = Status.FOR_SALE,
+                           amenities = listOf(Amenity.BAKERY, Amenity.SCHOOL),
                            dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
                                ZoneOffset.UTC),
                            dateOfSale = null,

@@ -32,5 +32,13 @@
     <string name="address_tv">Enter the address :</string>
     <string name="city_tv">City :</string>
 
+    //AMENITIES
+    <string name="school">School</string>
+    <string name="shop">Shops</string>
+    <string name="mall">Shopping Mall</string>
+    <string name="station">Train Station</string>
+    <string name="bakery">Bakery</string>
+    <string name="gym">Gym</string>
+
 
 </resources>

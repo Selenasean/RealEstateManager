@@ -1,101 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Bottom sheet contents. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linear_lyt_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <!-- Drag handle for accessibility -->
+    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+        android:id="@+id/drag_handle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <TextView
-        android:id="@+id/create_title"
-        android:layout_width="match_parent"
+        android:id="@+id/title_tv"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/padding_big"
-        android:gravity="center"
+        android:layout_gravity="center"
+
         android:text="@string/create_title"
-        android:textColor="@color/md_theme_secondary"
         android:textSize="@dimen/text_size_big"
-        android:textStyle="bold"
-        />
+        android:textStyle="bold" />
 
-    <LinearLayout
-        android:id="@+id/lyt_container_title"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_extra_medium"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:hint="@string/title_tv"
+        android:padding="@dimen/text_size_big"
+        app:endIconMode="clear_text"
+        app:startIconDrawable="@drawable/create_icon">
 
-        <ImageView
-            android:layout_width="@dimen/icon_size_small"
-            android:layout_height="@dimen/icon_size_small"
-            android:layout_marginEnd="@dimen/margin_medium"
-            android:src="@drawable/create_icon"
-            app:tint="@color/md_theme_secondary" />
-
-        <com.google.android.material.textfield.TextInputLayout
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/margin_extra"
+            tools:ignore="RtlSymmetry" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/title_edit_tv"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/edit_tv_height_medium"
-                android:drawableStart="@drawable/create_icon"
-                android:drawablePadding="@dimen/margin_medium"
-                android:hint="@string/title_tv"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/lyt_container_address"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_extra_medium"
-        android:gravity="center"
-        android:orientation="horizontal"
-       >
-
-        <ImageView
-            android:layout_width="@dimen/icon_size_small"
-            android:layout_height="@dimen/icon_size_small"
-            android:layout_marginEnd="@dimen/margin_medium"
-            android:src="@drawable/house_icon"
-            app:tint="@color/md_theme_secondary" />
-
-
-        <EditText
-            android:id="@+id/address_edit_tv"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/edit_tv_height_medium"
-            android:hint="@string/address_tv"
-            android:inputType="text" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/lyt_container_city"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_extra_medium"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="@dimen/icon_size_small"
-            android:layout_height="@dimen/icon_size_small"
-            android:layout_marginEnd="@dimen/margin_medium"
-            android:src="@drawable/location_icon"
-            app:tint="@color/md_theme_secondary" />
-
-        <EditText
-            android:id="@+id/city_edit_tv"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/edit_tv_height_medium"
-            android:hint="@string/city_tv" />
-
-    </LinearLayout>
-
+    </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>
+

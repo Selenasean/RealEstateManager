@@ -43,7 +43,6 @@ class DetailFragment : Fragment() {
         } else {
             binding.constraintlayoutContainer.visibility = View.VISIBLE
             binding.noItemLytContainer.visibility = View.GONE
-            Log.i("detailFragment", realEstate.photos.size.toString())
             adapter.submitList(realEstate.photos)
             binding.cityTv.text = realEstate.city
             binding.lytAttributes.surfaceValueTv.text = realEstate.surface.toString()
