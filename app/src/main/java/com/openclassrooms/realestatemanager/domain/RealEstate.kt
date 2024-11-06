@@ -1,6 +1,8 @@
 package com.openclassrooms.realestatemanager.domain
 
+import com.openclassrooms.realestatemanager.data.model.Amenity
 import com.openclassrooms.realestatemanager.data.model.BuildingType
+import com.openclassrooms.realestatemanager.data.model.Status
 
 data class RealEstate(
     val id: Long,
@@ -14,6 +16,8 @@ data class RealEstate(
     val bathrooms : Int,
     val bedrooms : Int,
     val description : String,
-    val address : String
+    val address : String,
+    val status : Status,
+    val amenities : List<Amenity>
 
 )

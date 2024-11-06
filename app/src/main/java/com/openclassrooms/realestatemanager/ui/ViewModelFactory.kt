@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.openclassrooms.realestatemanager.AppApplication
-import com.openclassrooms.realestatemanager.ui.list_and_details.CreateViewModel
+import com.openclassrooms.realestatemanager.ui.create.CreateViewModel
 import com.openclassrooms.realestatemanager.ui.list_and_details.ListDetailViewModel
 
 class ViewModelFactory : ViewModelProvider.Factory {
@@ -37,7 +37,7 @@ class ViewModelFactory : ViewModelProvider.Factory {
             return ListDetailViewModel(application.repository) as T
         }
         if(modelClass.isAssignableFrom(CreateViewModel::class.java)){
-            return CreateViewModel() as T
+            return CreateViewModel(application.repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

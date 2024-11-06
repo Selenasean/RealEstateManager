@@ -90,7 +90,7 @@
             <TextView
                 android:id="@+id/description_content"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="140dp"
                 android:paddingEnd="@dimen/padding_big"
                 android:layout_marginTop="@dimen/margin_medium"
                 android:paddingStart="@dimen/padding_big"
@@ -150,6 +150,41 @@
 
             </LinearLayout>
 
+            <!-- AMENITIES -->
+            <LinearLayout
+                android:id="@+id/lyt_amenities"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:orientation="horizontal"
+                tools:ignore="MissingConstraints">
+
+                <ImageView
+                    android:id="@+id/amenities_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/amenities_icon"
+                    app:tint="?attr/colorOnBackground"/>
+
+                <TextView
+                    android:id="@+id/amenities_tv"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/amenities_string" />
+
+                <TextView
+                    android:id="@+id/amenities_value_tv"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:lineBreakWordStyle="phrase"
+                    tools:targetApi="tiramisu"
+                    tools:text="3 Rue des Hetres, 23456 Icijnfidnfiosdnvfoqsgjpov,glsqigfnjkscvhuidfqjngifdnguifddignkdfgjkfdvfuu" />
+
+
+            </LinearLayout>
+
             <!-- MAP -->
             <LinearLayout
                 android:id="@+id/lyt_map"
@@ -157,7 +192,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/md_theme_tertiary"
                 android:orientation="horizontal"
-                tools:ignore="MissingConstraints">
+                tools:ignore="MissingConstraints"
+               >
 
             <ImageView
                     android:id="@+id/map_snapshot"
@@ -176,8 +212,8 @@
                 android:layout_marginStart="@dimen/padding_big"
                 android:layout_marginEnd="@dimen/padding_big"
                 android:layout_marginTop="@dimen/margin_medium"
-                android:paddingBottom="@dimen/cardview_default_elevation"
-                app:constraint_referenced_ids="lyt_attributes, lyt_location, lyt_map"
+                android:paddingBottom="@dimen/margin_medium"
+                app:constraint_referenced_ids="lyt_attributes, lyt_location, lyt_amenities, lyt_map"
                 app:flow_horizontalBias="0"
                 app:flow_horizontalGap="20dp"
                 app:flow_verticalGap="20dp"

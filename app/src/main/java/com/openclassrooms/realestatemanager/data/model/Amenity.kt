@@ -9,5 +9,7 @@ enum class Amenity(@StringRes val displayName: Int) {
     SHOPPING_MALL(R.string.mall),
     STATION(R.string.station),
     BAKERY(R.string.bakery),
-    GYM(R.string.gym)
+    GYM(R.string.gym),
+    FOREST(R.string.forest),
+
 }

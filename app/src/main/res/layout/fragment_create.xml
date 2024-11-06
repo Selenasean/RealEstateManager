@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Bottom sheet contents. -->
+<?xml version="1.0" encoding="utf-8"?><!-- Bottom sheet contents. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -24,21 +23,283 @@
         android:textSize="@dimen/text_size_big"
         android:textStyle="bold" />
 
-    <com.google.android.material.textfield.TextInputLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/title_tv"
-        android:padding="@dimen/text_size_big"
-        app:endIconMode="clear_text"
-        app:startIconDrawable="@drawable/create_icon">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/margin_extra"
-            tools:ignore="RtlSymmetry" />
+            android:orientation="vertical">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <!-- TYPE -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_lyt_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/type_tv"
+                android:padding="@dimen/margin_medium"
+                app:startIconDrawable="@drawable/house_icon"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                >
 
+                <AutoCompleteTextView
+                    android:id="@+id/tv_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:paddingStart="@dimen/margin_extra"
+                    tools:ignore="LabelFor,RtlSymmetry" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- PHOTOS PHOTOPICKER -->
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:hint="@string/photos_tv"-->
+<!--                android:padding="@dimen/margin_medium"-->
+<!--                app:endIconMode="clear_text"-->
+<!--                app:startIconDrawable="@drawable/photo_icon">-->
+
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:paddingStart="@dimen/margin_extra"-->
+<!--                    tools:ignore="RtlSymmetry" />-->
+
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
+            <!-- ADDRESS -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_lyt_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/address_tv"
+                android:padding="@dimen/margin_medium"
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@drawable/map_icon">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tv_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/margin_extra"
+                    tools:ignore="RtlSymmetry" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- CITY -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_lyt_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/city_tv"
+                android:padding="@dimen/margin_medium"
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@drawable/map_icon">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tv_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/margin_extra"
+                    tools:ignore="RtlSymmetry" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- PRICE -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_lyt_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/price_tv"
+                android:padding="@dimen/margin_medium"
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@drawable/price_icon">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tv_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/margin_extra"
+                    android:inputType="number"
+                    tools:ignore="RtlSymmetry" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- SURFACE -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_lyt_surface"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/surface_tv"
+                android:padding="@dimen/margin_medium"
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@drawable/surface_icon">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tv_surface"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/margin_extra"
+                    android:inputType="numberDecimal"
+                    tools:ignore="RtlSymmetry" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- NUMBER OF ROOMS -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_lyt_rooms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/rooms_tv"
+                android:padding="@dimen/margin_medium"
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@drawable/house_icon">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tv_rooms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/margin_extra"
+                    android:inputType="number"
+                    tools:ignore="RtlSymmetry" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- NUMBER OF BEDROOMS -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_lyt_bedrooms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/bedrooms_tv"
+                android:padding="@dimen/margin_medium"
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@drawable/bedroom_icon">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tv_bedrooms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/margin_extra"
+                    android:inputType="number"
+                    tools:ignore="RtlSymmetry" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- NUMBER OF BATHROOMS -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_lyt_bathrooms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/bathrooms_tv"
+                android:padding="@dimen/margin_medium"
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@drawable/bathroom_icon">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tv_bathrooms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/margin_extra"
+                    android:inputType="number"
+                    tools:ignore="RtlSymmetry" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- DESCRIPTION -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_lyt_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/description_tv"
+                android:padding="@dimen/margin_medium"
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@drawable/create_icon">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tv_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLength="120"
+                    android:paddingStart="@dimen/margin_extra"
+                    tools:ignore="RtlSymmetry" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- AMENITIES CHIPS -->
+            <LinearLayout
+                android:id="@+id/lyt_amenities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/amenities_tv"
+                android:padding="@dimen/margin_medium"
+                android:layout_margin="@dimen/margin_medium"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/icon_amenities"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/amenities_icon"
+                    app:tint="@color/md_theme_onPrimaryContainer"
+                    android:layout_marginEnd="@dimen/margin_medium"/>
+
+                <TextView
+                    android:id="@+id/amenities_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_medium"
+                    android:text="@string/amenities_tv"/>
+
+            </LinearLayout>
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_medium">
+
+
+            </com.google.android.material.chip.ChipGroup>
+
+            <!-- REALESTATE AGENT-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_lyt_agent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/realEstateAgent_tv"
+                android:padding="@dimen/margin_medium"
+                app:startIconDrawable="@drawable/person_icon"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                <AutoCompleteTextView
+                    android:id="@+id/tv_agent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/margin_extra"
+                    android:inputType="none"
+                    tools:ignore="LabelFor,RtlSymmetry"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- CREATE BTN -->
+            <Button
+                android:id="@+id/create_btn"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:text="@string/create_btn"
+                android:textAllCaps="true"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                app:tint="?attr/colorSecondary"
+                />
+
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>
 

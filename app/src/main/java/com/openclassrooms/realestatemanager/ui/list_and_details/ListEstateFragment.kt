@@ -3,32 +3,22 @@ package com.openclassrooms.realestatemanager.ui.list_and_details
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
-import androidx.lifecycle.findViewTreeLifecycleOwner
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.slidingpanelayout.widget.SlidingPaneLayout
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.openclassrooms.realestatemanager.AppApplication
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentEstateListBinding
-import com.openclassrooms.realestatemanager.domain.RealEstate
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
+import com.openclassrooms.realestatemanager.ui.create.CreateFragment
 
 class ListEstateFragment : Fragment() {
 

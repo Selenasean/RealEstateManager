@@ -28,9 +28,19 @@
     //CREATE FRAGMENT
     <string name="create_title">Create your real estate</string>
     <string name="content_description_rv">A list of real estate\'s photos</string>
-    <string name="title_tv">Name your real estate :</string>
-    <string name="address_tv">Enter the address :</string>
-    <string name="city_tv">City :</string>
+    <string name="address_tv">Address </string>
+    <string name="city_tv">City </string>
+    <string name="type_tv">Type of real estate</string>
+    <string name="price_tv">Price</string>
+    <string name="surface_tv">Surface</string>
+    <string name="rooms_tv">Rooms</string>
+    <string name="bedrooms_tv">Bedrooms</string>
+    <string name="bathrooms_tv">Bathrooms</string>
+    <string name="description_tv">Description</string>
+    <string name="amenities_tv">Amenities</string>
+    <string name="realEstateAgent_tv">Your name</string>
+    <string name="photos_tv">Upload photos</string>
+    <string name="create_btn">Create</string>
 
     //AMENITIES
     <string name="school">School</string>
@@ -39,6 +49,10 @@
     <string name="station">Train Station</string>
     <string name="bakery">Bakery</string>
     <string name="gym">Gym</string>
+    <string name="amenities_string">Amenities</string>
+    <string name="none">None</string>
+    <string name="forest">Forest</string>
+
 
 
 </resources>

@@ -5,8 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
 import com.openclassrooms.realestatemanager.domain.RealEstate
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
@@ -41,16 +43,26 @@ class DetailFragment : Fragment() {
             binding.noItemLytContainer.visibility = View.VISIBLE
             binding.constraintlayoutContainer.visibility = View.GONE
         } else {
+            val context = binding.root.context
             binding.constraintlayoutContainer.visibility = View.VISIBLE
             binding.noItemLytContainer.visibility = View.GONE
             adapter.submitList(realEstate.photos)
+            binding.descriptionContent.text = realEstate.description
+            binding.lytAttributes.statusValueTv.text = ContextCompat.getString(context, realEstate.status.state)
+            if(realEstate.status.state == R.string.for_sale){
+                binding.lytAttributes.statusValueTv.setTextColor(ContextCompat.getColor(context, R.color.md_theme_tertiaryFixed_mediumContrast))
+            }else{
+                binding.lytAttributes.statusValueTv.setTextColor(ContextCompat.getColor(context, R.color.md_theme_error_mediumContrast))
+            }
+            binding.lytAttributes.priceValueTv.text = realEstate.priceTag.toString().plus("€")
             binding.cityTv.text = realEstate.city
             binding.lytAttributes.surfaceValueTv.text = realEstate.surface.toString()
             binding.lytAttributes.roomsValueTv.text = realEstate.rooms.toString()
             binding.lytAttributes.bedroomsValueTv.text = realEstate.bedrooms.toString()
             binding.lytAttributes.bathroomsValueTv.text = realEstate.bathrooms.toString()
-            binding.descriptionContent.text = realEstate.description
             binding.locationValueTv.text = realEstate.address
+            val amenitiesString = realEstate.amenities.map { ContextCompat.getString(context,it.displayName) }
+            binding.amenitiesValueTv.text = amenitiesString.joinToString(", ")
         }
 
     }

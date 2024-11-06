@@ -42,12 +42,13 @@
             tools:text="@tools:sample/first_names"/>
 
         <TextView
-            android:id="@+id/name_tv"
+            android:id="@+id/status_display_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="30dp"
             android:layout_marginTop="10dp"
             android:textSize="20sp"
+            android:textAllCaps="true"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="@tools:sample/last_names" />

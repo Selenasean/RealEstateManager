@@ -4,11 +4,10 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import java.time.Instant
-import java.time.LocalDateTime
 
 @Entity(tableName = "realEstates",
     foreignKeys = [ForeignKey(
-        entity = RealEstateAgent::class,
+        entity = RealEstateAgentDb::class,
         parentColumns = arrayOf("uid"),
         childColumns = arrayOf("realEstateAgentId")
     )]
@@ -27,9 +26,8 @@ data class RealEstateDb(
     val description: String,
     val address: String,
     val city : String,
-    val nearbyBusiness : String?,
     val status: Status,
-    val amenities : List<Amenity>,
+    val amenities: List<Amenity>,
     val dateCreated: Instant,
     val dateOfSale: Instant?,
     val realEstateAgentId: Long

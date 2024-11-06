@@ -14,7 +14,7 @@ import com.openclassrooms.realestatemanager.data.model.Amenity
 import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.data.model.PhotoDb
 import com.openclassrooms.realestatemanager.data.model.RealEstateDb
-import com.openclassrooms.realestatemanager.data.model.RealEstateAgent
+import com.openclassrooms.realestatemanager.data.model.RealEstateAgentDb
 import com.openclassrooms.realestatemanager.data.model.Status
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -24,7 +24,7 @@ import java.time.LocalTime
 import java.time.ZoneOffset
 
 @Database(
-    entities = [PhotoDb::class, RealEstateDb::class, RealEstateAgent::class],
+    entities = [PhotoDb::class, RealEstateDb::class, RealEstateAgentDb::class],
     version = 1,
     exportSchema = false
 )
@@ -61,9 +61,9 @@ abstract class AppDataBase : RoomDatabase() {
             applicationScope.launch {
                appDataBase.withTransaction {
                    //fake agent
-                   val agentId1 = appDataBase.realEstateAgentDao().createAgent(RealEstateAgent(name = "Patrick"))
-                   val agentId2 = appDataBase.realEstateAgentDao().createAgent(RealEstateAgent(name = "Didier"))
-                   val agentId3 = appDataBase.realEstateAgentDao().createAgent(RealEstateAgent(name = "Corinne"))
+                   val agentId1 = appDataBase.realEstateAgentDao().createAgent(RealEstateAgentDb(name = "Patrick"))
+                   val agentId2 = appDataBase.realEstateAgentDao().createAgent(RealEstateAgentDb(name = "Didier"))
+                   val agentId3 = appDataBase.realEstateAgentDao().createAgent(RealEstateAgentDb(name = "Corinne"))
                    //fake estate and associated photos
                    val estateId1 = appDataBase.realEstateDao().createRealEstate(
                        RealEstateDb(
@@ -77,7 +77,6 @@ abstract class AppDataBase : RoomDatabase() {
                            description = "Superbe maison dans le bourg de Serris, 3 chambres, cuisine toute équipée, salle de bain moderne. Dispose d'un garage d'une superficie de 50m². S'étale sur 2 étages, un toilette par étage. Parfait pour jeune couple !",
                            address = "22 rue Emile Cloud",
                            city = "Serris",
-                           nearbyBusiness = "Boulangerie, écoles",
                            status = Status.FOR_SALE,
                            amenities = listOf(Amenity.BAKERY, Amenity.SCHOOL),
                            dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
@@ -123,7 +122,6 @@ abstract class AppDataBase : RoomDatabase() {
                            description = "Superbe vila dans le bourg de Versailles, 8 chambres, cuisine toute équipée, 2 salles de bain modernes. Dispose d'un garage d'une superficie de 50m². S'étale sur 2 étages, un toilette par étage.",
                            address = "2 avenue de Paris",
                            city = "Versailles",
-                           nearbyBusiness = "centre commercial, écoles, musés",
                            status = Status.FOR_SALE,
                            amenities = listOf(Amenity.BAKERY, Amenity.SCHOOL, Amenity.SHOPPING_MALL),
                            dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
@@ -144,7 +142,6 @@ abstract class AppDataBase : RoomDatabase() {
                            description = "Superbe appartement au centre de Créteil, 3 chambres, cuisine toute équipée, salle de bain moderne. Au 2e étage d'un bâtiment des années 80, avec ascenseur. Parfait pour jeune couple !",
                            address = "24 avenue du Marechal de Lattre de Tassigny",
                            city = "Créteil",
-                           nearbyBusiness = "Metro, centre commercial, écoles",
                            status = Status.FOR_SALE,
                            amenities = listOf(Amenity.BAKERY, Amenity.SCHOOL, Amenity.SHOPPING_MALL, Amenity.STATION, Amenity.GYM),
                            dateCreated =LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
@@ -165,7 +162,6 @@ abstract class AppDataBase : RoomDatabase() {
                            description = "Superbe maison dans le bourg d'Orly, 4 chambres, cuisine toute équipée, salle de bain moderne. Dispose d'un garage d'une superficie de 50m². S'étale sur 2 étages, un toilette par étage. Parfait pour jeune couple !",
                            address = "3bis rue Roger Salengro",
                            city = "Orly",
-                           nearbyBusiness = "Boulangerie, écoles, aeroport",
                            status = Status.FOR_SALE,
                            amenities = listOf(Amenity.BAKERY, Amenity.SCHOOL),
                            dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
@@ -186,8 +182,7 @@ abstract class AppDataBase : RoomDatabase() {
                            description = "Superbe vila dans le bourg de Montlignon, 11 chambres, cuisine toute équipée, 3 salles de bain modernes. Dispose d'un garage d'une superficie de 80m². S'étale sur 2 étages, un toilette par étage.",
                            address = "18 allée de la Chasse",
                            city = "Montlignon",
-                           nearbyBusiness = "Boulangerie, écoles, forêt et parc",
-                           status = Status.FOR_SALE,
+                           status = Status.SOLD,
                            amenities = listOf(Amenity.BAKERY, Amenity.SCHOOL),
                            dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
                                ZoneOffset.UTC),
@@ -207,7 +202,6 @@ abstract class AppDataBase : RoomDatabase() {
                            description = "Superbe appartement dans le centre de Montreuil, 2 chambres, cuisine toute équipée, salle de bain moderne. Au 4e étage avec ascensseur. Parfait pour jeune couple !",
                            address = "9 rue Parmentier",
                            city = "Montreuil",
-                           nearbyBusiness = null,
                            status = Status.FOR_SALE,
                            amenities = listOf(Amenity.BAKERY, Amenity.SCHOOL),
                            dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(

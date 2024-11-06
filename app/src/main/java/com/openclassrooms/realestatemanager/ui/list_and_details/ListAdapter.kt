@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.list_and_details
 
 
+import android.graphics.Color
 import android.view.LayoutInflater
 
 import android.view.ViewGroup
@@ -54,10 +55,16 @@ class ListAdapter(private val clickedListener: (id: Long) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(itemState: ItemState) {
             val realestate = itemState.realEstate
+            val context = binding.root.context
             //set text
-            binding.nameTv.text = realestate.title
+            binding.statusDisplayTv.text = ContextCompat.getString(context, realestate.status.state)
+            if(realestate.status.state == R.string.for_sale){
+                binding.statusDisplayTv.setTextColor(ContextCompat.getColor(context, R.color.md_theme_tertiaryFixed_mediumContrast))
+            }else{
+                binding.statusDisplayTv.setTextColor(ContextCompat.getColor(context, R.color.md_theme_error_mediumContrast))
+            }
             binding.cityTv.text = realestate.city
-            binding.buildingTypeTv.text = ContextCompat.getString(binding.root.context, realestate.type.displayName)
+            binding.buildingTypeTv.text = ContextCompat.getString(context, realestate.type.displayName)
             binding.priceTv.text = realestate.priceTag.toString().plus("€")
             if (realestate.photos.isNotEmpty()) {
                 binding.imageRealestate.load(realestate.photos[0].urlPhoto) {
@@ -65,9 +72,9 @@ class ListAdapter(private val clickedListener: (id: Long) -> Unit) :
                 }
             }
             if(itemState.isSelected){
-                binding.realestateContainer.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.md_theme_primaryContainer))
+                binding.realestateContainer.setBackgroundColor(ContextCompat.getColor(context, R.color.md_theme_primaryContainer))
             }else{
-                binding.realestateContainer.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.md_theme_background))
+                binding.realestateContainer.setBackgroundColor(ContextCompat.getColor(context, R.color.md_theme_background))
             }
 
         }

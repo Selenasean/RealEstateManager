@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "realEstateAgents")
-data class RealEstateAgent(
+data class RealEstateAgentDb(
 
     @PrimaryKey(autoGenerate = true) val uid: Long = 0,
 
