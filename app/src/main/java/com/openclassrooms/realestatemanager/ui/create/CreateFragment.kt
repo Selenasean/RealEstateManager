@@ -2,26 +2,24 @@ package com.openclassrooms.realestatemanager.ui.create
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.data.model.Amenity
 import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.databinding.FragmentCreateBinding
-import com.openclassrooms.realestatemanager.domain.RealEstateAgent
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
 import kotlin.random.Random
 
 class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
 
-    companion object{
+    companion object {
         fun newInstance() = CreateFragment()
         const val TAG = "CREATE_BOTTOM_SHEET"
     }
@@ -33,66 +31,77 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         val binding = FragmentCreateBinding.bind(view)
         val context = binding.root.context
 
+        //TODO : photos to add and display
+
         //settings for dropDown menus & chips
         dropDownMenusSettings(binding, context)
-        displayAmenitiesChips(binding,context)
-        viewModel.state.observe( viewLifecycleOwner){ render(it, binding) }
-        binding.createBtn.setOnClickListener { view -> createRealEstate() }
+        displayAmenitiesChips(binding, context)
+        viewModel.state.observe(viewLifecycleOwner) { render(it, binding) }
+        binding.createBtn.setOnClickListener { viewModel.createRealEstate() }
 
+        //inputs listeners
+        binding.tvAddress.doAfterTextChanged{ viewModel.updateAddress(it.toString()) }
+        binding.tvCity.doAfterTextChanged { viewModel.updateCity(it.toString()) }
+        binding.tvPrice.doAfterTextChanged { viewModel.updatePrice(it.toString()) }
+        binding.tvSurface.doAfterTextChanged { viewModel.updateSurface(it.toString()) }
+        binding.tvRooms.doAfterTextChanged{ viewModel.updateRooms(it.toString()) }
+        binding.tvBedrooms.doAfterTextChanged { viewModel.updateBedrooms(it.toString()) }
+        binding.tvBathrooms.doAfterTextChanged { viewModel.updateBathrooms(it.toString()) }
+        binding.tvDescription.doAfterTextChanged { viewModel.updateDescription(it.toString()) }
     }
 
     private fun render(it: RealEstateCreatedState, binding: FragmentCreateBinding) {
         binding.createBtn.isEnabled = it.isCreatedEnabled()
     }
 
-
-    private fun createRealEstate() {
-        //TODO: create realEstate : type, address, city, price, surface, rooms, bedrooms, bathrooms, description, amenities,agentName
-        var type: String
-        var adress: String
-        var city: String
-        var price: Int
-        var surface: Int
-        var rooms: Int
-        var bedrooms: Int
-        var batrooms: Int
-        var descripton: String
-        var amenities: List<String>
-        var agentName: String
-
-    }
-
     private fun displayAmenitiesChips(binding: FragmentCreateBinding, context: Context) {
         val chipsGroup = binding.chipGroup
-        val amenitiesList: List<String> = Amenity.entries.map { ContextCompat.getString(context,it.displayName) }
 
-        amenitiesList.forEach{ amenity ->
-            val chip = LayoutInflater.from(context).inflate(R.layout.chip_layout,chipsGroup,false) as Chip
-            chip.text = amenity
+        Amenity.entries.forEach { amenity ->
+            val chip = LayoutInflater.from(context)
+                .inflate(R.layout.chip_layout, chipsGroup, false) as Chip
+            chip.text = ContextCompat.getString(context, amenity.displayName)
+
             //attributes id to each chip
             chip.id = Random.nextInt()
             chipsGroup.addView(chip)
+
+            //listener
+            chip.setOnCheckedChangeListener { _, isChecked ->
+                viewModel.updateAmenities(amenity, isChecked)
+            }
         }
 
 
     }
 
-    private fun dropDownMenusSettings(binding: FragmentCreateBinding,context: Context) {
+    private fun dropDownMenusSettings(binding: FragmentCreateBinding, context: Context) {
         //for type of real estate menu
-        val typeItems = BuildingType.entries.map { ContextCompat.getString(context,it.displayName) }
-        val typeAdapter = ArrayAdapter(requireContext(),R.layout.dropdown_menu_create, typeItems)
+        val typeItems =
+            BuildingType.entries.map { ContextCompat.getString(context, it.displayName) }
+        val typeAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_menu_create, typeItems)
         binding.tvType.setAdapter(typeAdapter)
 
-        //for agent's name menu
-        viewModel.getAgentsName().observe(viewLifecycleOwner){
-            val agentAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_menu_create,it)
-            binding.tvAgent.setAdapter(agentAdapter)
+        //listener
+        binding.tvType.setOnItemClickListener { _, _, position, _ ->
+            viewModel.updateType(BuildingType.entries[position])
         }
 
+        //for agent's name menu
+        viewModel.getAgents().observe(viewLifecycleOwner) { agents ->
+            val agentAdapter = ArrayAdapter(
+                requireContext(),
+                R.layout.dropdown_menu_create,
+                agents.map { agent -> agent.name }
+            )
+            binding.tvAgent.setAdapter(agentAdapter)
 
+            //listener
+            binding.tvAgent.setOnItemClickListener { _, _, position, _ ->
+                viewModel.updateAgentName(agents[position])
+            }
+        }
 
     }
-    
-
 
 }

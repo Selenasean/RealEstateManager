@@ -97,7 +97,7 @@ class Repository(private val appdatabase: AppDataBase) {
 
     }
 
-    fun createRealEstate(realEstate: RealEstateToCreate){
+    suspend fun createRealEstate(realEstate: RealEstateToCreate){
 
         appdatabase.realEstateDao().createRealEstate(
             RealEstateDb(
@@ -120,5 +120,5 @@ class Repository(private val appdatabase: AppDataBase) {
         )
     }
 
-    //TODO : function mapping
+    //TODO : function mapping here ?
 }

@@ -26,6 +26,7 @@ import java.time.ZoneOffset
 @Database(
     entities = [PhotoDb::class, RealEstateDb::class, RealEstateAgentDb::class],
     version = 1,
+
     exportSchema = false
 )
 @TypeConverters(Converters::class)

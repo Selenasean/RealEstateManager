@@ -13,13 +13,13 @@ import kotlinx.coroutines.flow.Flow
 interface RealEstateDao {
 
     @Insert
-    fun createRealEstate(realEstate: RealEstateDb) : Long
+    suspend fun createRealEstate(realEstate: RealEstateDb) : Long
 
     @Delete
-    fun deleteRealEstate(realEstate: RealEstateDb)
+    suspend fun deleteRealEstate(realEstate: RealEstateDb)
 
     @Update
-    fun updateRealEstate(realEstate: RealEstateDb)
+     suspend fun updateRealEstate(realEstate: RealEstateDb)
 
     @Query("SELECT * FROM realEstates LEFT JOIN photos ON realEstates.uid = photos.realEstateId")
     fun getAllRealEstates(): Flow<Map<RealEstateDb, List<PhotoDb>>>
