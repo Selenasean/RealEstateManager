@@ -1,27 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardview_item"
     android:layout_width="150dp"
     android:layout_height="150dp"
-    android:layout_marginEnd="10dp">
+    app:cardCornerRadius="10dp"
+    android:layout_marginEnd="@dimen/margin_medium"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/image_item"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:contentDescription="@null"
-        android:scaleType="centerCrop"
+    <FrameLayout
+        android:id="@+id/cardview_lyt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large"
-        tools:src="@tools:sample/backgrounds/scenic" />
+        <ImageView
+            android:id="@+id/image_item"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+        <TextView
+            android:id="@+id/label_item"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            tools:text="LABEL"
+            android:background="#80CDCDCD"
+            android:layout_gravity="bottom"
+            android:alpha="@integer/material_motion_duration_medium_1"
+            />
+
+    </FrameLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
+
+
 

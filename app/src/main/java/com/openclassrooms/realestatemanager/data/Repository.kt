@@ -13,6 +13,7 @@ import com.openclassrooms.realestatemanager.domain.RealEstateToCreate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.Instant
+import java.util.UUID
 
 class Repository(private val appdatabase: AppDataBase) {
 
@@ -64,7 +65,7 @@ class Repository(private val appdatabase: AppDataBase) {
                 type = entry.key.type,
                 photos = photos.map { photoDb ->
                     Photo(
-                        id = photoDb.uid,
+                        uid = photoDb.uid,
                         urlPhoto = photoDb.urlPhoto,
                     )
                 },

@@ -36,7 +36,7 @@
             android:layout_marginTop="10dp"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="@color/md_theme_onPrimaryContainer"
+            android:textColor="?attr/colorPrimary"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/image_realestate"
             tools:text="@tools:sample/first_names"/>
@@ -71,7 +71,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="5dp"
             android:textSize="20sp"
-            android:textColor="@color/md_theme_secondary"
+            android:textColor="?attr/colorSecondary"
             app:layout_constraintTop_toBottomOf="@id/city_tv"
             app:layout_constraintStart_toEndOf="@id/image_realestate"
             tools:text="@tools:sample/date/mmddyy"/>

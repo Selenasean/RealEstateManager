@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.create
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +13,7 @@ import com.openclassrooms.realestatemanager.domain.RealEstateAgent
 import com.openclassrooms.realestatemanager.domain.RealEstateToCreate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class CreateViewModel(private val repository: Repository) : ViewModel() {
 
@@ -127,6 +129,30 @@ class CreateViewModel(private val repository: Repository) : ViewModel() {
         _createdRealEstateMutableStateFlow.value = currentState.copy(agent = agent)
         Log.i("createVM", "agent :${_createdRealEstateMutableStateFlow.value}")
     }
+
+    fun updatePhotos(uris: List<Uri>) {
+        val currentState = _createdRealEstateMutableStateFlow.value
+        //si uri selectionnée n'existe pas dans la liste des photos du state, ajouter dans la liste sinon ne rien faire
+        val selectedPhotos: List<PhotoSelectedViewState> = uris
+            .filter { uri ->
+                val existingUris = currentState.photos.map { photo ->
+                    photo.uri
+                }
+                !existingUris.contains(uri.toString())
+            }
+            .map { uri ->
+                PhotoSelectedViewState(
+                    id = UUID.randomUUID().toString(),
+                    uri = uri.toString(),
+                    label = null
+                )
+
+            }
+
+        _createdRealEstateMutableStateFlow.value =
+            currentState.copy(photos = selectedPhotos + currentState.photos)
+        Log.i("createVM", "photos :${_createdRealEstateMutableStateFlow.value}")
+    }
 }
 
 /**
@@ -143,14 +169,13 @@ data class RealEstateCreatedState(
     val bathrooms: String? = null,
     val description: String? = null,
     val amenities: List<Amenity> = emptyList(),
-    val agent: RealEstateAgent? = null
+    val agent: RealEstateAgent? = null,
+    val photos: List<PhotoSelectedViewState> = emptyList()
 ) {
     fun isCreatedEnabled(): Boolean {
-        if (agent == null) {
-            return false
-        }
+
         return listOf(
-            type?.toString(),
+            type.toString(),
             address,
             city,
             price,
@@ -159,7 +184,16 @@ data class RealEstateCreatedState(
             bedrooms,
             bathrooms,
             description,
-        ).none { it.isNullOrBlank() }
+        ).none { it.isNullOrBlank() } && agent != null && photos.isNotEmpty()
     }
 }
+
+/**
+ * State to display photo selected on screen
+ */
+data class PhotoSelectedViewState(
+    val id: String,
+    val uri: String,
+    val label: String?,
+)
 

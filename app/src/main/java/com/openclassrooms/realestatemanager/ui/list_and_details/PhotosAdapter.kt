@@ -16,7 +16,7 @@ class PhotosAdapter : ListAdapter<Photo, PhotosAdapter.ViewHolder>(DIFF_CALLBACK
     companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Photo>() {
             override fun areItemsTheSame(oldItem: Photo, newItem: Photo): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.uid == newItem.uid
             }
 
             override fun areContentsTheSame(oldItem: Photo, newItem: Photo): Boolean {
@@ -45,7 +45,8 @@ class PhotosAdapter : ListAdapter<Photo, PhotosAdapter.ViewHolder>(DIFF_CALLBACK
         fun bind(photo: Photo) {
             //set photo
             Log.i("photoAdapter", "bind() ${photo.urlPhoto}" )
-            binding.imageItem.load(photo.urlPhoto) {
+            binding.imageItem.
+            load(photo.urlPhoto) {
                 crossfade(true)
             }
         }

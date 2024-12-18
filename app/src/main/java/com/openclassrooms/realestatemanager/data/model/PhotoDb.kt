@@ -12,7 +12,7 @@ import androidx.room.PrimaryKey
     )]
 )
 data class PhotoDb(
-    @PrimaryKey(autoGenerate = true) val uid: Long = 0 ,
+    @PrimaryKey val uid: String,
 
     val realEstateId: Long,
     val urlPhoto : String,

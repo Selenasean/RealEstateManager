@@ -12,6 +12,10 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
 import com.openclassrooms.realestatemanager.domain.RealEstate
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
+import com.openclassrooms.realestatemanager.utils.CurrencyCode
+import com.openclassrooms.realestatemanager.utils.Utils
+import java.util.Currency
+import java.util.Locale
 
 class DetailFragment : Fragment() {
 
@@ -54,7 +58,7 @@ class DetailFragment : Fragment() {
             }else{
                 binding.lytAttributes.statusValueTv.setTextColor(ContextCompat.getColor(context, R.color.md_theme_error_mediumContrast))
             }
-            binding.lytAttributes.priceValueTv.text = realEstate.priceTag.toString().plus("€")
+            binding.lytAttributes.priceValueTv.text = Utils.priceFormatter(realEstate.priceTag, CurrencyCode.EURO)
             binding.cityTv.text = realEstate.city
             binding.lytAttributes.surfaceValueTv.text = realEstate.surface.toString()
             binding.lytAttributes.roomsValueTv.text = realEstate.rooms.toString()

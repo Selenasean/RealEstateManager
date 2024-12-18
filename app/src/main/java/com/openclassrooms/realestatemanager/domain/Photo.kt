@@ -1,7 +1,7 @@
 package com.openclassrooms.realestatemanager.domain
 
 data class Photo(
-    val id: Long,
+    val uid: String,
     val urlPhoto :String
 )
 

@@ -35,13 +35,12 @@
             <!-- TYPE -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_lyt_type"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/type_tv"
                 android:padding="@dimen/margin_medium"
-                app:startIconDrawable="@drawable/house_icon"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                >
+                app:startIconDrawable="@drawable/house_icon">
 
                 <AutoCompleteTextView
                     android:id="@+id/tv_type"
@@ -53,22 +52,73 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- PHOTOS PHOTOPICKER -->
-<!--            <com.google.android.material.textfield.TextInputLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:hint="@string/photos_tv"-->
-<!--                android:padding="@dimen/margin_medium"-->
-<!--                app:endIconMode="clear_text"-->
-<!--                app:startIconDrawable="@drawable/photo_icon">-->
+            <!-- PHOTOS PHOTOPICKER  add button for photo picker + for taking a picture + label -->
+            <LinearLayout
+                android:id="@+id/photo_tv_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_medium"
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
 
-<!--                <com.google.android.material.textfield.TextInputEditText-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:paddingStart="@dimen/margin_extra"-->
-<!--                    tools:ignore="RtlSymmetry" />-->
+                <ImageView
+                    android:id="@+id/icon_photo"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:contentDescription="@null"
+                    android:src="@drawable/photo_icon"
+                    app:tint="@color/md_theme_onPrimaryContainer" />
 
-<!--            </com.google.android.material.textfield.TextInputLayout>-->
+                <TextView
+                    android:id="@+id/photo_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/photos_tv"
+                    android:textSize="@dimen/text_size_medium"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/photo_btn_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_medium"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/select_picture_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:text="@string/select_picture_btn"
+                    android:textAllCaps="true"
+                    style="@style/Widget.Material3.Button"/>
+
+                <Button
+                    android:id="@+id/take_picture_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/take_picture_btn"
+                    android:textAllCaps="true"
+                    style="@style/Widget.Material3.Button"/>
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_photos_selected"
+                android:layout_width="match_parent"
+                android:layout_margin="@dimen/margin_medium"
+                android:layout_height="150dp"
+                android:orientation="horizontal"
+                tools:listitem="@layout/image_item"
+                android:clipToPadding="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:importantForAccessibility="auto"
+                />
+
+
             <!-- ADDRESS -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_lyt_address"
@@ -121,8 +171,8 @@
                     android:id="@+id/tv_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/margin_extra"
                     android:inputType="number"
+                    android:paddingStart="@dimen/margin_extra"
                     tools:ignore="RtlSymmetry" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -141,8 +191,8 @@
                     android:id="@+id/tv_surface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/margin_extra"
                     android:inputType="numberDecimal"
+                    android:paddingStart="@dimen/margin_extra"
                     tools:ignore="RtlSymmetry" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -161,8 +211,8 @@
                     android:id="@+id/tv_rooms"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/margin_extra"
                     android:inputType="number"
+                    android:paddingStart="@dimen/margin_extra"
                     tools:ignore="RtlSymmetry" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -181,8 +231,8 @@
                     android:id="@+id/tv_bedrooms"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/margin_extra"
                     android:inputType="number"
+                    android:paddingStart="@dimen/margin_extra"
                     tools:ignore="RtlSymmetry" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -201,8 +251,8 @@
                     android:id="@+id/tv_bathrooms"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/margin_extra"
                     android:inputType="number"
+                    android:paddingStart="@dimen/margin_extra"
                     tools:ignore="RtlSymmetry" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -232,26 +282,26 @@
                 android:id="@+id/lyt_amenities"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/amenities_tv"
-                android:padding="@dimen/margin_medium"
                 android:layout_margin="@dimen/margin_medium"
-                android:orientation="horizontal">
+                android:hint="@string/amenities_tv"
+                android:orientation="horizontal"
+                android:padding="@dimen/margin_medium">
 
                 <ImageView
                     android:id="@+id/icon_amenities"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
+                    android:layout_marginEnd="@dimen/margin_medium"
                     android:contentDescription="@null"
                     android:src="@drawable/amenities_icon"
-                    app:tint="@color/md_theme_onPrimaryContainer"
-                    android:layout_marginEnd="@dimen/margin_medium"/>
+                    app:tint="@color/md_theme_onPrimaryContainer" />
 
                 <TextView
                     android:id="@+id/amenities_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size_medium"
-                    android:text="@string/amenities_tv"/>
+                    android:text="@string/amenities_tv"
+                    android:textSize="@dimen/text_size_medium" />
 
             </LinearLayout>
 
@@ -267,35 +317,33 @@
             <!-- REALESTATE AGENT-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_lyt_agent"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/realEstateAgent_tv"
                 android:padding="@dimen/margin_medium"
-                app:startIconDrawable="@drawable/person_icon"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+                app:startIconDrawable="@drawable/person_icon">
 
                 <AutoCompleteTextView
                     android:id="@+id/tv_agent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/margin_extra"
                     android:inputType="none"
-                    tools:ignore="LabelFor,RtlSymmetry"
-                    />
+                    android:paddingStart="@dimen/margin_extra"
+                    tools:ignore="LabelFor,RtlSymmetry" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- CREATE BTN -->
             <Button
                 android:id="@+id/create_btn"
+                style="@style/Widget.Material3.Button"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:text="@string/create_btn"
-                android:textAllCaps="true"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                style="@style/Widget.Material3.Button"
-                />
+                android:text="@string/create_btn"
+                android:textAllCaps="true" />
 
         </LinearLayout>
 

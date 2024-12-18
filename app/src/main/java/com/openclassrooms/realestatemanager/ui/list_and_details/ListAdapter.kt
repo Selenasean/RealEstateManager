@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.ui.list_and_details
 
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 
 import android.view.ViewGroup
@@ -70,6 +71,7 @@ class ListAdapter(private val clickedListener: (id: Long) -> Unit) :
                 binding.imageRealestate.load(realestate.photos[0].urlPhoto) {
                     crossfade(true)
                 }
+                Log.i("listadapter", realestate.photos.toString())
             }
             if(itemState.isSelected){
                 binding.realestateContainer.setBackgroundColor(ContextCompat.getColor(context, R.color.md_theme_primaryContainer))

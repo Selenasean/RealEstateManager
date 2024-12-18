@@ -32,7 +32,7 @@ public class OldMainActivity extends AppCompatActivity {
     }
 
     private void configureTextViewQuantity(){
-        int quantity = Utils.convertDollarToEuro(100);
+        float quantity = Utils.convertDollarToEuro(100);
         textViewQuantity.setTextSize(20);
         //parameter int changed into String
         textViewQuantity.setText(String.valueOf(quantity));

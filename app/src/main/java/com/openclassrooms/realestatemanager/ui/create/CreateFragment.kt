@@ -2,9 +2,15 @@ package com.openclassrooms.realestatemanager.ui.create
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Message
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
@@ -22,6 +28,7 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
     companion object {
         fun newInstance() = CreateFragment()
         const val TAG = "CREATE_BOTTOM_SHEET"
+        private const val CURRENT_PHOTO_KEY = "CURRENT_PHOTO_KEY"
     }
 
     private val viewModel by activityViewModels<CreateViewModel> { ViewModelFactory.getInstance() }
@@ -31,7 +38,8 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         val binding = FragmentCreateBinding.bind(view)
         val context = binding.root.context
 
-        //TODO : photos to add and display
+        //TODO : photos to add and display : listener to open photopicker and choose photo + label ?
+        // TODO : onclick on picture from rv choose to change picture and label ?
 
         //settings for dropDown menus & chips
         dropDownMenusSettings(binding, context)
@@ -48,6 +56,23 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         binding.tvBedrooms.doAfterTextChanged { viewModel.updateBedrooms(it.toString()) }
         binding.tvBathrooms.doAfterTextChanged { viewModel.updateBathrooms(it.toString()) }
         binding.tvDescription.doAfterTextChanged { viewModel.updateDescription(it.toString()) }
+
+        //photopicker & listener
+        val pickMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()){ uris ->
+            if(uris.isNotEmpty()){
+                //do something with it
+                Log.d("PhotoPicker", "Number of items selected: ${uris.size}")
+                Log.d("PhotoPicker", "uris = ${uris}")
+                viewModel.updatePhotos(uris)
+            }
+        }
+        binding.selectPictureBtn.setOnClickListener{
+            openPhotoPicker(pickMedia)
+        }
+    }
+
+    private fun openPhotoPicker(pickMedia: ActivityResultLauncher<PickVisualMediaRequest>) {
+        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
     private fun render(it: RealEstateCreatedState, binding: FragmentCreateBinding) {
@@ -71,7 +96,6 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
                 viewModel.updateAmenities(amenity, isChecked)
             }
         }
-
 
     }
 
