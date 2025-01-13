@@ -1,8 +1,10 @@
 package com.openclassrooms.realestatemanager.ui
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.openclassrooms.realestatemanager.AppApplication
 import com.openclassrooms.realestatemanager.ui.create.CreateViewModel
@@ -32,12 +34,13 @@ class ViewModelFactory : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
         val application : AppApplication = extras[APPLICATION_KEY] as AppApplication
+        val savedStateHandle : SavedStateHandle = extras.createSavedStateHandle()
 
         if(modelClass.isAssignableFrom(ListDetailViewModel::class.java)){
             return ListDetailViewModel(application.repository) as T
         }
         if(modelClass.isAssignableFrom(CreateViewModel::class.java)){
-            return CreateViewModel(application.repository) as T
+            return CreateViewModel(application.repository, savedStateHandle) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

@@ -20,7 +20,9 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.data.model.Amenity
 import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.databinding.FragmentCreateBinding
+import com.openclassrooms.realestatemanager.domain.Photo
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
+import com.openclassrooms.realestatemanager.ui.list_and_details.PhotosAdapter
 import kotlin.random.Random
 
 class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
@@ -29,9 +31,12 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         fun newInstance() = CreateFragment()
         const val TAG = "CREATE_BOTTOM_SHEET"
         private const val CURRENT_PHOTO_KEY = "CURRENT_PHOTO_KEY"
+        const val CLASS_NAME = "CREATE_FRAGMENT"
     }
 
+
     private val viewModel by activityViewModels<CreateViewModel> { ViewModelFactory.getInstance() }
+    private lateinit var adapter: PhotosAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,11 +46,12 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         //TODO : photos to add and display : listener to open photopicker and choose photo + label ?
         // TODO : onclick on picture from rv choose to change picture and label ?
 
-        //settings for dropDown menus & chips
+        //settings for dropDown menus, chips, viewModel & recyclerView
         dropDownMenusSettings(binding, context)
         displayAmenitiesChips(binding, context)
         viewModel.state.observe(viewLifecycleOwner) { render(it, binding) }
         binding.createBtn.setOnClickListener { viewModel.createRealEstate() }
+        setRecyclerView(binding)
 
         //inputs listeners
         binding.tvAddress.doAfterTextChanged{ viewModel.updateAddress(it.toString()) }
@@ -71,12 +77,34 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         }
     }
 
+    private fun setRecyclerView(binding: FragmentCreateBinding) {
+        val recyclerView = binding.rvPhotosSelected
+        adapter = PhotosAdapter(CLASS_NAME)
+        recyclerView.adapter = adapter
+    }
+
     private fun openPhotoPicker(pickMedia: ActivityResultLauncher<PickVisualMediaRequest>) {
         pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
     private fun render(it: RealEstateCreatedState, binding: FragmentCreateBinding) {
         binding.createBtn.isEnabled = it.isCreatedEnabled()
+        if(it.photos.isEmpty()){
+            binding.rvPhotosSelected.visibility = View.GONE
+        }else{
+            binding.rvPhotosSelected.visibility = View.VISIBLE
+            adapter.submitList(
+                it.photos.map { photo ->
+                    Photo(
+                        uid = photo.id,
+                        urlPhoto = photo.uri,
+                        label = photo.label!!
+                    )
+                }
+            )
+        }
+
+
     }
 
     private fun displayAmenitiesChips(binding: FragmentCreateBinding, context: Context) {

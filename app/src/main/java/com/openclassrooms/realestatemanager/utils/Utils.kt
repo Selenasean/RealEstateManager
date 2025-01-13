@@ -37,7 +37,7 @@ object Utils {
         val formatter = NumberFormat.getCurrencyInstance(locale)
         formatter.currency = Currency.getInstance(currencyCode.code)
         formatter.maximumFractionDigits = 2
-            return formatter.format(price)
+        return formatter.format(price)
 
     }
 

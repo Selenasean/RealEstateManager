@@ -54,7 +54,8 @@
     <string name="amenities_string">Amenities</string>
     <string name="none">None</string>
     <string name="forest">Forest</string>
-
+    <string name="delete_icon">delete icon</string>
+    <string name="pencil_icon">pencil icon</string>
 
 
 </resources>

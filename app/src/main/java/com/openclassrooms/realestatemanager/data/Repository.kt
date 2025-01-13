@@ -34,7 +34,8 @@ class Repository(private val appdatabase: AppDataBase) {
                     photos = it.value.map { photoDb ->
                         Photo(
                             photoDb.uid,
-                            photoDb.urlPhoto
+                            photoDb.urlPhoto,
+                            photoDb.label
                         )
                     },
                     surface = it.key.surface,
@@ -67,6 +68,7 @@ class Repository(private val appdatabase: AppDataBase) {
                     Photo(
                         uid = photoDb.uid,
                         urlPhoto = photoDb.urlPhoto,
+                        label = photoDb.label
                     )
                 },
                 surface = entry.key.surface,

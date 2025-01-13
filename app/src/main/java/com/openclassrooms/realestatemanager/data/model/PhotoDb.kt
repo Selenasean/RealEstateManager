@@ -16,4 +16,5 @@ data class PhotoDb(
 
     val realEstateId: Long,
     val urlPhoto : String,
+    val label: String
 )

@@ -36,6 +36,25 @@
             android:alpha="@integer/material_motion_duration_medium_1"
             />
 
+        <ImageButton
+            android:id="@+id/delete_image"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="end"
+            android:layout_margin="@dimen/extra_small"
+            android:background="@drawable/cross"
+            android:contentDescription="@string/delete_icon" />
+
+        <ImageButton
+            android:id="@+id/label_create"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="@dimen/margin_extra_medium_medium"
+            android:layout_marginEnd="@dimen/extra_small"
+            android:background="@drawable/stylo"
+            android:contentDescription="@string/pencil_icon" />
+
     </FrameLayout>
 
 

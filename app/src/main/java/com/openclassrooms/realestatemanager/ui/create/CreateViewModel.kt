@@ -1,8 +1,11 @@
 package com.openclassrooms.realestatemanager.ui.create
 
 import android.net.Uri
+import android.os.Parcel
+import android.os.Parcelable
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -13,9 +16,13 @@ import com.openclassrooms.realestatemanager.domain.RealEstateAgent
 import com.openclassrooms.realestatemanager.domain.RealEstateToCreate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 import java.util.UUID
 
-class CreateViewModel(private val repository: Repository) : ViewModel() {
+class CreateViewModel(
+    private val repository: Repository,
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
 
     //TODO : create object realEstate à envoyer en bdd
@@ -25,13 +32,14 @@ class CreateViewModel(private val repository: Repository) : ViewModel() {
         return repository.getAllAgents().asLiveData()
     }
 
-    private val _createdRealEstateMutableStateFlow = MutableStateFlow(RealEstateCreatedState())
+    private val _createdRealEstateMutableStateFlow = savedStateHandle.getMutableStateFlow("KEY_STATE", RealEstateCreatedState())
+
 
     //state of data for UI
     val state: LiveData<RealEstateCreatedState> = _createdRealEstateMutableStateFlow.asLiveData()
 
     fun createRealEstate() {
-        //TODO : get data to send to repo + factoring
+        //TODO : get data to send to repo + factoring -> PHOTO is missing !
         val currentState = _createdRealEstateMutableStateFlow.value
 
         val realEstateToCreate: RealEstateToCreate = RealEstateToCreate(
@@ -135,6 +143,7 @@ class CreateViewModel(private val repository: Repository) : ViewModel() {
         //si uri selectionnée n'existe pas dans la liste des photos du state, ajouter dans la liste sinon ne rien faire
         val selectedPhotos: List<PhotoSelectedViewState> = uris
             .filter { uri ->
+                //map currentState.photos from List<Uri> to List<String>
                 val existingUris = currentState.photos.map { photo ->
                     photo.uri
                 }
@@ -144,7 +153,7 @@ class CreateViewModel(private val repository: Repository) : ViewModel() {
                 PhotoSelectedViewState(
                     id = UUID.randomUUID().toString(),
                     uri = uri.toString(),
-                    label = null
+                    label = ""
                 )
 
             }
@@ -158,6 +167,7 @@ class CreateViewModel(private val repository: Repository) : ViewModel() {
 /**
  * State to store data & enabled creation button
  */
+@Parcelize
 data class RealEstateCreatedState(
     val type: BuildingType? = null,
     val address: String? = null,
@@ -171,7 +181,7 @@ data class RealEstateCreatedState(
     val amenities: List<Amenity> = emptyList(),
     val agent: RealEstateAgent? = null,
     val photos: List<PhotoSelectedViewState> = emptyList()
-) {
+) : Parcelable {
     fun isCreatedEnabled(): Boolean {
 
         return listOf(
@@ -191,9 +201,10 @@ data class RealEstateCreatedState(
 /**
  * State to display photo selected on screen
  */
+@Parcelize
 data class PhotoSelectedViewState(
     val id: String,
     val uri: String,
     val label: String?,
-)
+): Parcelable
 

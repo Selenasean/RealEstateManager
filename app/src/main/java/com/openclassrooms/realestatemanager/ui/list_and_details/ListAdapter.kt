@@ -23,6 +23,7 @@ class ListAdapter(private val clickedListener: (id: Long) -> Unit) :
     ) {
 
     companion object {
+
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ItemState>() {
             override fun areItemsTheSame(oldItem: ItemState, newItem: ItemState): Boolean {
                 return oldItem.realEstate.id == newItem.realEstate.id

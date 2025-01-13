@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <dimen name ="extra_small">5dp</dimen>
     <dimen name="margin_extra_medium">20dp</dimen>
     <dimen name="margin_medium">10dp</dimen>
+    <dimen name="margin_extra_medium_medium">40dp</dimen>
     <dimen name="margin_extra">50dp</dimen>
 
     <dimen name="padding_medium_medium">15dp</dimen>

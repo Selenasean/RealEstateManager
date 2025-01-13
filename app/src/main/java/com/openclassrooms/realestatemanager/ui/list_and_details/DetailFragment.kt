@@ -21,6 +21,7 @@ class DetailFragment : Fragment() {
 
     companion object {
         fun newInstance() = DetailFragment()
+        const val CLASS_NAME = "DETAIL_FRAGMENT"
     }
 
     private val viewModel by activityViewModels<ListDetailViewModel> { ViewModelFactory.getInstance() }
@@ -67,13 +68,14 @@ class DetailFragment : Fragment() {
             binding.locationValueTv.text = realEstate.address
             val amenitiesString = realEstate.amenities.map { ContextCompat.getString(context,it.displayName) }
             binding.amenitiesValueTv.text = amenitiesString.joinToString(", ")
+
         }
 
     }
 
     private fun setRecyclerView(binding: FragmentDetailBinding) {
         val recyclerView = binding.imagesRv
-        adapter = PhotosAdapter()
+        adapter = PhotosAdapter(CLASS_NAME)
         recyclerView.adapter = adapter
     }
 

@@ -92,28 +92,32 @@ abstract class AppDataBase : RoomDatabase() {
                            uid = UUID.randomUUID().toString(),
                            realEstateId = estateId1,
                            urlPhoto = "https://images.unsp" +
-                                   "lash.com/photo-1504615755583-2916b52192a3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8aG91c2V8ZW58MHx8MHx8fDA%3D"
+                                   "lash.com/photo-1504615755583-2916b52192a3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8aG91c2V8ZW58MHx8MHx8fDA%3D",
+                           label = "Label 1"
                        )
                    )
                    appDataBase.photoDao().createPhoto(
                        PhotoDb(
                            uid = UUID.randomUUID().toString(),
                            realEstateId = estateId1,
-                           urlPhoto = "https://plus.unsplash.com/premium_photo-1661778773089-8718bcedb39e?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                           urlPhoto = "https://plus.unsplash.com/premium_photo-1661778773089-8718bcedb39e?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                           label = "Label 2"
                        )
                    )
                    appDataBase.photoDao().createPhoto(
                        PhotoDb(
                            uid = UUID.randomUUID().toString(),
                            realEstateId = estateId1,
-                           urlPhoto = "https://images.unsplash.com/photo-1514053026555-49ce8886ae41?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                       )
+                           urlPhoto = "https://images.unsplash.com/photo-1514053026555-49ce8886ae41?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                           label = "Label 3"
+                           )
                    )
                    appDataBase.photoDao().createPhoto(
                        PhotoDb(
                            uid = UUID.randomUUID().toString(),
                            realEstateId = estateId1,
-                           urlPhoto = "https://plus.unsplash.com/premium_photo-1683888725059-b912dda58ba0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                           urlPhoto = "https://plus.unsplash.com/premium_photo-1683888725059-b912dda58ba0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                                   label = "Label 4"
                        )
                    )
                    appDataBase.realEstateDao().createRealEstate(
