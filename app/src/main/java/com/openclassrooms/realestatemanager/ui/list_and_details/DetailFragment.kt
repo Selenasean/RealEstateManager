@@ -12,6 +12,7 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
 import com.openclassrooms.realestatemanager.domain.RealEstate
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
+import com.openclassrooms.realestatemanager.ui.create.PhotoSelectedViewState
 import com.openclassrooms.realestatemanager.utils.CurrencyCode
 import com.openclassrooms.realestatemanager.utils.Utils
 import java.util.Currency
@@ -51,7 +52,15 @@ class DetailFragment : Fragment() {
             val context = binding.root.context
             binding.constraintlayoutContainer.visibility = View.VISIBLE
             binding.noItemLytContainer.visibility = View.GONE
-            adapter.submitList(realEstate.photos)
+            adapter.submitList(realEstate.photos.map { photo ->
+                //TODO : map RealEstate en RealEstateViewState dans VM
+                PhotoSelectedViewState(
+                    id = photo.uid,
+                    uri = photo.urlPhoto,
+                    label = photo.label
+                )
+
+            })
             binding.descriptionContent.text = realEstate.description
             binding.lytAttributes.statusValueTv.text = ContextCompat.getString(context, realEstate.status.state)
             if(realEstate.status.state == R.string.for_sale){
@@ -75,7 +84,8 @@ class DetailFragment : Fragment() {
 
     private fun setRecyclerView(binding: FragmentDetailBinding) {
         val recyclerView = binding.imagesRv
-        adapter = PhotosAdapter(CLASS_NAME)
+        //comment ne rien faire
+        adapter = PhotosAdapter(CLASS_NAME, labelClickedListener = { Unit})
         recyclerView.adapter = adapter
     }
 

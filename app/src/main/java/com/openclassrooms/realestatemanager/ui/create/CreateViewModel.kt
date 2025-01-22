@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -42,7 +43,7 @@ class CreateViewModel(
         //TODO : get data to send to repo + factoring -> PHOTO is missing !
         val currentState = _createdRealEstateMutableStateFlow.value
 
-        val realEstateToCreate: RealEstateToCreate = RealEstateToCreate(
+        val realEstateToCreate = RealEstateToCreate(
             type = currentState.type!!,
             address = currentState.address!!.trim(),
             city = currentState.city!!.trim(),
@@ -162,6 +163,24 @@ class CreateViewModel(
             currentState.copy(photos = selectedPhotos + currentState.photos)
         Log.i("createVM", "photos :${_createdRealEstateMutableStateFlow.value}")
     }
+
+    fun deletePhoto(uri: String){
+        //supp photo selectionné depuis RV, chercher la photo par son URI dans liste de photos state
+
+    }
+
+    fun updateLabel(label: String, id: String){
+        val currentState = _createdRealEstateMutableStateFlow.value
+        val photosUpdated: List<PhotoSelectedViewState> = currentState.photos.map { photo ->
+            if(photo.id == id){
+                photo.copy(label = label)
+            }else{
+                photo
+            }
+        }
+        _createdRealEstateMutableStateFlow.value =
+            currentState.copy(photos = photosUpdated)
+    }
 }
 
 /**
@@ -205,6 +224,6 @@ data class RealEstateCreatedState(
 data class PhotoSelectedViewState(
     val id: String,
     val uri: String,
-    val label: String?,
+    val label: String,
 ): Parcelable
 

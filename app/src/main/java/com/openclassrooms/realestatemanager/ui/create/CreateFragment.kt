@@ -1,28 +1,30 @@
 package com.openclassrooms.realestatemanager.ui.create
 
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
-import android.os.Message
+import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
+import com.openclassrooms.realestatemanager.BuildConfig
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.data.model.Amenity
 import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.databinding.FragmentCreateBinding
-import com.openclassrooms.realestatemanager.domain.Photo
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
 import com.openclassrooms.realestatemanager.ui.list_and_details.PhotosAdapter
+import java.io.File
 import kotlin.random.Random
 
 class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
@@ -30,13 +32,12 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
     companion object {
         fun newInstance() = CreateFragment()
         const val TAG = "CREATE_BOTTOM_SHEET"
-        private const val CURRENT_PHOTO_KEY = "CURRENT_PHOTO_KEY"
         const val CLASS_NAME = "CREATE_FRAGMENT"
     }
 
-
     private val viewModel by activityViewModels<CreateViewModel> { ViewModelFactory.getInstance() }
     private lateinit var adapter: PhotosAdapter
+    private var currentPhotoUri: Uri? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,32 +55,60 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         setRecyclerView(binding)
 
         //inputs listeners
-        binding.tvAddress.doAfterTextChanged{ viewModel.updateAddress(it.toString()) }
+        binding.tvAddress.doAfterTextChanged { viewModel.updateAddress(it.toString()) }
         binding.tvCity.doAfterTextChanged { viewModel.updateCity(it.toString()) }
         binding.tvPrice.doAfterTextChanged { viewModel.updatePrice(it.toString()) }
         binding.tvSurface.doAfterTextChanged { viewModel.updateSurface(it.toString()) }
-        binding.tvRooms.doAfterTextChanged{ viewModel.updateRooms(it.toString()) }
+        binding.tvRooms.doAfterTextChanged { viewModel.updateRooms(it.toString()) }
         binding.tvBedrooms.doAfterTextChanged { viewModel.updateBedrooms(it.toString()) }
         binding.tvBathrooms.doAfterTextChanged { viewModel.updateBathrooms(it.toString()) }
         binding.tvDescription.doAfterTextChanged { viewModel.updateDescription(it.toString()) }
 
-        //photopicker & listener
-        val pickMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()){ uris ->
-            if(uris.isNotEmpty()){
-                //do something with it
-                Log.d("PhotoPicker", "Number of items selected: ${uris.size}")
-                Log.d("PhotoPicker", "uris = ${uris}")
-                viewModel.updatePhotos(uris)
+        //photopicker media & listener
+        val pickMedia =
+            registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
+                if (uris.isNotEmpty()) {
+                    Log.d("PhotoPicker", "Number of items selected: ${uris.size}")
+                    Log.d("PhotoPicker", "uris = ${uris}")
+                    viewModel.updatePhotos(uris)
+                }
             }
-        }
-        binding.selectPictureBtn.setOnClickListener{
+        binding.selectPictureBtn.setOnClickListener {
             openPhotoPicker(pickMedia)
         }
+        //take picture from device
+        val takePictureCallback =
+            registerForActivityResult(ActivityResultContracts.TakePicture()) { successful ->
+                if (successful) {
+                    //do something
+
+                }
+
+            }
+
+        binding.takePictureBtn.setOnClickListener {
+            currentPhotoUri = FileProvider.getUriForFile(
+                context,
+                BuildConfig.APPLICATION_ID + ".provider",
+                File.createTempFile(
+                    "JPEG_",
+                    ".jpg",
+                    context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                )
+            )
+
+            takePictureCallback.launch(currentPhotoUri)
+        }
+
     }
 
     private fun setRecyclerView(binding: FragmentCreateBinding) {
         val recyclerView = binding.rvPhotosSelected
-        adapter = PhotosAdapter(CLASS_NAME)
+        adapter = PhotosAdapter(CLASS_NAME, labelClickedListener = { state: PhotoSelectedViewState ->
+            //open a dialog with edit text and display photo
+            val showDialog = CreateLabelDialogFragment.newInstance(state)
+            showDialog.show(childFragmentManager, "dialog")
+        })
         recyclerView.adapter = adapter
     }
 
@@ -89,19 +118,11 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
 
     private fun render(it: RealEstateCreatedState, binding: FragmentCreateBinding) {
         binding.createBtn.isEnabled = it.isCreatedEnabled()
-        if(it.photos.isEmpty()){
+        if (it.photos.isEmpty()) {
             binding.rvPhotosSelected.visibility = View.GONE
-        }else{
+        } else {
             binding.rvPhotosSelected.visibility = View.VISIBLE
-            adapter.submitList(
-                it.photos.map { photo ->
-                    Photo(
-                        uid = photo.id,
-                        urlPhoto = photo.uri,
-                        label = photo.label!!
-                    )
-                }
-            )
+            adapter.submitList(it.photos)
         }
 
 

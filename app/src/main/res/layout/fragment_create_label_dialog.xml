@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/photo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/margin_extra_medium"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_input_lyt_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/label_tv"
+        android:padding="@dimen/margin_medium"
+        app:endIconMode="clear_text"
+        app:startIconDrawable="@drawable/create_icon">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tv_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/margin_extra"
+            tools:ignore="RtlSymmetry" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/create_label_btn"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginTop="@dimen/margin_extra_medium"
+        android:text="@string/create_label"
+        android:textAllCaps="true" />
+
+</LinearLayout>

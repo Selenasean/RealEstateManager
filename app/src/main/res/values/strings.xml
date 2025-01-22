@@ -56,6 +56,9 @@
     <string name="forest">Forest</string>
     <string name="delete_icon">delete icon</string>
     <string name="pencil_icon">pencil icon</string>
+    <string name="label_tv">Add a label</string>
+    <string name="create_label">Create label</string>
+    <string name="add_label">Add label</string>
 
 
 </resources>
