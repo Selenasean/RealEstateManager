@@ -44,9 +44,6 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         val binding = FragmentCreateBinding.bind(view)
         val context = binding.root.context
 
-        //TODO : photos to add and display : listener to open photopicker and choose photo + label ?
-        // TODO : onclick on picture from rv choose to change picture and label ?
-
         //settings for dropDown menus, chips, viewModel & recyclerView
         dropDownMenusSettings(binding, context)
         displayAmenitiesChips(binding, context)
@@ -68,22 +65,19 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
                 if (uris.isNotEmpty()) {
-                    Log.d("PhotoPicker", "Number of items selected: ${uris.size}")
-                    Log.d("PhotoPicker", "uris = ${uris}")
                     viewModel.updatePhotos(uris)
                 }
             }
         binding.selectPictureBtn.setOnClickListener {
             openPhotoPicker(pickMedia)
         }
+
         //take picture from device
         val takePictureCallback =
             registerForActivityResult(ActivityResultContracts.TakePicture()) { successful ->
                 if (successful) {
-                    //do something
-
+                    viewModel.addPictureTaken(currentPhotoUri.toString())
                 }
-
             }
 
         binding.takePictureBtn.setOnClickListener {
@@ -102,20 +96,9 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
 
     }
 
-    private fun setRecyclerView(binding: FragmentCreateBinding) {
-        val recyclerView = binding.rvPhotosSelected
-        adapter = PhotosAdapter(CLASS_NAME, labelClickedListener = { state: PhotoSelectedViewState ->
-            //open a dialog with edit text and display photo
-            val showDialog = CreateLabelDialogFragment.newInstance(state)
-            showDialog.show(childFragmentManager, "dialog")
-        })
-        recyclerView.adapter = adapter
-    }
-
-    private fun openPhotoPicker(pickMedia: ActivityResultLauncher<PickVisualMediaRequest>) {
-        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-    }
-
+    /**
+     * Display recyclerView of photos or not depending on the size of the photo's list
+     */
     private fun render(it: RealEstateCreatedState, binding: FragmentCreateBinding) {
         binding.createBtn.isEnabled = it.isCreatedEnabled()
         if (it.photos.isEmpty()) {
@@ -125,9 +108,36 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
             adapter.submitList(it.photos)
         }
 
-
     }
 
+
+    /**
+     * Settings for recycler view used to display photo taken or selected by user
+     */
+    private fun setRecyclerView(binding: FragmentCreateBinding) {
+        val recyclerView = binding.rvPhotosSelected
+        adapter =
+            PhotosAdapter(CLASS_NAME, labelClickedListener = { state: PhotoSelectedViewState ->
+                //open a dialog with edit text and display photo to edit a label
+                val showDialog = CreateLabelDialogFragment.newInstance(state)
+                showDialog.show(childFragmentManager, "dialog")
+            }, onDeleteClickedListener = { state: PhotoSelectedViewState ->
+                Log.i("createVM", state.id + state.uri)
+                viewModel.deletePhoto(state.id)
+            })
+        recyclerView.adapter = adapter
+    }
+
+    /**
+     * To open the PhotoPicker
+     */
+    private fun openPhotoPicker(pickMedia: ActivityResultLauncher<PickVisualMediaRequest>) {
+        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
+
+    /**
+     * To display amenities chips and listener
+     */
     private fun displayAmenitiesChips(binding: FragmentCreateBinding, context: Context) {
         val chipsGroup = binding.chipGroup
 
@@ -148,11 +158,18 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
 
     }
 
+    /**
+     * Settings fo the dropDown Menus : type of real estate and agent's name
+     */
     private fun dropDownMenusSettings(binding: FragmentCreateBinding, context: Context) {
         //for type of real estate menu
         val typeItems =
             BuildingType.entries.map { ContextCompat.getString(context, it.displayName) }
-        val typeAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_menu_create, typeItems)
+        val typeAdapter = ArrayAdapter(
+            requireContext(),
+            R.layout.dropdown_menu_create,
+            typeItems
+        )
         binding.tvType.setAdapter(typeAdapter)
 
         //listener

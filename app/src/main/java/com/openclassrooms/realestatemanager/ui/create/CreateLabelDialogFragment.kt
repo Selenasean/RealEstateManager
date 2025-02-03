@@ -14,10 +14,8 @@ import com.openclassrooms.realestatemanager.databinding.FragmentCreateLabelDialo
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
 import com.openclassrooms.realestatemanager.ui.list_and_details.PhotosAdapter
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+// the fragment initialization parameters
 private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
@@ -30,7 +28,6 @@ class CreateLabelDialogFragment() : DialogFragment() {
 
     companion object{
         fun newInstance(state: PhotoSelectedViewState): CreateLabelDialogFragment{
-
             return CreateLabelDialogFragment().apply { arguments = bundleOf(ARG_PARAM1 to state) }
         }
     }

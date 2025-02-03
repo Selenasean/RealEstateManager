@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'com.google.devtools.ksp'
     id 'kotlin-parcelize'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -55,7 +56,6 @@ dependencies {
     implementation 'androidx.fragment:fragment-ktx:1.8.3'
     implementation 'io.coil-kt:coil:2.7.0'
 
-
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.2'
 
     //LIVEDATA & VIEWMODEL
@@ -76,4 +76,8 @@ dependencies {
     //UNIT TEST
     testImplementation 'junit:junit:4.13.2'
     testImplementation "androidx.room:room-testing:$room_version"
+
+    //GOOGLE MAPS
+    implementation 'com.google.android.gms:play-services-maps:19.0.0'
+    implementation 'com.google.android.gms:play-services-location:21.3.0'
 }

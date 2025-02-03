@@ -7,6 +7,7 @@ import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding
 import com.openclassrooms.realestatemanager.ui.list_and_details.ListEstateFragment
+import com.openclassrooms.realestatemanager.ui.map.MapFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,6 +17,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         replaceFragment()
     }
 

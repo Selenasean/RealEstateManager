@@ -25,6 +25,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="0dp"
                 app:menu="@menu/list_menu"/>
+
 <!--  Filter + creation -->
         </com.google.android.material.appbar.AppBarLayout>
 

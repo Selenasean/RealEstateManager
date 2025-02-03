@@ -17,7 +17,8 @@ import com.openclassrooms.realestatemanager.ui.create.PhotoSelectedViewState
 
 class PhotosAdapter(
     var className: String,
-    private val labelClickedListener: (state: PhotoSelectedViewState) -> Unit
+    private val labelClickedListener: (state: PhotoSelectedViewState) -> Unit,
+    private val onDeleteClickedListener: (state : PhotoSelectedViewState) -> Unit
 ) :
     ListAdapter<PhotoSelectedViewState, PhotosAdapter.ViewHolder>(DIFF_CALLBACK) {
 
@@ -74,13 +75,21 @@ class PhotosAdapter(
                 deleteBtn.visibility = View.VISIBLE
                 labelBtn.visibility = View.VISIBLE
 
-                //TODO : deleteBtn renvoi vers la suppression de la liste de la photo supp
-                //TODO : labelBtn ouvre un dialog pour ecrire un label (caractère limité)
+               //button to edit a label
                 labelBtn.setOnClickListener {
                     val position = bindingAdapterPosition
                     //check if bindingAdapterPosition is valid
                     if (position != NO_POSITION) {
                         labelClickedListener(getItem(position))
+                    }
+                }
+
+                //button to delete the photo selected
+                deleteBtn.setOnClickListener {
+                    val position = bindingAdapterPosition
+                    //check if bindingAdapterPosition is valid
+                    if (position != NO_POSITION) {
+                        onDeleteClickedListener(getItem(position))
                     }
                 }
             }

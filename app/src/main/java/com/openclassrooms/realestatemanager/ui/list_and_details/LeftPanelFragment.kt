@@ -46,6 +46,8 @@ class ListEstateFragment : Fragment() {
             viewLifecycleOwner,
             ListOnBackPressCallback(slidingPaneLayout, viewModel)
         )
+
+
         //to implement the menu on topAppBar
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
