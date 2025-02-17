@@ -23,7 +23,8 @@ import com.openclassrooms.realestatemanager.data.model.Amenity
 import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.databinding.FragmentCreateBinding
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
-import com.openclassrooms.realestatemanager.ui.list_and_details.PhotosAdapter
+import com.openclassrooms.realestatemanager.ui.list_map_details.PhotosAdapter
+import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
 import java.io.File
 import kotlin.random.Random
 

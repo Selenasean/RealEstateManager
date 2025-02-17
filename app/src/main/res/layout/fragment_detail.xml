@@ -9,7 +9,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".ui.list_and_details.DetailFragment">
+        tools:context=".ui.list_map_details.DetailFragment">
 
         <!-- TEXTVIEW IF THERE IS NOTHING TO DISPLAY -->
         <LinearLayout

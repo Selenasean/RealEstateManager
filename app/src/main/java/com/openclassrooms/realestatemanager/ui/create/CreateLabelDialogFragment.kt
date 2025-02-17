@@ -12,7 +12,7 @@ import coil.load
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentCreateLabelDialogBinding
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
-import com.openclassrooms.realestatemanager.ui.list_and_details.PhotosAdapter
+import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
 
 // the fragment initialization parameters
 private const val ARG_PARAM1 = "param1"

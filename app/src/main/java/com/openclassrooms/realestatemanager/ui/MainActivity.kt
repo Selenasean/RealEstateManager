@@ -3,11 +3,8 @@ package com.openclassrooms.realestatemanager.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
-import androidx.lifecycle.ReportFragment.Companion.reportFragment
-import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding
-import com.openclassrooms.realestatemanager.ui.list_and_details.ListEstateFragment
-import com.openclassrooms.realestatemanager.ui.map.MapFragment
+import com.openclassrooms.realestatemanager.ui.list_map_details.ListEstateFragment
 
 class MainActivity : AppCompatActivity() {
 

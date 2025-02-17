@@ -1,7 +1,6 @@
-package com.openclassrooms.realestatemanager.ui.list_and_details
+package com.openclassrooms.realestatemanager.ui.list_map_details
 
 
-import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 
@@ -12,13 +11,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import coil.load
-import com.openclassrooms.realestatemanager.AppApplication
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.RealestateItemBinding
 
 
 class ListAdapter(private val clickedListener: (id: Long) -> Unit) :
-    ListAdapter<ItemState, com.openclassrooms.realestatemanager.ui.list_and_details.ListAdapter.ViewHolder>(
+    ListAdapter<ItemState, com.openclassrooms.realestatemanager.ui.list_map_details.ListAdapter.ViewHolder>(
         DIFF_CALLBACK
     ) {
 

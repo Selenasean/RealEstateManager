@@ -13,6 +13,7 @@
         android:orientation="vertical">
 
         <!-- Set up for top App Bar -->
+        <!--  Filter + creation -->
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLyt"
             android:layout_width="match_parent"
@@ -26,20 +27,20 @@
                 android:elevation="0dp"
                 app:menu="@menu/list_menu"/>
 
-<!--  Filter + creation -->
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/childFragmentContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            tools:listitem="@layout/realestate_item" />
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+
     </LinearLayout>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_detail_container"
-        android:name="com.openclassrooms.realestatemanager.ui.list_and_details.DetailFragment"
+        android:name="com.openclassrooms.realestatemanager.ui.list_map_details.DetailFragment"
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_weight="1" />

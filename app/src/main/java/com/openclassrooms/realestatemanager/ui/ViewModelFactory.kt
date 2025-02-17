@@ -8,7 +8,7 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.openclassrooms.realestatemanager.AppApplication
 import com.openclassrooms.realestatemanager.ui.create.CreateViewModel
-import com.openclassrooms.realestatemanager.ui.list_and_details.ListDetailViewModel
+import com.openclassrooms.realestatemanager.ui.list_map_details.ListMapDetailViewModel
 
 class ViewModelFactory : ViewModelProvider.Factory {
 
@@ -36,8 +36,8 @@ class ViewModelFactory : ViewModelProvider.Factory {
         val application : AppApplication = extras[APPLICATION_KEY] as AppApplication
         val savedStateHandle : SavedStateHandle = extras.createSavedStateHandle()
 
-        if(modelClass.isAssignableFrom(ListDetailViewModel::class.java)){
-            return ListDetailViewModel(application.repository) as T
+        if(modelClass.isAssignableFrom(ListMapDetailViewModel::class.java)){
+            return ListMapDetailViewModel(application.repository) as T
         }
         if(modelClass.isAssignableFrom(CreateViewModel::class.java)){
             return CreateViewModel(application.repository, savedStateHandle) as T

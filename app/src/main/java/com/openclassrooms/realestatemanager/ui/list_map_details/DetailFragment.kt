@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.list_and_details
+package com.openclassrooms.realestatemanager.ui.list_map_details
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,7 +20,7 @@ class DetailFragment : Fragment() {
         const val CLASS_NAME = "DETAIL_FRAGMENT"
     }
 
-    private val viewModel by activityViewModels<ListDetailViewModel> { ViewModelFactory.getInstance() }
+    private val viewModel by activityViewModels<ListMapDetailViewModel> { ViewModelFactory.getInstance() }
     private lateinit var adapter: PhotosAdapter
 
     override fun onCreateView(

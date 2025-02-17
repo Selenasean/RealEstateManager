@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.list_and_details
+package com.openclassrooms.realestatemanager.ui.list_map_details
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import coil.load
 import com.openclassrooms.realestatemanager.databinding.ImageItemBinding
-import com.openclassrooms.realestatemanager.domain.Photo
+
 import com.openclassrooms.realestatemanager.ui.create.CreateFragment
-import com.openclassrooms.realestatemanager.ui.create.PhotoSelectedViewState
+import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
 
 
 class PhotosAdapter(

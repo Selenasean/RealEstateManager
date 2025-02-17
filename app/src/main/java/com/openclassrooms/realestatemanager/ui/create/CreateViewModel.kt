@@ -14,6 +14,7 @@ import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.domain.Photo
 import com.openclassrooms.realestatemanager.domain.RealEstateAgent
 import com.openclassrooms.realestatemanager.domain.RealEstateToCreate
+import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.util.UUID
@@ -163,9 +164,8 @@ class CreateViewModel(
         Log.i("createVM", "photos :${_createdRealEstateMutableStateFlow.value}")
     }
 
-    //TODO : supp toutes les photos ?
     fun deletePhoto(id: String) {
-        //supp photo selectionné depuis RV, chercher la photo par son id dans liste de photos state
+
         val currentState = _createdRealEstateMutableStateFlow.value
         val photos: List<PhotoSelectedViewState> = currentState.photos
             .filter { photo ->
@@ -240,21 +240,4 @@ data class RealEstateCreatedState(
 }
 
 //TODO : extraire dans un autre package
-/**
- * State to display photo selected on screen
- */
-@Parcelize
-data class PhotoSelectedViewState(
-    val id: String,
-    val uri: String,
-    val label: String,
-) : Parcelable
 
-//function extension to map
-fun Photo.toPhotoSelectedViewState(): PhotoSelectedViewState {
-    return PhotoSelectedViewState(
-        id = this.uid,
-        uri = this.urlPhoto,
-        label = this.label
-    )
-}

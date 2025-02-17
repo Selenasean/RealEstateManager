@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.list_and_details
+package com.openclassrooms.realestatemanager.ui.list_map_details
 
 
 import androidx.lifecycle.LiveData
@@ -9,21 +9,26 @@ import com.openclassrooms.realestatemanager.data.model.Amenity
 import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.data.model.Status
 import com.openclassrooms.realestatemanager.domain.Photo
-import com.openclassrooms.realestatemanager.domain.RealEstate
-import com.openclassrooms.realestatemanager.ui.create.PhotoSelectedViewState
-import com.openclassrooms.realestatemanager.ui.create.toPhotoSelectedViewState
+import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
+import com.openclassrooms.realestatemanager.utils.toPhotoSelectedViewState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 
 
-
-class ListDetailViewModel(private val repository : Repository) : ViewModel() {
+class ListMapDetailViewModel(private val repository : Repository) : ViewModel() {
 
     private var selectedStateFlow = MutableStateFlow<Long?>(null)
+    //state of Pane : open or close, to display the right fragment
+    private val _eventsFlow = Channel<Event>()
+    val eventsFlow = _eventsFlow.receiveAsFlow()
+
 
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -87,14 +92,30 @@ class ListDetailViewModel(private val repository : Repository) : ViewModel() {
              }
         }.asLiveData()
 
+    fun togglePane(){
+//        _isPaneOpen.value = !_isPaneOpen.value!!
+    _eventsFlow.trySend(Event.OpenDetails)
+    }
+
+    fun isDetailOpen(): Boolean {
+        return selectedStateFlow.value != null
+
+    }
 
 }
 
+
+/**
+ * State for items on the recyclerView used on the list view
+ */
 data class ItemState(
     val isSelected: Boolean,
     val realEstate : RealEstateViewState
 )
 
+/**
+ * State for real estate infos used in the ItemState
+ */
 data class RealEstateViewState(
     val id: Long,
     val title: String,
@@ -112,6 +133,9 @@ data class RealEstateViewState(
     val amenities : List<Amenity>
 )
 
+/**
+ * State for the detail view
+ */
 data class RealEstateDetailViewState(
     val id: Long,
     val title: String,
@@ -128,3 +152,13 @@ data class RealEstateDetailViewState(
     val status : Status,
     val amenities : List<Amenity>
 )
+
+/**
+ * To deal with events
+ */
+//sealed class Event{
+//    data object OpenDetails(): Event
+//}
+sealed interface Event {
+    data object OpenDetails : Event
+}
