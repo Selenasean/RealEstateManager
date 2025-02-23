@@ -11,7 +11,7 @@ interface RealEstateAgentDao {
     @Insert
     fun createAgent(realEstateAgent: RealEstateAgentDb): Long
 
-    @Query("SELECT * FROM realEstateAgents WHERE uid = :agentId")
+    @Query("SELECT * FROM realEstateAgents WHERE id = :agentId")
     fun getOneAgent(agentId: Int): Flow<RealEstateAgentDb>
 
     @Query("SELECT * FROM realEstateAgents")

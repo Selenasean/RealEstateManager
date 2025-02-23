@@ -38,13 +38,23 @@ class CreateViewModel(
     //state of data for UI
     val state: LiveData<RealEstateCreatedState> = _createdRealEstateMutableStateFlow.asLiveData()
 
+    /**
+     * Create a realEstate from info enter by user
+     */
+    //TODO : passer sur un autre thread !
     fun createRealEstate() {
-        //TODO : get data to send to repo + factoring -> PHOTO is missing !
         val currentState = _createdRealEstateMutableStateFlow.value
 
         val realEstateToCreate = RealEstateToCreate(
             type = currentState.type!!,
-            address = currentState.address!!.trim(),
+            photos = currentState.photos.map { photo ->
+                Photo(
+                    id = photo.id,
+                    urlPhoto = photo.uri,
+                    label = photo.label
+                )
+            },
+            address = currentState . address !!. trim (),
             city = currentState.city!!.trim(),
             price = currentState.price!!.toFloat(),
             surface = currentState.surface!!.toInt(),
@@ -55,6 +65,7 @@ class CreateViewModel(
             amenities = currentState.amenities,
             agentId = currentState.agent!!.id
         )
+
         viewModelScope.launch {
             repository.createRealEstate(realEstateToCreate)
         }
@@ -239,5 +250,5 @@ data class RealEstateCreatedState(
     }
 }
 
-//TODO : extraire dans un autre package
+
 

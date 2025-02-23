@@ -17,7 +17,7 @@ data class PhotoSelectedViewState(
 //function extension to map
 fun Photo.toPhotoSelectedViewState(): PhotoSelectedViewState {
     return PhotoSelectedViewState(
-        id = this.uid,
+        id = this.id,
         uri = this.urlPhoto,
         label = this.label
     )

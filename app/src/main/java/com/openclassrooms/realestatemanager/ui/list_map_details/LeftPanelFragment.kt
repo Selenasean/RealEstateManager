@@ -59,8 +59,10 @@ class ListEstateFragment : Fragment() {
                 replace(binding.childFragmentContainer.id, ListFragment.newInstance())
             }
         }else{
-            if(viewModel.isDetailOpen())
-            slidingPaneLayout.openPane()
+            if(viewModel.isDetailOpen()){
+                slidingPaneLayout.openPane()
+            }
+
         }
 //        viewModel.isPaneOpen.observe(viewLifecycleOwner, Observer { isOpen ->
 //            if(isOpen){

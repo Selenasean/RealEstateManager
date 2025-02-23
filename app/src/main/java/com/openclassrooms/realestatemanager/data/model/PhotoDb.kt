@@ -7,14 +7,14 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "photos",
     foreignKeys = [ForeignKey(
         entity = RealEstateDb::class,
-        parentColumns = ["uid"],
+        parentColumns = ["id"],
         childColumns = ["realEstateId"]
     )]
 )
 data class PhotoDb(
-    @PrimaryKey val uid: String,
+    @PrimaryKey val id: String,
 
-    val realEstateId: Long,
+    val realEstateId: String,
     val urlPhoto : String,
     val label: String
 )

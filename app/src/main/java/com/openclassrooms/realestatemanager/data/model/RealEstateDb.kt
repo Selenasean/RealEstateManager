@@ -8,13 +8,13 @@ import java.time.Instant
 @Entity(tableName = "realEstates",
     foreignKeys = [ForeignKey(
         entity = RealEstateAgentDb::class,
-        parentColumns = arrayOf("uid"),
+        parentColumns = arrayOf("id"),
         childColumns = arrayOf("realEstateAgentId")
     )]
 )
 data class RealEstateDb(
 
-    @PrimaryKey(autoGenerate = true) val uid: Long = 0,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
 
     val type: BuildingType,
     val price: Float,

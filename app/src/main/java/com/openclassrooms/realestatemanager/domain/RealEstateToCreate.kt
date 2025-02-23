@@ -5,6 +5,7 @@ import com.openclassrooms.realestatemanager.data.model.BuildingType
 
 data class RealEstateToCreate(
     val type: BuildingType,
+    val photos: List<Photo>,
     val address: String,
     val city: String,
     val price: Float,

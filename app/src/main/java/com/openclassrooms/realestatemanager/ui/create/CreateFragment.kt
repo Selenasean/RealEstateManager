@@ -49,8 +49,10 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         dropDownMenusSettings(binding, context)
         displayAmenitiesChips(binding, context)
         viewModel.state.observe(viewLifecycleOwner) { render(it, binding) }
-        binding.createBtn.setOnClickListener { viewModel.createRealEstate() }
         setRecyclerView(binding)
+
+        //create a realEstate
+        binding.createBtn.setOnClickListener { viewModel.createRealEstate() }
 
         //inputs listeners
         binding.tvAddress.doAfterTextChanged { viewModel.updateAddress(it.toString()) }
@@ -69,6 +71,7 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
                     viewModel.updatePhotos(uris)
                 }
             }
+
         binding.selectPictureBtn.setOnClickListener {
             openPhotoPicker(pickMedia)
         }
@@ -123,7 +126,6 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
                 val showDialog = CreateLabelDialogFragment.newInstance(state)
                 showDialog.show(childFragmentManager, "dialog")
             }, onDeleteClickedListener = { state: PhotoSelectedViewState ->
-                Log.i("createVM", state.id + state.uri)
                 viewModel.deletePhoto(state.id)
             })
         recyclerView.adapter = adapter

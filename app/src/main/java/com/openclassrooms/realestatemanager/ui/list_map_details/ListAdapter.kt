@@ -15,7 +15,7 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.RealestateItemBinding
 
 
-class ListAdapter(private val clickedListener: (id: Long) -> Unit) :
+class ListAdapter(private val clickedListener: (id: String) -> Unit) :
     ListAdapter<ItemState, com.openclassrooms.realestatemanager.ui.list_map_details.ListAdapter.ViewHolder>(
         DIFF_CALLBACK
     ) {

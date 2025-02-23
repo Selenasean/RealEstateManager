@@ -1,8 +1,5 @@
 package com.openclassrooms.realestatemanager.data
 
-import android.util.Log
-import androidx.lifecycle.asLiveData
-import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.data.model.PhotoDb
 import com.openclassrooms.realestatemanager.data.model.RealEstateDb
 import com.openclassrooms.realestatemanager.data.model.Status
@@ -26,14 +23,14 @@ class Repository(private val appdatabase: AppDataBase) {
         return appdatabase.realEstateDao().getAllRealEstates().map { realEstateDbs ->
             realEstateDbs.map {
                 RealEstate(
-                    id = it.key.uid,
+                    id = it.key.id.toString(),
                     title = it.key.name,
                     city = it.key.city,
                     priceTag = it.key.price,
                     type = it.key.type,
                     photos = it.value.map { photoDb ->
                         Photo(
-                            photoDb.uid,
+                            photoDb.id,
                             photoDb.urlPhoto,
                             photoDb.label
                         )
@@ -54,19 +51,19 @@ class Repository(private val appdatabase: AppDataBase) {
     /**
      * Get One RealEstates
      */
-    fun getOneRealEstates(realEstateId: Long): Flow<RealEstate> {
-        return appdatabase.realEstateDao().getOneRealEstate(realEstateId).map { realEstateDb ->
+    fun getOneRealEstates(realEstateId: String): Flow<RealEstate> {
+        return appdatabase.realEstateDao().getOneRealEstate(realEstateId.toLong()).map { realEstateDb ->
             val entry = realEstateDb.entries.first()
             val photos : List<PhotoDb> = entry.value
             RealEstate(
-                id = entry.key.uid,
+                id = entry.key.id.toString(),
                 title = entry.key.name,
                 city = entry.key.city,
                 priceTag = entry.key.price,
                 type = entry.key.type,
                 photos = photos.map { photoDb ->
                     Photo(
-                        uid = photoDb.uid,
+                        id = photoDb.id,
                         urlPhoto = photoDb.urlPhoto,
                         label = photoDb.label
                     )
@@ -92,7 +89,7 @@ class Repository(private val appdatabase: AppDataBase) {
         return appdatabase.realEstateAgentDao().getAllAgents().map { realEstateAgentDb ->
             realEstateAgentDb.map{
                 RealEstateAgent(
-                    id = it.uid,
+                    id = it.id,
                     name = it.name
                 )
             }
@@ -100,9 +97,12 @@ class Repository(private val appdatabase: AppDataBase) {
 
     }
 
+    /**
+     * Create RealEstate in database + photos associated
+     */
+    //TODO : PASSER SUR UN AUTRE THREAD
     suspend fun createRealEstate(realEstate: RealEstateToCreate){
-
-        appdatabase.realEstateDao().createRealEstate(
+        val realEstateCreatedId = appdatabase.realEstateDao().createRealEstate(
             RealEstateDb(
                 type= realEstate.type,
                 price= realEstate.price,
@@ -121,6 +121,18 @@ class Repository(private val appdatabase: AppDataBase) {
                 realEstateAgentId = realEstate.agentId
             )
         )
+
+        realEstate.photos.forEach { photo ->
+            appdatabase.photoDao().createPhoto(
+                PhotoDb(
+                    id = photo.id,
+                    realEstateId = realEstateCreatedId.toString(),
+                    urlPhoto =  photo.urlPhoto,
+                    label = photo.label
+                )
+            )
+
+        }
     }
 
     //TODO : function mapping here ?

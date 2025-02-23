@@ -34,14 +34,14 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/create_label_btn"
-        style="@style/Widget.Material3.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginTop="@dimen/margin_extra_medium"
-        android:text="@string/create_label"
-        android:textAllCaps="true" />
+<!--    <Button-->
+<!--        android:id="@+id/create_label_btn"-->
+<!--        style="@style/Widget.Material3.Button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="right"-->
+<!--        android:layout_marginTop="@dimen/margin_extra_medium"-->
+<!--        android:text="@string/create_label"-->
+<!--        android:textAllCaps="true" />-->
 
 </LinearLayout>

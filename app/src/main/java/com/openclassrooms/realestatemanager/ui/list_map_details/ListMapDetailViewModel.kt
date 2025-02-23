@@ -24,8 +24,9 @@ import kotlinx.coroutines.flow.receiveAsFlow
 
 class ListMapDetailViewModel(private val repository : Repository) : ViewModel() {
 
-    private var selectedStateFlow = MutableStateFlow<Long?>(null)
     //state of Pane : open or close, to display the right fragment
+    private var selectedStateFlow = MutableStateFlow<String?>(null)
+
     private val _eventsFlow = Channel<Event>()
     val eventsFlow = _eventsFlow.receiveAsFlow()
 
@@ -60,7 +61,7 @@ class ListMapDetailViewModel(private val repository : Repository) : ViewModel() 
         }
     }.asLiveData()
 
-    fun onRealEstateClick(id: Long) {
+    fun onRealEstateClick(id: String) {
         selectedStateFlow.value = id
     }
 
@@ -97,7 +98,7 @@ class ListMapDetailViewModel(private val repository : Repository) : ViewModel() 
     _eventsFlow.trySend(Event.OpenDetails)
     }
 
-    fun isDetailOpen(): Boolean {
+    fun  isDetailOpen(): Boolean {
         return selectedStateFlow.value != null
 
     }
@@ -117,7 +118,7 @@ data class ItemState(
  * State for real estate infos used in the ItemState
  */
 data class RealEstateViewState(
-    val id: Long,
+    val id: String,
     val title: String,
     val city : String,
     val priceTag: Float,
@@ -137,7 +138,7 @@ data class RealEstateViewState(
  * State for the detail view
  */
 data class RealEstateDetailViewState(
-    val id: Long,
+    val id: String,
     val title: String,
     val city : String,
     val priceTag: Float,

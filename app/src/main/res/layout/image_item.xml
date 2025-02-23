@@ -31,7 +31,7 @@
             android:layout_height="50dp"
             android:gravity="center"
             tools:text="LABEL"
-            android:background="#90CDCDCD"
+            android:background="#CDCDCDC3"
             android:layout_gravity="bottom"
             android:alpha="@integer/material_motion_duration_medium_1"
             />

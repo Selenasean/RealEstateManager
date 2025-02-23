@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.create
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
@@ -32,6 +33,7 @@ class CreateLabelDialogFragment() : DialogFragment() {
         }
     }
 
+    @SuppressLint("PrivateResource")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val binding = FragmentCreateLabelDialogBinding.inflate(layoutInflater)
         val state = BundleCompat.getParcelable(requireArguments(), ARG_PARAM1,PhotoSelectedViewState::class.java)!!

@@ -62,7 +62,7 @@ class ListFragment : Fragment(){
         val recyclerView: RecyclerView = binding.recyclerView
 
         recyclerView.setLayoutManager(LinearLayoutManager(context))
-        adapter = ListAdapter(clickedListener = {id: Long ->
+        adapter = ListAdapter(clickedListener = {id: String ->
             //open the Pane of SlidingPanel Layout
             viewModel.togglePane()
             viewModel.onRealEstateClick(id)
