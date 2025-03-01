@@ -24,7 +24,6 @@ class CreateViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    //TODO : create object realEstate à envoyer en bdd
 
     //to get a list of agent's name
     fun getAgents(): LiveData<List<RealEstateAgent>> {
@@ -41,7 +40,6 @@ class CreateViewModel(
     /**
      * Create a realEstate from info enter by user
      */
-    //TODO : passer sur un autre thread !
     fun createRealEstate() {
         val currentState = _createdRealEstateMutableStateFlow.value
 
@@ -54,7 +52,7 @@ class CreateViewModel(
                     label = photo.label
                 )
             },
-            address = currentState . address !!. trim (),
+            address = currentState.address!!.trim(),
             city = currentState.city!!.trim(),
             price = currentState.price!!.toFloat(),
             surface = currentState.surface!!.toInt(),

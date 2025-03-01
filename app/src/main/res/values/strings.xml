@@ -54,13 +54,13 @@
     <string name="amenities_string">Amenities</string>
     <string name="none">None</string>
     <string name="forest">Forest</string>
+
     <string name="delete_icon">delete icon</string>
     <string name="pencil_icon">pencil icon</string>
     <string name="label_tv">Add a label</string>
     <string name="create_label">Create label</string>
     <string name="add_label">Add label</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="map">Map</string>
     <string name="list">List</string>
 

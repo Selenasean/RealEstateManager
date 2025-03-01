@@ -20,12 +20,13 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:orientation="vertical"
+            tools:visibility="gone"
             >
 
             <ImageView
                 android:id="@+id/img_no_item"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
+                android:layout_width="300dp"
+                android:layout_height="400dp"
                 android:contentDescription="@null"
                 android:src="@drawable/cat" />
 
@@ -90,15 +91,16 @@
             <TextView
                 android:id="@+id/description_content"
                 android:layout_width="match_parent"
-                android:layout_height="140dp"
-                android:paddingEnd="@dimen/padding_big"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_medium"
-                android:paddingStart="@dimen/padding_big"
                 android:ellipsize="end"
+                android:paddingStart="@dimen/padding_big"
+                android:paddingEnd="@dimen/padding_big"
                 android:scrollHorizontally="true"
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@id/description_tv"
                 tools:ignore="UnusedAttribute"
+                tools:layout_editor_absoluteX="88dp"
                 tools:text="@tools:sample/lorem/random" />
 
             <TextView

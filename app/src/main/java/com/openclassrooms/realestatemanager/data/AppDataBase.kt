@@ -77,7 +77,7 @@ abstract class AppDataBase : RoomDatabase() {
                            bathrooms = 1,
                            bedrooms = 3,
                            description = "Superbe maison dans le bourg de Serris, 3 chambres, cuisine toute équipée, salle de bain moderne. Dispose d'un garage d'une superficie de 50m². S'étale sur 2 étages, un toilette par étage. Parfait pour jeune couple !",
-                           address = "22 rue Emile Cloud",
+                           address = "8 route de Meaux",
                            city = "Serris",
                            status = Status.FOR_SALE,
                            amenities = listOf(Amenity.BAKERY, Amenity.SCHOOL),
@@ -120,7 +120,7 @@ abstract class AppDataBase : RoomDatabase() {
                                    label = "Label 4"
                        )
                    )
-                   appDataBase.realEstateDao().createRealEstate(
+                   val estateId2 = appDataBase.realEstateDao().createRealEstate(
                        RealEstateDb(
                            type = BuildingType.VILA,
                            price = 380000F,
@@ -130,7 +130,7 @@ abstract class AppDataBase : RoomDatabase() {
                            bathrooms = 2,
                            bedrooms = 8,
                            description = "Superbe vila dans le bourg de Versailles, 8 chambres, cuisine toute équipée, 2 salles de bain modernes. Dispose d'un garage d'une superficie de 50m². S'étale sur 2 étages, un toilette par étage.",
-                           address = "2 avenue de Paris",
+                           address = "7 bis rue Hardy",
                            city = "Versailles",
                            status = Status.FOR_SALE,
                            amenities = listOf(Amenity.BAKERY, Amenity.SCHOOL, Amenity.SHOPPING_MALL),
@@ -140,7 +140,15 @@ abstract class AppDataBase : RoomDatabase() {
                            realEstateAgentId = agentId1
                        )
                    )
-                   appDataBase.realEstateDao().createRealEstate(
+                   appDataBase.photoDao().createPhoto(
+                       PhotoDb(
+                           id = UUID.randomUUID().toString(),
+                           realEstateId = estateId2.toString(),
+                           urlPhoto = "https://images.unsplash.com/photo-1593714604578-d9e41b00c6c6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                           label = "Label 1"
+                       )
+                   )
+                   val estateId3 = appDataBase.realEstateDao().createRealEstate(
                        RealEstateDb(
                            type = BuildingType.APARTMENT,
                            price = 150000F,
@@ -150,7 +158,7 @@ abstract class AppDataBase : RoomDatabase() {
                            bathrooms = 1,
                            bedrooms = 3,
                            description = "Superbe appartement au centre de Créteil, 3 chambres, cuisine toute équipée, salle de bain moderne. Au 2e étage d'un bâtiment des années 80, avec ascenseur. Parfait pour jeune couple !",
-                           address = "24 avenue du Marechal de Lattre de Tassigny",
+                           address = "1 rue Andre Maurois",
                            city = "Créteil",
                            status = Status.FOR_SALE,
                            amenities = listOf(Amenity.BAKERY, Amenity.SCHOOL, Amenity.SHOPPING_MALL, Amenity.STATION, Amenity.GYM),
@@ -160,7 +168,15 @@ abstract class AppDataBase : RoomDatabase() {
                            realEstateAgentId = agentId2
                        )
                    )
-                   appDataBase.realEstateDao().createRealEstate(
+                   appDataBase.photoDao().createPhoto(
+                       PhotoDb(
+                           id = UUID.randomUUID().toString(),
+                           realEstateId = estateId3.toString(),
+                           urlPhoto = "https://images.unsplash.com/photo-1460317442991-0ec209397118?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                           label = "Label 1"
+                       )
+                   )
+                   val estateId4 = appDataBase.realEstateDao().createRealEstate(
                        RealEstateDb(
                            type = BuildingType.HOUSE,
                            price = 350000F,
@@ -170,7 +186,7 @@ abstract class AppDataBase : RoomDatabase() {
                            bathrooms = 1,
                            bedrooms = 4,
                            description = "Superbe maison dans le bourg d'Orly, 4 chambres, cuisine toute équipée, salle de bain moderne. Dispose d'un garage d'une superficie de 50m². S'étale sur 2 étages, un toilette par étage. Parfait pour jeune couple !",
-                           address = "3bis rue Roger Salengro",
+                           address = "30 rue du Commerce",
                            city = "Orly",
                            status = Status.FOR_SALE,
                            amenities = listOf(Amenity.BAKERY, Amenity.SCHOOL),
@@ -180,7 +196,15 @@ abstract class AppDataBase : RoomDatabase() {
                            realEstateAgentId = agentId2
                        )
                    )
-                   appDataBase.realEstateDao().createRealEstate(
+                   appDataBase.photoDao().createPhoto(
+                       PhotoDb(
+                           id = UUID.randomUUID().toString(),
+                           realEstateId = estateId4.toString(),
+                           urlPhoto = "https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                           label = "Label 1"
+                       )
+                   )
+                   val estateId5 = appDataBase.realEstateDao().createRealEstate(
                        RealEstateDb(
                            type = BuildingType.VILA,
                            price = 580000F,
@@ -189,9 +213,9 @@ abstract class AppDataBase : RoomDatabase() {
                            rooms = 13,
                            bathrooms = 3,
                            bedrooms = 11,
-                           description = "Superbe vila dans le bourg de Montlignon, 11 chambres, cuisine toute équipée, 3 salles de bain modernes. Dispose d'un garage d'une superficie de 80m². S'étale sur 2 étages, un toilette par étage.",
-                           address = "18 allée de la Chasse",
-                           city = "Montlignon",
+                           description = "Superbe vila dans le bourg de Houilles, 11 chambres, cuisine toute équipée, 3 salles de bain modernes. Dispose d'un garage d'une superficie de 80m². S'étale sur 2 étages, un toilette par étage.",
+                           address = "24 rue Marceau",
+                           city = "Houilles",
                            status = Status.SOLD,
                            amenities = listOf(Amenity.BAKERY, Amenity.SCHOOL),
                            dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
@@ -200,7 +224,15 @@ abstract class AppDataBase : RoomDatabase() {
                            realEstateAgentId = agentId3
                        )
                    )
-                   appDataBase.realEstateDao().createRealEstate(
+                   appDataBase.photoDao().createPhoto(
+                       PhotoDb(
+                           id = UUID.randomUUID().toString(),
+                           realEstateId = estateId5.toString(),
+                           urlPhoto = "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                           label = "Label 1"
+                       )
+                   )
+                   val estateId6 = appDataBase.realEstateDao().createRealEstate(
                        RealEstateDb(
                            type = BuildingType.APARTMENT,
                            price = 120000F,
@@ -209,15 +241,23 @@ abstract class AppDataBase : RoomDatabase() {
                            rooms = 4,
                            bathrooms = 1,
                            bedrooms = 2,
-                           description = "Superbe appartement dans le centre de Montreuil, 2 chambres, cuisine toute équipée, salle de bain moderne. Au 4e étage avec ascensseur. Parfait pour jeune couple !",
-                           address = "9 rue Parmentier",
-                           city = "Montreuil",
+                           description = "Superbe appartement dans le centre de Meaux, 2 chambres, cuisine toute équipée, salle de bain moderne. Au 4e étage avec ascensseur. Parfait pour jeune couple !",
+                           address = "38 rue de la Coulommiere",
+                           city = "Meaux",
                            status = Status.FOR_SALE,
                            amenities = listOf(Amenity.BAKERY, Amenity.SCHOOL),
                            dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
                                ZoneOffset.UTC),
                            dateOfSale = null,
                            realEstateAgentId = agentId3
+                       )
+                   )
+                   appDataBase.photoDao().createPhoto(
+                       PhotoDb(
+                           id = UUID.randomUUID().toString(),
+                           realEstateId = estateId6.toString(),
+                           urlPhoto ="https://images.unsplash.com/photo-1574362848149-11496d93a7c7?q=80&w=1984&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                           label = "Label 1"
                        )
                    )
                }

@@ -24,14 +24,16 @@ import kotlinx.coroutines.flow.receiveAsFlow
 
 class ListMapDetailViewModel(private val repository : Repository) : ViewModel() {
 
-    //state of Pane : open or close, to display the right fragment
+    //state of Pane : open or close, depending if there is id or not, to display the right fragment
     private var selectedStateFlow = MutableStateFlow<String?>(null)
 
+    //Flow to be observe in UI, notifying of an Event
     private val _eventsFlow = Channel<Event>()
     val eventsFlow = _eventsFlow.receiveAsFlow()
 
-
-
+    /**
+     * To get data from one realEstate to be observed in UI
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
     val detailState : LiveData<RealEstateDetailViewState?> = selectedStateFlow
         .flatMapLatest { id ->
@@ -61,14 +63,23 @@ class ListMapDetailViewModel(private val repository : Repository) : ViewModel() 
         }
     }.asLiveData()
 
+    /**
+     * Stock id value for opening the right DetailFragment
+     */
     fun onRealEstateClick(id: String) {
         selectedStateFlow.value = id
     }
 
+    /**
+     * Reset value, if its null means the DetailFragment is closed
+     */
     fun onDetailClosed() {
         selectedStateFlow.value = null
     }
 
+    /**
+     * get list of ItemState to observe in UI
+     */
     val listState: LiveData<List<ItemState>> = repository.getAllRealEstates().combine(selectedStateFlow) { listRealEstate, idSelected ->
              listRealEstate.map { realEstate ->
                  ItemState(
@@ -93,15 +104,13 @@ class ListMapDetailViewModel(private val repository : Repository) : ViewModel() 
              }
         }.asLiveData()
 
+    /**
+     * Use Event to open DetailFragment from the ListFragment
+     */
     fun togglePane(){
-//        _isPaneOpen.value = !_isPaneOpen.value!!
-    _eventsFlow.trySend(Event.OpenDetails)
+        _eventsFlow.trySend(Event.OpenDetails)
     }
 
-    fun  isDetailOpen(): Boolean {
-        return selectedStateFlow.value != null
-
-    }
 
 }
 
@@ -157,9 +166,6 @@ data class RealEstateDetailViewState(
 /**
  * To deal with events
  */
-//sealed class Event{
-//    data object OpenDetails(): Event
-//}
 sealed interface Event {
     data object OpenDetails : Event
 }

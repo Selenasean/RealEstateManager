@@ -11,10 +11,10 @@ import com.openclassrooms.realestatemanager.data.model.PhotoDb
 interface PhotoDao {
 
     @Insert
-    fun createPhoto(photo: PhotoDb)
+    suspend fun createPhoto(photo: PhotoDb)
 
     @Delete
-    fun deletePhoto(photo: PhotoDb)
+    suspend fun deletePhoto(photo: PhotoDb)
 
     @Query("SELECT * FROM photos")
     fun getAllPhotos(): Flow<List<PhotoDb>>

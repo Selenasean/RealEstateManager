@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding
-import com.openclassrooms.realestatemanager.ui.list_map_details.ListEstateFragment
+import com.openclassrooms.realestatemanager.ui.list_map_details.LeftPanelFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,12 +15,14 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        replaceFragment()
+        if(savedInstanceState == null){
+            replaceFragment()
+        }
     }
 
     private fun replaceFragment() {
         supportFragmentManager.commit {
-            replace(binding.fragmentSlidingPanelayoutContainer.id, ListEstateFragment.newInstance())
+            replace(binding.fragmentSlidingPanelayoutContainer.id, LeftPanelFragment.newInstance())
         }
     }
 

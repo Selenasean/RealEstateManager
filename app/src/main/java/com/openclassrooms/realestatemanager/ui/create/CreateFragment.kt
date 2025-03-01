@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.create
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -52,7 +53,10 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         setRecyclerView(binding)
 
         //create a realEstate
-        binding.createBtn.setOnClickListener { viewModel.createRealEstate() }
+        binding.createBtn.setOnClickListener {
+            viewModel.createRealEstate()
+            dismiss()
+        }
 
         //inputs listeners
         binding.tvAddress.doAfterTextChanged { viewModel.updateAddress(it.toString()) }
@@ -68,7 +72,13 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
                 if (uris.isNotEmpty()) {
+                    val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    uris.forEach { uri ->
+                        context.contentResolver.takePersistableUriPermission(uri, flag)
+                    }
+
                     viewModel.updatePhotos(uris)
+
                 }
             }
 

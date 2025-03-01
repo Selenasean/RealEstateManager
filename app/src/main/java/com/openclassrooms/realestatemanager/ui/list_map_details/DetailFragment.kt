@@ -39,6 +39,9 @@ class DetailFragment : Fragment() {
         viewModel.detailState.observe(viewLifecycleOwner) { render(it, binding) }
     }
 
+    /**
+     * To render elements on UI
+     */
     private fun render(realEstate: RealEstateDetailViewState?, binding: FragmentDetailBinding) {
         if (realEstate == null) {
             binding.noItemLytContainer.visibility = View.VISIBLE

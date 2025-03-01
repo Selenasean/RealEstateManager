@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         >
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
 <!--         Trigger Google Play services to install the backported photo picker module. -->
         <!--suppress AndroidDomInspection https://issuetracker.google.com/issues/280659181 -->
@@ -37,6 +40,7 @@
             </intent-filter>
         </activity>
 
+        <!-- to take a picture -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -47,6 +51,7 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
+        <!-- for API KEY in google map -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />

@@ -15,14 +15,12 @@
         android:icon="@drawable/create_icon"
         app:showAsAction="always"
         android:title="@string/create"/>
-
     <item
         android:id="@+id/app_bar_map"
         android:icon="@drawable/map_icon"
         app:showAsAction="always"
-        android:title="@string/map"
-
-        />
+        android:title="@string/list"
+        tools:ignore="AlwaysShowAction" />
 
     <item
         android:id="@+id/app_bar_list"

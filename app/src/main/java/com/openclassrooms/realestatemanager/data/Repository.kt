@@ -100,7 +100,6 @@ class Repository(private val appdatabase: AppDataBase) {
     /**
      * Create RealEstate in database + photos associated
      */
-    //TODO : PASSER SUR UN AUTRE THREAD
     suspend fun createRealEstate(realEstate: RealEstateToCreate){
         val realEstateCreatedId = appdatabase.realEstateDao().createRealEstate(
             RealEstateDb(
@@ -112,7 +111,7 @@ class Repository(private val appdatabase: AppDataBase) {
                 bedrooms = realEstate.bedrooms,
                 bathrooms = realEstate.bathrooms,
                 description = realEstate.description,
-                address = realEstate.description,
+                address = realEstate.address,
                 city = realEstate.city,
                 status = Status.FOR_SALE,
                 amenities = realEstate.amenities,
