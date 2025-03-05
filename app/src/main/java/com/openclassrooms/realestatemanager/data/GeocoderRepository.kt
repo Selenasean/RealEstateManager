@@ -17,7 +17,7 @@ class GeocoderRepository(context: Context) {
         // return null si geocoder return qlqch de null sinon assignation de la valeur à la variable locations
         val location: Address =
             geocoder.getFromLocationName(address, 1)?.firstOrNull() ?: return null
-        
+
         return Position(
             latitude = location.latitude,
             longitude = location.longitude
