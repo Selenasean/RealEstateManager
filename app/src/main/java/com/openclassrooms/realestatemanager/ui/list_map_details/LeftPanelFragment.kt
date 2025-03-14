@@ -46,8 +46,8 @@ class LeftPanelFragment : Fragment() {
             ListOnBackPressCallback(slidingPaneLayout, viewModel)
         )
 
-        //TODO : doesn't work -> want to unselect item in list when rotate from landscape to portrait
         observeAsEvents(viewModel.eventsFlow) { event ->
+            Log.i("leftPanelFragment", "onViewCreated: observeAsEvents")
             when (event) {
                 is Event.OpenDetails -> slidingPaneLayout.openPane()
             }
@@ -64,8 +64,8 @@ class LeftPanelFragment : Fragment() {
         //to implement the menu on topAppBar
         val mapItemId = binding.topAppBar.menu.findItem(R.id.app_bar_map)
         val listIdItem = binding.topAppBar.menu.findItem(R.id.app_bar_list)
-        mapItemId.setVisible(true)
-        listIdItem.setVisible(false)
+        mapItemId.isVisible = true
+        listIdItem.isVisible = false
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.app_bar_create -> {
@@ -90,8 +90,8 @@ class LeftPanelFragment : Fragment() {
                     childFragmentManager.commit {
                         replace(R.id.childFragmentContainer, MapFragment.newInstance())
                     }
-                    mapItemId.setVisible(false)
-                    listIdItem.setVisible(true)
+                    mapItemId.isVisible = false
+                    listIdItem.isVisible = true
                     true
                 }
 

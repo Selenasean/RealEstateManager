@@ -11,17 +11,21 @@ class GeocoderRepository(context: Context) {
     fun getLongLat(address: String): Position? {
 //        geocoder.getFromLocationName( address, 1, object : GeocodeListener {
 //            override fun onGeocode(addresses: MutableList<Address>) {
-//                TODO("Not yet implemented")
+//
 //            }
 //        })
         // return null si geocoder return qlqch de null sinon assignation de la valeur à la variable locations
-        val location: Address =
-            geocoder.getFromLocationName(address, 1)?.firstOrNull() ?: return null
+       try{
+           val location: Address = geocoder.getFromLocationName(address, 1)?.firstOrNull() ?: return null
 
-        return Position(
-            latitude = location.latitude,
-            longitude = location.longitude
-        )
+           return Position(
+               latitude = location.latitude,
+               longitude = location.longitude
+           )
+       }catch(exception: Exception){
+           return null
+       }
+
     }
 
 

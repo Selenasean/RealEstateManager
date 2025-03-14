@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.openclassrooms.realestatemanager.data.AppDataBase
 import com.openclassrooms.realestatemanager.data.AppDataBase.Companion.createAppDatabase
+import com.openclassrooms.realestatemanager.data.GeocoderRepository
 import com.openclassrooms.realestatemanager.data.Repository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -15,6 +16,7 @@ class AppApplication : Application() {
     val applicationScope: CoroutineScope = CoroutineScope(SupervisorJob())
     lateinit var appDataBase: AppDataBase
     lateinit var repository: Repository
+    lateinit var geocoderRepository: GeocoderRepository
 
 
 
@@ -24,7 +26,7 @@ class AppApplication : Application() {
         appDataBase = createAppDatabase(this, applicationScope, { appDataBase } )
         repository = Repository(appDataBase)
         AppApplication.appContext = applicationContext
-
+        geocoderRepository = GeocoderRepository(AppApplication.appContext)
     }
 
     companion object {

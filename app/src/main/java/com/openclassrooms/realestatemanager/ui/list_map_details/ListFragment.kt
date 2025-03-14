@@ -41,7 +41,6 @@ class ListFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentListBinding.bind(view)
 
-
         viewModel.listState.observe(viewLifecycleOwner, Observer { listItemState ->
             render(listItemState)
         })
@@ -60,7 +59,6 @@ class ListFragment : Fragment(){
         recyclerView.setLayoutManager(LinearLayoutManager(context))
         adapter = ListAdapter(clickedListener = {id: String ->
             //open the Pane of SlidingPanel Layout
-            viewModel.togglePane()
             viewModel.onRealEstateClick(id)
         })
 

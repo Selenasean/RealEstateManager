@@ -10,8 +10,8 @@ import com.openclassrooms.realestatemanager.AppApplication
 import com.openclassrooms.realestatemanager.ui.create.CreateViewModel
 import com.openclassrooms.realestatemanager.ui.list_map_details.ListMapDetailViewModel
 
-class ViewModelFactory : ViewModelProvider.Factory {
 
+class ViewModelFactory : ViewModelProvider.Factory {
 
 
     companion object{
@@ -37,7 +37,7 @@ class ViewModelFactory : ViewModelProvider.Factory {
         val savedStateHandle : SavedStateHandle = extras.createSavedStateHandle()
 
         if(modelClass.isAssignableFrom(ListMapDetailViewModel::class.java)){
-            return ListMapDetailViewModel(application.repository) as T
+            return ListMapDetailViewModel(application.repository, application.geocoderRepository) as T
         }
         if(modelClass.isAssignableFrom(CreateViewModel::class.java)){
             return CreateViewModel(application.repository, savedStateHandle) as T
