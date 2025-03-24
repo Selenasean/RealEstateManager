@@ -1,8 +1,11 @@
 package com.openclassrooms.realestatemanager.ui.create
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -12,12 +15,16 @@ import android.widget.ArrayAdapter
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.content.getSystemService
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
+import com.openclassrooms.realestatemanager.AppApplication
 import com.openclassrooms.realestatemanager.BuildConfig
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.data.model.Amenity
@@ -26,6 +33,9 @@ import com.openclassrooms.realestatemanager.databinding.FragmentCreateBinding
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
 import com.openclassrooms.realestatemanager.ui.list_map_details.PhotosAdapter
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
 import java.io.File
 import kotlin.random.Random
 
@@ -41,6 +51,7 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
     private lateinit var adapter: PhotosAdapter
     private var currentPhotoUri: Uri? = null
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentCreateBinding.bind(view)
@@ -52,8 +63,10 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         viewModel.state.observe(viewLifecycleOwner) { render(it, binding) }
         setRecyclerView(binding)
 
+        checkInternetConnection()
         //create a realEstate
         binding.createBtn.setOnClickListener {
+
             viewModel.createRealEstate()
             dismiss()
         }
@@ -203,6 +216,20 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
             binding.tvAgent.setOnItemClickListener { _, _, position, _ ->
                 viewModel.updateAgentName(agents[position])
             }
+        }
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun checkInternetConnection() : Boolean{
+        val manager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if(true){
+            val networkInfo = manager.activeNetwork
+            return networkInfo != null
+            Log.i("create internet", checkInternetConnection().toString())
+        }else{
+            return false
+            Log.i("create internet", checkInternetConnection().toString())
         }
 
     }

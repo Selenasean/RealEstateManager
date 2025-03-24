@@ -119,16 +119,18 @@ class ListMapDetailViewModel(
     val mapList: LiveData<List<MapState>> =
         repository.getAllRealEstates().combine(selectedStateFlow) { realEstateList, idSelected ->
             realEstateList.map { realEstate ->
-                val position = geocoderRepository.getLongLat(realEstate.address)
                 MapState(
                     id = realEstate.id,
                     city = realEstate.city,
                     type = realEstate.type,
                     priceTag = realEstate.priceTag,
+                    status = realEstate.status,
                     isSelected = realEstate.id == idSelected,
-                    longitude = position?.longitude,
-                    latitude = position?.latitude
+                    longitude = realEstate.longitude,
+                    latitude = realEstate.latitude
                 )
+            }.filter {
+                it.longitude != null
             }
         }.asLiveData()
 
@@ -192,6 +194,7 @@ data class MapState(
     val city: String,
     val priceTag: Float,
     val isSelected: Boolean,
+    val status: Status,
     val longitude: Double?,
     val latitude: Double?
 )

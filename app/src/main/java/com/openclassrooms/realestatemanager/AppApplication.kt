@@ -24,9 +24,9 @@ class AppApplication : Application() {
         super.onCreate()
 
         appDataBase = createAppDatabase(this, applicationScope, { appDataBase } )
-        repository = Repository(appDataBase)
         AppApplication.appContext = applicationContext
         geocoderRepository = GeocoderRepository(AppApplication.appContext)
+        repository = Repository(appDataBase, geocoderRepository)
     }
 
     companion object {

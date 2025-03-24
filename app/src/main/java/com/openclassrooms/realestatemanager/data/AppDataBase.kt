@@ -84,7 +84,9 @@ abstract class AppDataBase : RoomDatabase() {
                            dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
                                ZoneOffset.UTC),
                            dateOfSale = null,
-                           realEstateAgentId = agentId1
+                           realEstateAgentId = agentId1,
+                           latitude = 48.842967007702,
+                           longitude = 2.789498969349
                        )
                    )
                    appDataBase.photoDao().createPhoto(
@@ -137,7 +139,9 @@ abstract class AppDataBase : RoomDatabase() {
                            dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
                                ZoneOffset.UTC),
                            dateOfSale = null,
-                           realEstateAgentId = agentId1
+                           realEstateAgentId = agentId1,
+                           latitude = 48.799789980426,
+                           longitude = 2.12132499652
                        )
                    )
                    appDataBase.photoDao().createPhoto(
@@ -165,7 +169,9 @@ abstract class AppDataBase : RoomDatabase() {
                            dateCreated =LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
                                ZoneOffset.UTC),
                            dateOfSale = null,
-                           realEstateAgentId = agentId2
+                           realEstateAgentId = agentId2,
+                           latitude = 48.790022003832,
+                           longitude = 2.444626988119
                        )
                    )
                    appDataBase.photoDao().createPhoto(
@@ -193,7 +199,9 @@ abstract class AppDataBase : RoomDatabase() {
                            dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
                                ZoneOffset.UTC),
                            dateOfSale = null,
-                           realEstateAgentId = agentId2
+                           realEstateAgentId = agentId2,
+                           latitude = 48.742956988859,
+                           longitude = 2.39837103635
                        )
                    )
                    appDataBase.photoDao().createPhoto(
@@ -221,7 +229,9 @@ abstract class AppDataBase : RoomDatabase() {
                            dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
                                ZoneOffset.UTC),
                            dateOfSale = null,
-                           realEstateAgentId = agentId3
+                           realEstateAgentId = agentId3,
+                           latitude = 48.925588014035,
+                           longitude = 2.184905001048
                        )
                    )
                    appDataBase.photoDao().createPhoto(
@@ -249,7 +259,9 @@ abstract class AppDataBase : RoomDatabase() {
                            dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
                                ZoneOffset.UTC),
                            dateOfSale = null,
-                           realEstateAgentId = agentId3
+                           realEstateAgentId = agentId3,
+                           latitude = 48.956983019112,
+                           longitude = 2.886898025352
                        )
                    )
                    appDataBase.photoDao().createPhoto(

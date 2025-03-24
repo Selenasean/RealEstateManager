@@ -13,9 +13,12 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.openclassrooms.realestatemanager.data.model.Status
 import com.openclassrooms.realestatemanager.databinding.FragmentMapBinding
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
 import com.openclassrooms.realestatemanager.utils.CurrencyCode
@@ -50,13 +53,14 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
 
     override fun onMapReady(map: GoogleMap) {
+        zoomOnMap(map) //zoom on Paris, France
         viewModel.mapList.observe(viewLifecycleOwner, Observer { list ->
             map.clear()
             list.forEach { item ->
                 if (item.latitude != null || item.longitude != null) {
                     //create marker for each realEstate
                     createMarkers(map, item)
-                    zoomOnMap(map, item) //zoom on the latest real estate
+
                     //listener
                     map.setOnMarkerClickListener(this)
                 } else {
@@ -70,15 +74,12 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
     private fun zoomOnMap(
         map: GoogleMap,
-        item: MapState
     ) {
-        //zoom near the latest real estate TODO : zoomer sur l'ensemble des marker
+        val parisGPS = LatLng(48.864716, 2.333333)
+        //zoom on Paris, France
         map.moveCamera(
             CameraUpdateFactory.newLatLngZoom(
-                LatLng(
-                    item.latitude!!,
-                    item.longitude!!
-                ), 10f
+                parisGPS, 10f
             )
         )
     }
@@ -87,6 +88,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         map: GoogleMap,
         item: MapState
     ) {
+
         val realEstateMarker = map.addMarker(
             MarkerOptions()
                 .position(LatLng(item.latitude!!, item.longitude!!))
@@ -94,6 +96,12 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                 .snippet(Utils.priceFormatter(item.priceTag, CurrencyCode.EURO))
 
         )
+        if(item.status == Status.FOR_SALE){
+            realEstateMarker?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+        }
+        if(item.status == Status.SOLD){
+            realEstateMarker?.setIcon(BitmapDescriptorFactory.defaultMarker())
+        }
         //create data object to insert in the marker tag
         realEstateMarker?.tag = MarkerData(
             id = item.id,
