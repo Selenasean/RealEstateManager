@@ -59,7 +59,9 @@ class ListMapDetailViewModel(
                         description = realEstate.description,
                         address = realEstate.address,
                         status = realEstate.status,
-                        amenities = realEstate.amenities
+                        amenities = realEstate.amenities,
+                        latitude = realEstate.latitude,
+                        longitude = realEstate.longitude
                     )
 
                 }
@@ -182,7 +184,9 @@ data class RealEstateDetailViewState(
     val description: String,
     val address: String,
     val status: Status,
-    val amenities: List<Amenity>
+    val amenities: List<Amenity>,
+    val latitude: Double?,
+    val longitude: Double?
 )
 
 /**

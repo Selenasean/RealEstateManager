@@ -7,7 +7,7 @@
     android:layout_width="150dp"
     android:layout_height="150dp"
     app:cardCornerRadius="10dp"
-    android:layout_marginEnd="@dimen/margin_medium"
+    android:layout_marginEnd="@dimen/small"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
@@ -50,7 +50,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="end"
-            android:layout_marginTop="@dimen/margin_extra_medium_medium"
+            android:layout_marginTop="@dimen/medium"
             android:layout_marginEnd="@dimen/extra_small"
             android:background="@drawable/stylo"
             android:contentDescription="@string/pencil_icon" />

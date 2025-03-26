@@ -39,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/type_tv"
-                android:padding="@dimen/margin_medium"
+                android:padding="@dimen/small"
                 app:startIconDrawable="@drawable/house_icon">
 
                 <AutoCompleteTextView
@@ -47,7 +47,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:paddingStart="@dimen/margin_extra"
+                    android:paddingStart="@dimen/medium_plus"
                     tools:ignore="LabelFor,RtlSymmetry" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -57,7 +57,7 @@
                 android:id="@+id/photo_tv_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_medium"
+                android:layout_margin="@dimen/small"
                 android:orientation="horizontal"
                 tools:ignore="UseCompoundDrawables">
 
@@ -65,8 +65,8 @@
                     android:id="@+id/icon_photo"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_marginStart="@dimen/margin_medium"
-                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:layout_marginStart="@dimen/small"
+                    android:layout_marginEnd="@dimen/small"
                     android:contentDescription="@null"
                     android:src="@drawable/photo_icon"
                     app:tint="@color/md_theme_onPrimaryContainer" />
@@ -84,14 +84,14 @@
                 android:id="@+id/photo_btn_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_medium"
+                android:layout_margin="@dimen/small"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/select_picture_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:layout_marginEnd="@dimen/small"
                     android:text="@string/select_picture_btn"
                     android:textAllCaps="true"
                     style="@style/Widget.Material3.Button"/>
@@ -109,7 +109,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_photos_selected"
                 android:layout_width="match_parent"
-                android:layout_margin="@dimen/margin_medium"
+                android:layout_margin="@dimen/small"
                 android:layout_height="150dp"
                 android:orientation="horizontal"
                 tools:listitem="@layout/image_item"
@@ -125,7 +125,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/address_tv"
-                android:padding="@dimen/margin_medium"
+                android:padding="@dimen/small"
                 app:endIconMode="clear_text"
                 app:startIconDrawable="@drawable/map_icon">
 
@@ -133,7 +133,7 @@
                     android:id="@+id/tv_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/margin_extra"
+                    android:paddingStart="@dimen/medium_plus"
                     tools:ignore="RtlSymmetry" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -144,7 +144,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/city_tv"
-                android:padding="@dimen/margin_medium"
+                android:padding="@dimen/small"
                 app:endIconMode="clear_text"
                 app:startIconDrawable="@drawable/map_icon">
 
@@ -152,7 +152,7 @@
                     android:id="@+id/tv_city"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/margin_extra"
+                    android:paddingStart="@dimen/medium_plus"
                     tools:ignore="RtlSymmetry" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -163,7 +163,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/price_tv"
-                android:padding="@dimen/margin_medium"
+                android:padding="@dimen/small"
                 app:endIconMode="clear_text"
                 app:startIconDrawable="@drawable/price_icon">
 
@@ -172,7 +172,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:paddingStart="@dimen/margin_extra"
+                    android:paddingStart="@dimen/medium_plus"
                     tools:ignore="RtlSymmetry" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -183,7 +183,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/surface_tv"
-                android:padding="@dimen/margin_medium"
+                android:padding="@dimen/small"
                 app:endIconMode="clear_text"
                 app:startIconDrawable="@drawable/surface_icon">
 
@@ -192,7 +192,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
-                    android:paddingStart="@dimen/margin_extra"
+                    android:paddingStart="@dimen/medium_plus"
                     tools:ignore="RtlSymmetry" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -203,7 +203,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/rooms_tv"
-                android:padding="@dimen/margin_medium"
+                android:padding="@dimen/small"
                 app:endIconMode="clear_text"
                 app:startIconDrawable="@drawable/house_icon">
 
@@ -212,7 +212,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:paddingStart="@dimen/margin_extra"
+                    android:paddingStart="@dimen/medium_plus"
                     tools:ignore="RtlSymmetry" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -223,7 +223,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/bedrooms_tv"
-                android:padding="@dimen/margin_medium"
+                android:padding="@dimen/small"
                 app:endIconMode="clear_text"
                 app:startIconDrawable="@drawable/bedroom_icon">
 
@@ -232,7 +232,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:paddingStart="@dimen/margin_extra"
+                    android:paddingStart="@dimen/medium_plus"
                     tools:ignore="RtlSymmetry" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -243,7 +243,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/bathrooms_tv"
-                android:padding="@dimen/margin_medium"
+                android:padding="@dimen/small"
                 app:endIconMode="clear_text"
                 app:startIconDrawable="@drawable/bathroom_icon">
 
@@ -252,7 +252,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:paddingStart="@dimen/margin_extra"
+                    android:paddingStart="@dimen/medium_plus"
                     tools:ignore="RtlSymmetry" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -263,7 +263,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/description_tv"
-                android:padding="@dimen/margin_medium"
+                android:padding="@dimen/small"
                 app:endIconMode="clear_text"
                 app:startIconDrawable="@drawable/create_icon">
 
@@ -272,7 +272,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLength="300"
-                    android:paddingStart="@dimen/margin_extra"
+                    android:paddingStart="@dimen/medium_plus"
                     tools:ignore="RtlSymmetry" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -282,16 +282,16 @@
                 android:id="@+id/lyt_amenities"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_medium"
+                android:layout_margin="@dimen/small"
                 android:hint="@string/amenities_tv"
                 android:orientation="horizontal"
-                android:padding="@dimen/margin_medium">
+                android:padding="@dimen/small">
 
                 <ImageView
                     android:id="@+id/icon_amenities"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:layout_marginEnd="@dimen/small"
                     android:contentDescription="@null"
                     android:src="@drawable/amenities_icon"
                     app:tint="@color/md_theme_onPrimaryContainer" />
@@ -309,7 +309,7 @@
                 android:id="@+id/chipGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_medium">
+                android:layout_margin="@dimen/small">
 
 
             </com.google.android.material.chip.ChipGroup>
@@ -321,7 +321,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/realEstateAgent_tv"
-                android:padding="@dimen/margin_medium"
+                android:padding="@dimen/small"
                 app:startIconDrawable="@drawable/person_icon">
 
                 <AutoCompleteTextView
@@ -329,7 +329,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:paddingStart="@dimen/margin_extra"
+                    android:paddingStart="@dimen/medium_plus"
                     tools:ignore="LabelFor,RtlSymmetry" />
 
             </com.google.android.material.textfield.TextInputLayout>

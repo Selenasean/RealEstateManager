@@ -11,7 +11,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/margin_extra_medium"
+        android:layout_margin="@dimen/small_double"
         android:importantForAccessibility="no"
         android:scaleType="centerCrop" />
 
@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/label_tv"
-        android:padding="@dimen/margin_medium"
+        android:padding="@dimen/small"
         app:endIconMode="clear_text"
         app:startIconDrawable="@drawable/create_icon">
 
@@ -29,7 +29,7 @@
             android:id="@+id/tv_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/margin_extra"
+            android:paddingStart="@dimen/medium_plus"
             tools:ignore="RtlSymmetry" />
 
     </com.google.android.material.textfield.TextInputLayout>

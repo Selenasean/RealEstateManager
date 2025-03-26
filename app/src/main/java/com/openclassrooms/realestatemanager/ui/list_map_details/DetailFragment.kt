@@ -7,13 +7,19 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.openclassrooms.realestatemanager.R
+import com.openclassrooms.realestatemanager.data.Position
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
 import com.openclassrooms.realestatemanager.utils.CurrencyCode
 import com.openclassrooms.realestatemanager.utils.Utils
 
-class DetailFragment : Fragment() {
+class DetailFragment : Fragment(), OnMapReadyCallback {
 
     companion object {
         fun newInstance() = DetailFragment()
@@ -22,6 +28,7 @@ class DetailFragment : Fragment() {
 
     private val viewModel by activityViewModels<ListMapDetailViewModel> { ViewModelFactory.getInstance() }
     private lateinit var adapter: PhotosAdapter
+    private lateinit var realEstatePosition: Position
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +44,11 @@ class DetailFragment : Fragment() {
         setRecyclerView(binding)
         binding.noItemLytContainer.visibility = View.GONE
         viewModel.detailState.observe(viewLifecycleOwner) { render(it, binding) }
+
+        //map view dsplayed
+        val mapView = binding.mapSnapshot
+        mapView.onCreate(savedInstanceState)
+        mapView.getMapAsync { this }
     }
 
     /**
@@ -71,16 +83,16 @@ class DetailFragment : Fragment() {
             }
             binding.lytAttributes.priceValueTv.text =
                 Utils.priceFormatter(realEstate.priceTag, CurrencyCode.EURO)
-            binding.cityTv.text = realEstate.city
+            binding.lytLocationAmenities.cityTv.text = realEstate.city
             binding.lytAttributes.surfaceValueTv.text = realEstate.surface.toString()
             binding.lytAttributes.roomsValueTv.text = realEstate.rooms.toString()
             binding.lytAttributes.bedroomsValueTv.text = realEstate.bedrooms.toString()
             binding.lytAttributes.bathroomsValueTv.text = realEstate.bathrooms.toString()
-            binding.locationValueTv.text = realEstate.address
+            binding.lytLocationAmenities.locationValueTv.text = realEstate.address
             val amenitiesString =
                 realEstate.amenities.map { ContextCompat.getString(context, it.displayName) }
-            binding.amenitiesValueTv.text = amenitiesString.joinToString(", ")
-
+            binding.lytLocationAmenities.amenitiesValueTv.text = amenitiesString.joinToString(", ")
+            realEstatePosition= Position(realEstate.latitude!!, realEstate.longitude!!)
         }
 
     }
@@ -92,6 +104,28 @@ class DetailFragment : Fragment() {
             PhotosAdapter(CLASS_NAME, labelClickedListener = { Unit }, onDeleteClickedListener = {})
         recyclerView.adapter = adapter
     }
+
+    override fun onMapReady(map: GoogleMap) {
+        if(true){
+            map.moveCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(realEstatePosition.latitude,
+                        realEstatePosition.longitude), 13f
+                )
+            )
+            map.addMarker(
+                MarkerOptions().position(
+                    LatLng(
+                        realEstatePosition.latitude,
+                        realEstatePosition.longitude
+                    )
+                ))
+        }
+
+    }
+
+
+
 
 
 }

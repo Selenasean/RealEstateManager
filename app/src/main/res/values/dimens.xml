@@ -2,16 +2,13 @@
 <resources>
 
     <dimen name ="extra_small">5dp</dimen>
-    <dimen name="margin_extra_medium">20dp</dimen>
-    <dimen name="margin_medium">10dp</dimen>
-    <dimen name="margin_extra_medium_medium">40dp</dimen>
-    <dimen name="margin_extra">50dp</dimen>
+    <dimen name ="small">10dp</dimen>
+    <dimen name ="small_plus">15dp</dimen>
+    <dimen name ="small_double">20dp</dimen>
+    <dimen name ="small_double_24">24dp</dimen>
+    <dimen name ="medium">40dp</dimen>
+    <dimen name ="medium_plus">50dp</dimen>
 
-    <dimen name="padding_medium_medium">15dp</dimen>
-    <dimen name="padding_big">24dp</dimen>
-
-    <dimen name="edit_tv_height_medium">50dp</dimen>
-    <dimen name="icon_size_small">24dp</dimen>
 
     <dimen name="text_size_big">20sp</dimen>
     <dimen name="text_size_medium">16sp</dimen>
