@@ -60,6 +60,7 @@ object Utils {
      * @param context
      * @return
      */
+
     fun isInternetAvailable(context: Context): Boolean {
         val wifi = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
         return wifi.isWifiEnabled

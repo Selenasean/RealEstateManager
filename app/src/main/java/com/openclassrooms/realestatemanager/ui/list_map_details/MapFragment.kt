@@ -13,7 +13,6 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
@@ -57,15 +56,13 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         viewModel.mapList.observe(viewLifecycleOwner, Observer { list ->
             map.clear()
             list.forEach { item ->
-                if (item.latitude != null || item.longitude != null) {
-                    //create marker for each realEstate
-                    createMarkers(map, item)
 
-                    //listener
-                    map.setOnMarkerClickListener(this)
-                } else {
-                    Log.i("LatLng", "null : $item")
-                }
+                //create marker for each realEstate
+                createMarkers(map, item)
+
+                //listener
+                map.setOnMarkerClickListener(this)
+
             }
 
 
@@ -88,20 +85,21 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         map: GoogleMap,
         item: MapState
     ) {
+        val iconColor = if (item.status == Status.FOR_SALE) {
+            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)
+        } else {
+            BitmapDescriptorFactory.defaultMarker()
+        }
 
         val realEstateMarker = map.addMarker(
             MarkerOptions()
-                .position(LatLng(item.latitude!!, item.longitude!!))
+                .icon(iconColor)
+                .position(LatLng(item.latitude, item.longitude))
                 .title(ContextCompat.getString(requireContext(), item.type.displayName))
                 .snippet(Utils.priceFormatter(item.priceTag, CurrencyCode.EURO))
 
         )
-        if(item.status == Status.FOR_SALE){
-            realEstateMarker?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-        }
-        if(item.status == Status.SOLD){
-            realEstateMarker?.setIcon(BitmapDescriptorFactory.defaultMarker())
-        }
+
         //create data object to insert in the marker tag
         realEstateMarker?.tag = MarkerData(
             id = item.id,

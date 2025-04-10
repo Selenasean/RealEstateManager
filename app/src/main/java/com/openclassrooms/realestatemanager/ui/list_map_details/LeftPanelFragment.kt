@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
@@ -40,11 +41,19 @@ class LeftPanelFragment : Fragment() {
         val binding = FragmentLeftPanelBinding.bind(view)
         val slidingPaneLayout = binding.slidingPaneLayout
 
-        //callback to return on the leftPane from SlidingPaneLayout when clicked on return button of the device
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
-            ListOnBackPressCallback(slidingPaneLayout, viewModel)
-        )
+
+
+        // We need to wait for layout as the ListOnBackPressCallback access the view
+        // properties that are only correct after first layout. Not doing that causes the back press
+        // handler being disabled after process death when the details panel is open
+        binding.slidingPaneLayout.doOnLayout {
+            requireActivity().onBackPressedDispatcher.addCallback(
+                viewLifecycleOwner,
+                //callback to return on the leftPane from SlidingPaneLayout when clicked on return button of the device
+                ListOnBackPressCallback(slidingPaneLayout, viewModel)
+            )
+
+        }
 
         observeAsEvents(viewModel.eventsFlow) { event ->
             Log.i("leftPanelFragment", "onViewCreated: observeAsEvents")

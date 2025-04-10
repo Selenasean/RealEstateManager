@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.list_map_details
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +29,7 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
 
     private val viewModel by activityViewModels<ListMapDetailViewModel> { ViewModelFactory.getInstance() }
     private lateinit var adapter: PhotosAdapter
-    private lateinit var realEstatePosition: Position
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,7 +49,7 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
         //map view dsplayed
         val mapView = binding.mapSnapshot
         mapView.onCreate(savedInstanceState)
-        mapView.getMapAsync { this }
+        mapView.getMapAsync(this)
     }
 
     /**
@@ -92,7 +93,8 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
             val amenitiesString =
                 realEstate.amenities.map { ContextCompat.getString(context, it.displayName) }
             binding.lytLocationAmenities.amenitiesValueTv.text = amenitiesString.joinToString(", ")
-            realEstatePosition= Position(realEstate.latitude!!, realEstate.longitude!!)
+            Log.i("Detail fragment", "render: ça passe ${Position(realEstate.latitude!!, realEstate.longitude!!)}")
+            viewModel.realEstatePosition(Position(realEstate.latitude, realEstate.longitude))
         }
 
     }
@@ -106,26 +108,36 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(map: GoogleMap) {
-        if(true){
+        val position = viewModel.positionStateFlow
+        Log.i("Detail fragment", "onMapReady:  $position")
+        viewModel.positionStateFlow.observe(viewLifecycleOwner) { if(it!=null){
+            renderMap(map,it)
+        } }
+
+
+    }
+
+    private fun renderMap(map: GoogleMap, position: Position) {
+        Log.i("Detail fragment", "onMapReady: ça passe $position")
+        map.clear()
             map.moveCamera(
                 CameraUpdateFactory.newLatLngZoom(
-                    LatLng(realEstatePosition.latitude,
-                        realEstatePosition.longitude), 13f
+                    LatLng(
+                        position.latitude,
+                        position.longitude
+                    ), 10f
                 )
             )
             map.addMarker(
                 MarkerOptions().position(
                     LatLng(
-                        realEstatePosition.latitude,
-                        realEstatePosition.longitude
+                        position.latitude,
+                        position.longitude
                     )
-                ))
+                )
+            )
         }
 
     }
 
 
-
-
-
-}

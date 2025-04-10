@@ -37,7 +37,7 @@ class ViewModelFactory : ViewModelProvider.Factory {
         val savedStateHandle : SavedStateHandle = extras.createSavedStateHandle()
 
         if(modelClass.isAssignableFrom(ListMapDetailViewModel::class.java)){
-            return ListMapDetailViewModel(application.repository, application.geocoderRepository) as T
+            return ListMapDetailViewModel(application.repository, application.geocoderRepository, savedStateHandle) as T
         }
         if(modelClass.isAssignableFrom(CreateViewModel::class.java)){
             return CreateViewModel(application.repository, savedStateHandle) as T
