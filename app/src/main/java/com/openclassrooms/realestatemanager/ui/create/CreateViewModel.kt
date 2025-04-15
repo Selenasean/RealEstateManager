@@ -14,14 +14,19 @@ import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.domain.Photo
 import com.openclassrooms.realestatemanager.domain.RealEstateAgent
 import com.openclassrooms.realestatemanager.domain.RealEstateToCreate
+import com.openclassrooms.realestatemanager.utils.InternetEvent
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
+import com.openclassrooms.realestatemanager.utils.internetConnectivity.ConnectivityChecker
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.util.UUID
 
 class CreateViewModel(
     private val repository: Repository,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val connectivityChecker: ConnectivityChecker
 ) : ViewModel() {
 
 
@@ -30,17 +35,29 @@ class CreateViewModel(
         return repository.getAllAgents().asLiveData()
     }
 
-    //
+    //state of data stored in Bundle
     private val _createdRealEstateMutableStateFlow =
         savedStateHandle.getMutableStateFlow("KEY_STATE", RealEstateCreatedState())
 
     //state of data for UI
+    //TODO : combine avec connexion internet
     val state: LiveData<RealEstateCreatedState> = _createdRealEstateMutableStateFlow.asLiveData()
+
+
+
+
+    //Flow to be observe in UI, notifying of an Event
+    private val _internetEventFlow = Channel<InternetEvent>()
+    val internetEventFlow = _internetEventFlow.receiveAsFlow()
 
     /**
      * Create a realEstate from info enter by user
      */
-    fun createRealEstate() {
+    fun createRealEstate(): Boolean {
+        if (!connectivityChecker.isInternetAvailable()) {
+            _internetEventFlow.trySend(InternetEvent.NoInternetToast)
+            return false
+        }
         val currentState = _createdRealEstateMutableStateFlow.value
 
         val realEstateToCreate = RealEstateToCreate(
@@ -67,7 +84,7 @@ class CreateViewModel(
         viewModelScope.launch {
             repository.createRealEstate(realEstateToCreate)
         }
-
+        return true
 
     }
 

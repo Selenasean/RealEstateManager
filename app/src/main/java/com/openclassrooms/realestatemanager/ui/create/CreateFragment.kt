@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,6 +22,7 @@ import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
@@ -32,7 +34,9 @@ import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.databinding.FragmentCreateBinding
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
 import com.openclassrooms.realestatemanager.ui.list_map_details.PhotosAdapter
+import com.openclassrooms.realestatemanager.utils.InternetEvent
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
+import com.openclassrooms.realestatemanager.utils.observeAsEvents
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.Dispatcher
@@ -47,7 +51,7 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         const val CLASS_NAME = "CREATE_FRAGMENT"
     }
 
-    private val viewModel by activityViewModels<CreateViewModel> { ViewModelFactory.getInstance() }
+    private val viewModel by viewModels<CreateViewModel> { ViewModelFactory.getInstance() }
     private lateinit var adapter: PhotosAdapter
     private var currentPhotoUri: Uri? = null
 
@@ -63,12 +67,17 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         viewModel.state.observe(viewLifecycleOwner) { render(it, binding) }
         setRecyclerView(binding)
 
-        checkInternetConnection()
         //create a realEstate
         binding.createBtn.setOnClickListener {
-
-            viewModel.createRealEstate()
-            dismiss()
+            if(viewModel.createRealEstate()){
+                dismiss()
+            }
+        }
+        //observeEvent for internet connexion
+        observeAsEvents(viewModel.internetEventFlow) { event ->
+            when(event){
+                InternetEvent.NoInternetToast -> Toast.makeText(requireContext(), "pas internet", Toast.LENGTH_LONG).show()
+            }
         }
 
         //inputs listeners
@@ -216,20 +225,6 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
             binding.tvAgent.setOnItemClickListener { _, _, position, _ ->
                 viewModel.updateAgentName(agents[position])
             }
-        }
-
-    }
-
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun checkInternetConnection() : Boolean{
-        val manager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if(true){
-            val networkInfo = manager.activeNetwork
-            return networkInfo != null
-            Log.i("create internet", checkInternetConnection().toString())
-        }else{
-            return false
-            Log.i("create internet", checkInternetConnection().toString())
         }
 
     }

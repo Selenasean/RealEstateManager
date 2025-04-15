@@ -13,6 +13,7 @@ import com.openclassrooms.realestatemanager.data.model.Amenity
 import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.data.model.Status
 import com.openclassrooms.realestatemanager.domain.Photo
+
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
 import com.openclassrooms.realestatemanager.utils.toPhotoSelectedViewState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,7 +29,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 class ListMapDetailViewModel(
     private val repository: Repository,
     private val geocoderRepository: GeocoderRepository,
-    private val saveStateHandle: SavedStateHandle
+    private val saveStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
 

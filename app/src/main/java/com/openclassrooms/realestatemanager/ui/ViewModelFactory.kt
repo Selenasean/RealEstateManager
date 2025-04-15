@@ -9,18 +9,22 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.openclassrooms.realestatemanager.AppApplication
 import com.openclassrooms.realestatemanager.ui.create.CreateViewModel
 import com.openclassrooms.realestatemanager.ui.list_map_details.ListMapDetailViewModel
+import com.openclassrooms.realestatemanager.utils.internetConnectivity.ConnectivityChecker
+import com.openclassrooms.realestatemanager.utils.internetConnectivity.ConnectivityObserver
+import com.openclassrooms.realestatemanager.utils.internetConnectivity.ConnectivityObserverClass
+
 
 
 class ViewModelFactory : ViewModelProvider.Factory {
 
 
-    companion object{
+    companion object {
         private var factory: ViewModelFactory? = null
 
-        fun getInstance() : ViewModelFactory {
-            if(factory == null){
-                synchronized(ViewModelFactory::class.java){
-                    if(factory == null){
+        fun getInstance(): ViewModelFactory {
+            if (factory == null) {
+                synchronized(ViewModelFactory::class.java) {
+                    if (factory == null) {
                         factory = ViewModelFactory()
                     }
                 }
@@ -33,14 +37,21 @@ class ViewModelFactory : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
-        val application : AppApplication = extras[APPLICATION_KEY] as AppApplication
-        val savedStateHandle : SavedStateHandle = extras.createSavedStateHandle()
+        val application: AppApplication = extras[APPLICATION_KEY] as AppApplication
+        val savedStateHandle: SavedStateHandle = extras.createSavedStateHandle()
+        val connectivityChecker: ConnectivityChecker = application.connectivityChecker
 
-        if(modelClass.isAssignableFrom(ListMapDetailViewModel::class.java)){
-            return ListMapDetailViewModel(application.repository, application.geocoderRepository, savedStateHandle) as T
+
+        if (modelClass.isAssignableFrom(ListMapDetailViewModel::class.java)) {
+            return ListMapDetailViewModel(
+                application.repository,
+                application.geocoderRepository,
+                savedStateHandle
+            ) as T
         }
-        if(modelClass.isAssignableFrom(CreateViewModel::class.java)){
-            return CreateViewModel(application.repository, savedStateHandle) as T
+        if (modelClass.isAssignableFrom(CreateViewModel::class.java)) {
+            return CreateViewModel(
+                application.repository, savedStateHandle, connectivityChecker) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
