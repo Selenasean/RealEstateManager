@@ -10,7 +10,6 @@ import com.openclassrooms.realestatemanager.domain.RealEstateToCreate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.Instant
-import kotlin.math.log
 
 class Repository(
     private val appdatabase: AppDataBase,
@@ -108,42 +107,53 @@ class Repository(
     /**
      * Create RealEstate in database + photos associated
      */
-    //TODO : check if there is internet
     suspend fun createRealEstate(realEstate: RealEstateToCreate) {
         val position = geocoderRepository.getLongLat(realEstate.address)
-        val realEstateCreatedId = appdatabase.realEstateDao().createRealEstate(
-            RealEstateDb(
-                type = realEstate.type,
-                price = realEstate.price,
-                name = "",
-                surface = realEstate.surface,
-                rooms = realEstate.rooms,
-                bedrooms = realEstate.bedrooms,
-                bathrooms = realEstate.bathrooms,
-                description = realEstate.description,
-                address = realEstate.address,
-                city = realEstate.city,
-                status = Status.FOR_SALE,
-                amenities = realEstate.amenities,
-                dateCreated = Instant.now(),
-                dateOfSale = null,
-                realEstateAgentId = realEstate.agentId,
-                latitude = position?.latitude,
-                longitude = position?.longitude
-            )
-        )
-
-        realEstate.photos.forEach { photo ->
-            appdatabase.photoDao().createPhoto(
-                PhotoDb(
-                    id = photo.id,
-                    realEstateId = realEstateCreatedId.toString(),
-                    urlPhoto = photo.urlPhoto,
-                    label = photo.label
+        if (position != null) {
+            val realEstateCreatedId = appdatabase.realEstateDao().createRealEstate(
+                RealEstateDb(
+                    type = realEstate.type,
+                    price = realEstate.price,
+                    name = "",
+                    surface = realEstate.surface,
+                    rooms = realEstate.rooms,
+                    bedrooms = realEstate.bedrooms,
+                    bathrooms = realEstate.bathrooms,
+                    description = realEstate.description,
+                    address = realEstate.address,
+                    city = realEstate.city,
+                    status = Status.FOR_SALE,
+                    amenities = realEstate.amenities,
+                    dateCreated = Instant.now(),
+                    dateOfSale = null,
+                    realEstateAgentId = realEstate.agentId,
+                    latitude = position.latitude,
+                    longitude = position.longitude
                 )
             )
 
+            realEstate.photos.forEach { photo ->
+                appdatabase.photoDao().createPhoto(
+                    PhotoDb(
+                        id = photo.id,
+                        realEstateId = realEstateCreatedId.toString(),
+                        urlPhoto = photo.urlPhoto,
+                        label = photo.label
+                    )
+                )
+
+            }
+            return
+
         }
+    }
+
+    /**
+     * To know if localisation actualy exist
+     */
+    fun isPositionExist(address: String): Boolean {
+        val position = geocoderRepository.getLongLat(address)
+        return position != null
     }
 
     //TODO : function mapping here ?

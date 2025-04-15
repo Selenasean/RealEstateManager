@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.list_map_details
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,7 +45,7 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
         binding.noItemLytContainer.visibility = View.GONE
         viewModel.detailState.observe(viewLifecycleOwner) { render(it, binding) }
 
-        //map view dsplayed
+        //map view displayed
         val mapView = binding.mapSnapshot
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
@@ -83,7 +82,7 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
                 )
             }
             binding.lytAttributes.priceValueTv.text =
-                Utils.priceFormatter(realEstate.priceTag, CurrencyCode.EURO)
+                Utils.priceFormatter(price = realEstate.priceTag, CurrencyCode.EURO)
             binding.lytLocationAmenities.cityTv.text = realEstate.city
             binding.lytAttributes.surfaceValueTv.text = realEstate.surface.toString()
             binding.lytAttributes.roomsValueTv.text = realEstate.rooms.toString()
@@ -93,51 +92,60 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
             val amenitiesString =
                 realEstate.amenities.map { ContextCompat.getString(context, it.displayName) }
             binding.lytLocationAmenities.amenitiesValueTv.text = amenitiesString.joinToString(", ")
-            Log.i("Detail fragment", "render: ça passe ${Position(realEstate.latitude!!, realEstate.longitude!!)}")
-            viewModel.realEstatePosition(Position(realEstate.latitude, realEstate.longitude))
+            viewModel.realEstatePosition(
+                Position(
+                    latitude = realEstate.latitude!!,
+                    longitude = realEstate.longitude!!
+                )
+            )
         }
 
     }
 
+    /**
+     * RV settings
+     */
     private fun setRecyclerView(binding: FragmentDetailBinding) {
         val recyclerView = binding.imagesRv
-        //comment ne rien faire
         adapter =
-            PhotosAdapter(CLASS_NAME, labelClickedListener = { Unit }, onDeleteClickedListener = {})
+            PhotosAdapter(CLASS_NAME, labelClickedListener = {}, onDeleteClickedListener = {})
         recyclerView.adapter = adapter
     }
 
+    /**
+     * onMapReady callback
+     */
     override fun onMapReady(map: GoogleMap) {
-        val position = viewModel.positionStateFlow
-        Log.i("Detail fragment", "onMapReady:  $position")
-        viewModel.positionStateFlow.observe(viewLifecycleOwner) { if(it!=null){
-            renderMap(map,it)
-        } }
-
-
-    }
-
-    private fun renderMap(map: GoogleMap, position: Position) {
-        Log.i("Detail fragment", "onMapReady: ça passe $position")
-        map.clear()
-            map.moveCamera(
-                CameraUpdateFactory.newLatLngZoom(
-                    LatLng(
-                        position.latitude,
-                        position.longitude
-                    ), 10f
-                )
-            )
-            map.addMarker(
-                MarkerOptions().position(
-                    LatLng(
-                        position.latitude,
-                        position.longitude
-                    )
-                )
-            )
+        viewModel.positionStateFlow.observe(viewLifecycleOwner) {
+            if (it != null) {
+                renderMap(map, it)
+            }
         }
-
     }
+
+    /**
+     * Displaying markers on map according real estate's position
+     */
+    private fun renderMap(map: GoogleMap, position: Position) {
+        map.clear()
+        map.moveCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                LatLng(
+                    position.latitude,
+                    position.longitude
+                ), 10f
+            )
+        )
+        map.addMarker(
+            MarkerOptions().position(
+                LatLng(
+                    position.latitude,
+                    position.longitude
+                )
+            )
+        )
+    }
+
+}
 
 

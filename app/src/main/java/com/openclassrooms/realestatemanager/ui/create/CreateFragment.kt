@@ -1,14 +1,11 @@
 package com.openclassrooms.realestatemanager.ui.create
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
@@ -19,14 +16,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.content.getSystemService
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
-import com.openclassrooms.realestatemanager.AppApplication
 import com.openclassrooms.realestatemanager.BuildConfig
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.data.model.Amenity
@@ -34,12 +27,10 @@ import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.databinding.FragmentCreateBinding
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
 import com.openclassrooms.realestatemanager.ui.list_map_details.PhotosAdapter
-import com.openclassrooms.realestatemanager.utils.InternetEvent
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
+import com.openclassrooms.realestatemanager.utils.events.CreationSucceedEvent
+import com.openclassrooms.realestatemanager.utils.events.InternetEvent
 import com.openclassrooms.realestatemanager.utils.observeAsEvents
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
 import java.io.File
 import kotlin.random.Random
 
@@ -69,16 +60,31 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
 
         //create a realEstate
         binding.createBtn.setOnClickListener {
-            if(viewModel.createRealEstate()){
-                dismiss()
+            //check if address actually exist
+            if(viewModel.isPositionExist()){
+                viewModel.createRealEstate()
+                //observe event to close creation dialog after real estate's creation succeed
+                observeAsEvents(viewModel.isCreatedFlow) { event ->
+                    when (event) {
+                        CreationSucceedEvent.isCreated -> dismiss()
+                    }
+                }
+            }else{
+                Toast.makeText(requireContext(), R.string.wrong_address, Toast.LENGTH_LONG ).show()
             }
         }
+
         //observeEvent for internet connexion
         observeAsEvents(viewModel.internetEventFlow) { event ->
-            when(event){
-                InternetEvent.NoInternetToast -> Toast.makeText(requireContext(), "pas internet", Toast.LENGTH_LONG).show()
+            when (event) {
+                InternetEvent.NoInternetToast -> Toast.makeText(
+                    requireContext(),
+                    R.string.no_internet,
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
+
 
         //inputs listeners
         binding.tvAddress.doAfterTextChanged { viewModel.updateAddress(it.toString()) }

@@ -16,6 +16,7 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentLeftPanelBinding
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
 import com.openclassrooms.realestatemanager.ui.create.CreateFragment
+import com.openclassrooms.realestatemanager.utils.events.EventDetailPane
 import com.openclassrooms.realestatemanager.utils.observeAsEvents
 
 class LeftPanelFragment : Fragment() {
@@ -24,9 +25,7 @@ class LeftPanelFragment : Fragment() {
         fun newInstance() = LeftPanelFragment()
     }
 
-
     private val viewModel by activityViewModels<ListMapDetailViewModel> { ViewModelFactory.getInstance() }
-//    private lateinit var adapter: ListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,8 +40,6 @@ class LeftPanelFragment : Fragment() {
         val binding = FragmentLeftPanelBinding.bind(view)
         val slidingPaneLayout = binding.slidingPaneLayout
 
-
-
         // We need to wait for layout as the ListOnBackPressCallback access the view
         // properties that are only correct after first layout. Not doing that causes the back press
         // handler being disabled after process death when the details panel is open
@@ -55,10 +52,10 @@ class LeftPanelFragment : Fragment() {
 
         }
 
+        //Event to open Detail Pane from the SlidingPaneLayout
         observeAsEvents(viewModel.eventsFlow) { event ->
-            Log.i("leftPanelFragment", "onViewCreated: observeAsEvents")
             when (event) {
-                is Event.OpenDetails -> slidingPaneLayout.openPane()
+                is EventDetailPane.OpenDetails -> slidingPaneLayout.openPane()
             }
         }
 
@@ -83,18 +80,21 @@ class LeftPanelFragment : Fragment() {
                     fragmentManager.let { createBottomSheet.show(it, CreateFragment.TAG) }
                     true
                 }
+
                 R.id.app_bar_filter -> {
                     Log.i("listEstateFragment", "filter")
                     true
                 }
+
                 R.id.app_bar_list -> {
                     childFragmentManager.commit {
                         replace(R.id.childFragmentContainer, ListFragment.newInstance())
                     }
-                    listIdItem.setVisible(false)
-                    mapItemId.setVisible(true)
+                    listIdItem.isVisible = false
+                    mapItemId.isVisible = true
                     true
                 }
+
                 R.id.app_bar_map -> {
                     childFragmentManager.commit {
                         replace(R.id.childFragmentContainer, MapFragment.newInstance())

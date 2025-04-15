@@ -19,7 +19,7 @@ data class RealEstate(
     val address : String,
     val status : Status,
     val amenities : List<Amenity>,
-    val latitude: Double?,
-    val longitude: Double?
+    val latitude: Double,
+    val longitude: Double
 
 )

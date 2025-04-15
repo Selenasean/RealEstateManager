@@ -14,8 +14,9 @@ import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.domain.Photo
 import com.openclassrooms.realestatemanager.domain.RealEstateAgent
 import com.openclassrooms.realestatemanager.domain.RealEstateToCreate
-import com.openclassrooms.realestatemanager.utils.InternetEvent
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
+import com.openclassrooms.realestatemanager.utils.events.CreationSucceedEvent
+import com.openclassrooms.realestatemanager.utils.events.InternetEvent
 import com.openclassrooms.realestatemanager.utils.internetConnectivity.ConnectivityChecker
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -43,21 +44,23 @@ class CreateViewModel(
     //TODO : combine avec connexion internet
     val state: LiveData<RealEstateCreatedState> = _createdRealEstateMutableStateFlow.asLiveData()
 
-
-
-
-    //Flow to be observe in UI, notifying of an Event
+    //Flow to be observe in UI, notifying internet connexion or not
     private val _internetEventFlow = Channel<InternetEvent>()
     val internetEventFlow = _internetEventFlow.receiveAsFlow()
+
+    //Flow to be observe in UI, notifying creation success of real estate
+    private val _isCreatedFlow = Channel<CreationSucceedEvent>()
+    val isCreatedFlow = _isCreatedFlow.receiveAsFlow()
 
     /**
      * Create a realEstate from info enter by user
      */
-    fun createRealEstate(): Boolean {
+    fun createRealEstate() {
         if (!connectivityChecker.isInternetAvailable()) {
             _internetEventFlow.trySend(InternetEvent.NoInternetToast)
-            return false
+            return
         }
+        _isCreatedFlow.trySend(CreationSucceedEvent.isCreated)
         val currentState = _createdRealEstateMutableStateFlow.value
 
         val realEstateToCreate = RealEstateToCreate(
@@ -84,10 +87,14 @@ class CreateViewModel(
         viewModelScope.launch {
             repository.createRealEstate(realEstateToCreate)
         }
-        return true
+
 
     }
 
+    fun isPositionExist(): Boolean{
+        val address = _createdRealEstateMutableStateFlow.value.address
+        return repository.isPositionExist(address.toString())
+    }
 
     fun updateType(buildingType: BuildingType) {
         // ?: si null faire ce qui est a droite

@@ -31,6 +31,6 @@ data class RealEstateDb(
     val dateCreated: Instant,
     val dateOfSale: Instant?,
     val realEstateAgentId: Long,
-    val longitude: Double?,
-    val latitude : Double?
+    val longitude: Double,
+    val latitude : Double
 )

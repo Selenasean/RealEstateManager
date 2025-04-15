@@ -63,6 +63,8 @@
 
     <string name="map">Map</string>
     <string name="list">List</string>
+    <string name="no_internet">No internet connexion, real estate impossible to create</string>
+    <string name="wrong_address">Address does\'nt exist !</string>
 
 
 </resources>

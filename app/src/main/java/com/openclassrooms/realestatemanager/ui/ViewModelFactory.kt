@@ -10,9 +10,6 @@ import com.openclassrooms.realestatemanager.AppApplication
 import com.openclassrooms.realestatemanager.ui.create.CreateViewModel
 import com.openclassrooms.realestatemanager.ui.list_map_details.ListMapDetailViewModel
 import com.openclassrooms.realestatemanager.utils.internetConnectivity.ConnectivityChecker
-import com.openclassrooms.realestatemanager.utils.internetConnectivity.ConnectivityObserver
-import com.openclassrooms.realestatemanager.utils.internetConnectivity.ConnectivityObserverClass
-
 
 
 class ViewModelFactory : ViewModelProvider.Factory {
@@ -40,7 +37,6 @@ class ViewModelFactory : ViewModelProvider.Factory {
         val application: AppApplication = extras[APPLICATION_KEY] as AppApplication
         val savedStateHandle: SavedStateHandle = extras.createSavedStateHandle()
         val connectivityChecker: ConnectivityChecker = application.connectivityChecker
-
 
         if (modelClass.isAssignableFrom(ListMapDetailViewModel::class.java)) {
             return ListMapDetailViewModel(

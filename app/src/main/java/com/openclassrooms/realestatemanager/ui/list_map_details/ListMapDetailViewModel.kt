@@ -15,6 +15,7 @@ import com.openclassrooms.realestatemanager.data.model.Status
 import com.openclassrooms.realestatemanager.domain.Photo
 
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
+import com.openclassrooms.realestatemanager.utils.events.EventDetailPane
 import com.openclassrooms.realestatemanager.utils.toPhotoSelectedViewState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -42,8 +43,8 @@ class ListMapDetailViewModel(
     val positionStateFlow = _positionStateFlow.asLiveData()
 
 
-    //Flow to be observe in UI, notifying of an Event
-    private val _eventsFlow = Channel<Event>()
+    //Flow to be observe in UI, notifying an event
+    private val _eventsFlow = Channel<EventDetailPane>()
     val eventsFlow = _eventsFlow.receiveAsFlow()
 
 
@@ -90,7 +91,7 @@ class ListMapDetailViewModel(
      */
     fun onRealEstateClick(id: String) {
         _detailPaneIdStateFlow.value = id
-        _eventsFlow.trySend(Event.OpenDetails)
+        _eventsFlow.trySend(EventDetailPane.OpenDetails)
     }
 
     /**
@@ -154,9 +155,11 @@ class ListMapDetailViewModel(
             }
         }.asLiveData()
 
+    /**
+     * To get the position of a RealEstate and store it in stateFlow
+     */
     fun realEstatePosition(position: Position) {
         _positionStateFlow.value = position
-        Log.i("Detail fragment", "positionStateFlow = $position")
     }
 
 }
@@ -226,9 +229,4 @@ data class MapState(
     val latitude: Double
 )
 
-/**
- * To deal with events
- */
-sealed interface Event {
-    data object OpenDetails : Event
-}
+

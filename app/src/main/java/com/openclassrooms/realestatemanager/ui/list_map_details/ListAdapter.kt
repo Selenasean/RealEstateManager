@@ -70,7 +70,6 @@ class ListAdapter(private val clickedListener: (id: String) -> Unit) :
                 binding.imageRealestate.load(realestate.photos[0].urlPhoto) {
                     crossfade(true)
                 }
-                Log.i("listadapter", realestate.photos.toString())
             }
             if(itemState.isSelected){
                 binding.realestateContainer.setBackgroundColor(ContextCompat.getColor(context, R.color.md_theme_primaryContainer))
