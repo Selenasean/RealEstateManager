@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
@@ -46,7 +47,6 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
     private lateinit var adapter: PhotosAdapter
     private var currentPhotoUri: Uri? = null
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentCreateBinding.bind(view)
@@ -60,17 +60,18 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
 
         //create a realEstate
         binding.createBtn.setOnClickListener {
-            //check if address actually exist
-            if(viewModel.isPositionExist()){
-                viewModel.createRealEstate()
-                //observe event to close creation dialog after real estate's creation succeed
-                observeAsEvents(viewModel.isCreatedFlow) { event ->
-                    when (event) {
-                        CreationSucceedEvent.isCreated -> dismiss()
+            viewModel.createRealEstate()
+            Log.i("CreateFragment", "onViewCreated:  create RealEstate")
+            //observe event to close creation dialog after real estate's creation succeed
+            //TODO : trouver pourquoi ça ne veux pas dismiss
+            observeAsEvents(viewModel.isCreatedFlow) { event ->
+                when (event) {
+                    CreationSucceedEvent.isCreated -> {
+                        dismiss()
+                        Log.i("CreateFragment", "onViewCreated:  là ça dismiss")
                     }
+
                 }
-            }else{
-                Toast.makeText(requireContext(), R.string.wrong_address, Toast.LENGTH_LONG ).show()
             }
         }
 
@@ -87,7 +88,18 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
 
 
         //inputs listeners
-        binding.tvAddress.doAfterTextChanged { viewModel.updateAddress(it.toString()) }
+        binding.tvAddress.doAfterTextChanged {
+            if (viewModel.isPositionExist(it.toString())) {
+                viewModel.updateAddress(it.toString())
+                viewModel.addressValid()
+                binding.textInputLytAddress.helperText = null
+            } else {
+                binding.textInputLytAddress.helperText =
+                    ContextCompat.getString(context, R.string.address_invalid)
+                viewModel.addressInvalid()
+                viewModel.updateAddress(it.toString())
+            }
+        }
         binding.tvCity.doAfterTextChanged { viewModel.updateCity(it.toString()) }
         binding.tvPrice.doAfterTextChanged { viewModel.updatePrice(it.toString()) }
         binding.tvSurface.doAfterTextChanged { viewModel.updateSurface(it.toString()) }
@@ -137,6 +149,7 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         }
 
     }
+
 
     /**
      * Display recyclerView of photos or not depending on the size of the photo's list
@@ -236,3 +249,7 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
     }
 
 }
+
+
+
+

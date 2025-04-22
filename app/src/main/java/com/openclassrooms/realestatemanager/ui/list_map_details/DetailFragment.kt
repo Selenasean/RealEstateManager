@@ -35,6 +35,7 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         return FragmentDetailBinding.inflate(inflater, container, false).root
     }
 

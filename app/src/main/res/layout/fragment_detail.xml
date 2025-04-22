@@ -1,167 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    >
 
-
-    <FrameLayout
-        android:layout_width="match_parent"
+    <!--FAB-->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_update"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:context=".ui.list_map_details.DetailFragment">
+        android:layout_margin="@dimen/small_double_24"
+        android:contentDescription="@string/button_update"
+        android:src="@drawable/create_icon"
+        app:tint="@color/md_theme_onPrimary"
+        android:backgroundTint="@color/md_theme_primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
-        <!-- TEXTVIEW IF THERE IS NOTHING TO DISPLAY -->
-        <LinearLayout
-            android:id="@+id/no_item_lyt_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/medium_plus"
-            android:gravity="center"
-            android:orientation="vertical"
-            tools:ignore="UseCompoundDrawables"
-            tools:visibility="gone">
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/img_no_item"
-                android:layout_width="300dp"
-                android:layout_height="400dp"
-                android:contentDescription="@null"
-                android:src="@drawable/cat" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/no_item_tv"
+            <!-- TEXTVIEW IF THERE IS NOTHING TO DISPLAY -->
+            <LinearLayout
+                android:id="@+id/no_item_lyt_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/no_item_selected"
-                android:textSize="@dimen/text_size_big" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/medium_plus"
+                android:gravity="center"
+                android:orientation="vertical"
+                tools:ignore="UseCompoundDrawables"
+                tools:visibility="gone">
 
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/img_no_item"
+                    android:layout_width="300dp"
+                    android:layout_height="400dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/cat" />
 
+                <TextView
+                    android:id="@+id/no_item_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/no_item_selected"
+                    android:textSize="@dimen/text_size_big" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintlayout_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <!-- PHOTO PART -->
-            <TextView
-                android:id="@+id/textview_detail_media"
-                style="@style/TextAppearance.Material3.HeadlineSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/small_double"
-                android:layout_marginTop="@dimen/small"
-                android:text="@string/media"
-                android:textColor="@color/md_theme_onPrimaryContainer"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/images_rv"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginTop="@dimen/small"
-                android:clipToPadding="false"
-                android:contentDescription="@string/content_description_rv"
-                android:importantForAccessibility="auto"
-                android:orientation="horizontal"
-                android:paddingStart="@dimen/small_plus"
-                android:paddingEnd="@dimen/small_plus"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textview_detail_media"
-                tools:listitem="@layout/image_item" />
-
-            <!-- DESCRIPTION PART -->
-            <TextView
-                android:id="@+id/description_tv"
-                style="@style/TextAppearance.Material3.HeadlineSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/small_double"
-                android:layout_marginTop="@dimen/small"
-                android:text="@string/description_detail"
-                android:textColor="@color/md_theme_onPrimaryContainer"
-                app:layout_constraintBottom_toTopOf="@id/description_content"
-                app:layout_constraintTop_toBottomOf="@id/images_rv" />
-
-            <TextView
-                android:id="@+id/description_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/small"
-                android:ellipsize="end"
-                android:paddingStart="@dimen/small_double_24"
-                android:paddingEnd="@dimen/small_double_24"
-                android:textSize="16sp"
-                app:layout_constraintTop_toBottomOf="@id/description_tv"
-                tools:ignore="UnusedAttribute"
-                tools:text="@tools:sample/lorem/random" />
-
-            <TextView
-                android:id="@+id/details_tv"
-                style="@style/TextAppearance.Material3.HeadlineSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/small_double"
-                android:layout_marginTop="@dimen/small"
-                android:layout_marginBottom="@dimen/small"
-                android:text="@string/details"
-                app:layout_constraintTop_toBottomOf="@id/description_content" />
-
-            <include
-                android:id="@+id/lyt_attributes"
-                layout="@layout/attributes_view" />
-
-            <include
-                android:id="@+id/lyt_location_amenities"
-                layout="@layout/location_amenities_view" />
-
-            <!-- MAP -->
-            <LinearLayout
-                android:id="@+id/lyt_map"
-                android:layout_width="340dp"
-                android:layout_height="340dp"
-                android:orientation="horizontal"
-                tools:ignore="MissingConstraints">
-
-                <com.google.android.gms.maps.MapView
-                    android:id="@+id/map_snapshot"
-                    android:name="com.google.android.gms.maps.SupportMapFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    map:cameraZoom="13"
-                    map:liteMode="true"
-                    map:mapType="normal" />
             </LinearLayout>
 
-            <!-- Flow to modify place in space -->
-            <androidx.constraintlayout.helper.widget.Flow
-                android:id="@+id/flow"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/small_double_24"
-                android:layout_marginTop="@dimen/small"
-                android:layout_marginEnd="@dimen/small_double_24"
-                android:paddingBottom="@dimen/small"
-                app:constraint_referenced_ids="lyt_attributes, lyt_location_amenities, lyt_map"
-                app:flow_horizontalBias="0"
-                app:flow_horizontalGap="20dp"
-                app:flow_verticalGap="20dp"
-                app:flow_verticalStyle="packed"
-                app:flow_wrapMode="chain"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/details_tv" />
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintlayout_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <!-- PHOTO PART -->
+                <TextView
+                    android:id="@+id/textview_detail_media"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/small_double"
+                    android:layout_marginTop="@dimen/small"
+                    android:text="@string/media"
+                    android:textColor="@color/md_theme_onPrimaryContainer"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/images_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="@dimen/small"
+                    android:clipToPadding="false"
+                    android:contentDescription="@string/content_description_rv"
+                    android:importantForAccessibility="auto"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/small_plus"
+                    android:paddingEnd="@dimen/small_plus"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textview_detail_media"
+                    tools:listitem="@layout/image_item" />
 
-    </FrameLayout>
-</ScrollView>
+                <!-- DESCRIPTION PART -->
+                <TextView
+                    android:id="@+id/description_tv"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/small_double"
+                    android:layout_marginTop="@dimen/small"
+                    android:text="@string/description_detail"
+                    android:textColor="@color/md_theme_onPrimaryContainer"
+                    app:layout_constraintBottom_toTopOf="@id/description_content"
+                    app:layout_constraintTop_toBottomOf="@id/images_rv" />
+
+                <TextView
+                    android:id="@+id/description_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/small"
+                    android:ellipsize="end"
+                    android:paddingStart="@dimen/small_double_24"
+                    android:paddingEnd="@dimen/small_double_24"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/description_tv"
+                    tools:ignore="UnusedAttribute"
+                    tools:text="@tools:sample/lorem/random" />
+
+                <TextView
+                    android:id="@+id/details_tv"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/small_double"
+                    android:layout_marginTop="@dimen/small"
+                    android:layout_marginBottom="@dimen/small"
+                    android:text="@string/details"
+                    app:layout_constraintTop_toBottomOf="@id/description_content" />
+
+                <include
+                    android:id="@+id/lyt_attributes"
+                    layout="@layout/attributes_view" />
+
+                <include
+                    android:id="@+id/lyt_location_amenities"
+                    layout="@layout/location_amenities_view" />
+
+                <!-- MAP -->
+                <LinearLayout
+                    android:id="@+id/lyt_map"
+                    android:layout_width="340dp"
+                    android:layout_height="340dp"
+                    android:orientation="horizontal"
+                    tools:ignore="MissingConstraints">
+
+                    <com.google.android.gms.maps.MapView
+                        android:id="@+id/map_snapshot"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        map:cameraZoom="13"
+                        map:liteMode="true"
+                        map:mapType="normal" />
+                </LinearLayout>
+
+                <!-- Flow to modify place in space -->
+                <androidx.constraintlayout.helper.widget.Flow
+                    android:id="@+id/flow"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/small_double_24"
+                    android:layout_marginTop="@dimen/small"
+                    android:layout_marginEnd="@dimen/small_double_24"
+                    android:paddingBottom="@dimen/small"
+                    app:constraint_referenced_ids="lyt_attributes, lyt_location_amenities, lyt_map"
+                    app:flow_horizontalBias="0"
+                    app:flow_horizontalGap="20dp"
+                    app:flow_verticalGap="20dp"
+                    app:flow_verticalStyle="packed"
+                    app:flow_wrapMode="chain"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/details_tv" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,6 +19,7 @@ import com.openclassrooms.realestatemanager.utils.events.CreationSucceedEvent
 import com.openclassrooms.realestatemanager.utils.events.InternetEvent
 import com.openclassrooms.realestatemanager.utils.internetConnectivity.ConnectivityChecker
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -41,7 +42,6 @@ class CreateViewModel(
         savedStateHandle.getMutableStateFlow("KEY_STATE", RealEstateCreatedState())
 
     //state of data for UI
-    //TODO : combine avec connexion internet
     val state: LiveData<RealEstateCreatedState> = _createdRealEstateMutableStateFlow.asLiveData()
 
     //Flow to be observe in UI, notifying internet connexion or not
@@ -52,14 +52,24 @@ class CreateViewModel(
     private val _isCreatedFlow = Channel<CreationSucceedEvent>()
     val isCreatedFlow = _isCreatedFlow.receiveAsFlow()
 
+
+    fun addressInvalid() {
+        val currentState = _createdRealEstateMutableStateFlow.value
+        _createdRealEstateMutableStateFlow.value = currentState.copy(isAddressValid = false)
+        Log.i("createVM", "isAddressValid : ${_createdRealEstateMutableStateFlow.value}")
+    }
+
+    fun addressValid() {
+        val currentState = _createdRealEstateMutableStateFlow.value
+        _createdRealEstateMutableStateFlow.value = currentState.copy(isAddressValid = true)
+        Log.i("createVM", "isAddressValid : ${_createdRealEstateMutableStateFlow.value}")
+    }
+
     /**
      * Create a realEstate from info enter by user
      */
     fun createRealEstate() {
-        if (!connectivityChecker.isInternetAvailable()) {
-            _internetEventFlow.trySend(InternetEvent.NoInternetToast)
-            return
-        }
+        Log.i("createVM", "ça doit dismiss ")
         _isCreatedFlow.trySend(CreationSucceedEvent.isCreated)
         val currentState = _createdRealEstateMutableStateFlow.value
 
@@ -88,12 +98,13 @@ class CreateViewModel(
             repository.createRealEstate(realEstateToCreate)
         }
 
-
     }
 
-    fun isPositionExist(): Boolean{
-        val address = _createdRealEstateMutableStateFlow.value.address
-        return repository.isPositionExist(address.toString())
+    fun isPositionExist(address: String): Boolean {
+        if (connectivityChecker.isInternetAvailable()) {
+            return repository.isPositionExist(address)
+        }
+        return false
     }
 
     fun updateType(buildingType: BuildingType) {
@@ -238,6 +249,7 @@ class CreateViewModel(
     }
 }
 
+
 /**
  * State to store data & enabled creation button
  */
@@ -254,7 +266,8 @@ data class RealEstateCreatedState(
     val description: String? = null,
     val amenities: List<Amenity> = emptyList(),
     val agent: RealEstateAgent? = null,
-    val photos: List<PhotoSelectedViewState> = emptyList()
+    val photos: List<PhotoSelectedViewState> = emptyList(),
+    val isAddressValid: Boolean? = null
 ) : Parcelable {
 
     fun isCreatedEnabled(): Boolean {
@@ -268,7 +281,10 @@ data class RealEstateCreatedState(
             bedrooms,
             bathrooms,
             description,
-        ).none { it.isNullOrBlank() } && agent != null && photos.isNotEmpty()
+        ).none { it.isNullOrBlank() }
+                && agent != null
+                && photos.isNotEmpty()
+                && isAddressValid == true
     }
 }
 

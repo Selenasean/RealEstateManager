@@ -12,4 +12,5 @@
 
     <dimen name="text_size_big">20sp</dimen>
     <dimen name="text_size_medium">16sp</dimen>
+    <dimen name="text_size_small">12sp</dimen>
 </resources>

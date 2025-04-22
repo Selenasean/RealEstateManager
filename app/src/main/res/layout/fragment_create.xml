@@ -18,10 +18,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-
         android:text="@string/create_title"
         android:textSize="@dimen/text_size_big"
         android:textStyle="bold" />
+    <TextView
+        android:id="@+id/internet_info_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/internet_info"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/md_theme_tertiary"
+         />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -126,6 +134,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/address_tv"
                 android:padding="@dimen/small"
+                app:helperTextTextColor="@color/design_default_color_error"
                 app:endIconMode="clear_text"
                 app:startIconDrawable="@drawable/map_icon">
 

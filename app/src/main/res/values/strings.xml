@@ -65,6 +65,9 @@
     <string name="list">List</string>
     <string name="no_internet">No internet connexion, real estate impossible to create</string>
     <string name="wrong_address">Address does\'nt exist !</string>
+    <string name="address_invalid">Invalid address OR no internet connectivity</string>
+    <string name="internet_info">Info : You will need Internet to create your Real Estate</string>
+    <string name="button_update">"Button to update "</string>
 
 
 </resources>
