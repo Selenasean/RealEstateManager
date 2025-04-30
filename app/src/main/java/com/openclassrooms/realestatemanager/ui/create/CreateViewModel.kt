@@ -15,22 +15,31 @@ import com.openclassrooms.realestatemanager.domain.Photo
 import com.openclassrooms.realestatemanager.domain.RealEstateAgent
 import com.openclassrooms.realestatemanager.domain.RealEstateToCreate
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
-import com.openclassrooms.realestatemanager.utils.events.CreationSucceedEvent
-import com.openclassrooms.realestatemanager.utils.events.InternetEvent
+import com.openclassrooms.realestatemanager.utils.events.CreationEvents
 import com.openclassrooms.realestatemanager.utils.internetConnectivity.ConnectivityChecker
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.util.UUID
 
 class CreateViewModel(
+    realEstateId: String?,
     private val repository: Repository,
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     private val connectivityChecker: ConnectivityChecker
 ) : ViewModel() {
 
+
+    init {
+        if (realEstateId == null) {
+            //on create fragment
+            Log.i("init createVM", "null")
+        } else {
+            //on update fragment
+            Log.i("init createVM", realEstateId)
+        }
+    }
 
     //to get a list of agent's name
     fun getAgents(): LiveData<List<RealEstateAgent>> {
@@ -44,69 +53,60 @@ class CreateViewModel(
     //state of data for UI
     val state: LiveData<RealEstateCreatedState> = _createdRealEstateMutableStateFlow.asLiveData()
 
-    //Flow to be observe in UI, notifying internet connexion or not
-    private val _internetEventFlow = Channel<InternetEvent>()
-    val internetEventFlow = _internetEventFlow.receiveAsFlow()
-
     //Flow to be observe in UI, notifying creation success of real estate
-    private val _isCreatedFlow = Channel<CreationSucceedEvent>()
+    private val _isCreatedFlow = Channel<CreationEvents>()
     val isCreatedFlow = _isCreatedFlow.receiveAsFlow()
-
-
-    fun addressInvalid() {
-        val currentState = _createdRealEstateMutableStateFlow.value
-        _createdRealEstateMutableStateFlow.value = currentState.copy(isAddressValid = false)
-        Log.i("createVM", "isAddressValid : ${_createdRealEstateMutableStateFlow.value}")
-    }
-
-    fun addressValid() {
-        val currentState = _createdRealEstateMutableStateFlow.value
-        _createdRealEstateMutableStateFlow.value = currentState.copy(isAddressValid = true)
-        Log.i("createVM", "isAddressValid : ${_createdRealEstateMutableStateFlow.value}")
-    }
 
     /**
      * Create a realEstate from info enter by user
      */
     fun createRealEstate() {
-        Log.i("createVM", "ça doit dismiss ")
-        _isCreatedFlow.trySend(CreationSucceedEvent.isCreated)
         val currentState = _createdRealEstateMutableStateFlow.value
 
-        val realEstateToCreate = RealEstateToCreate(
-            type = currentState.type!!,
-            photos = currentState.photos.map { photo ->
-                Photo(
-                    id = photo.id,
-                    urlPhoto = photo.uri,
-                    label = photo.label
-                )
-            },
-            address = currentState.address!!.trim(),
-            city = currentState.city!!.trim(),
-            price = currentState.price!!.toFloat(),
-            surface = currentState.surface!!.toInt(),
-            rooms = currentState.rooms!!.toInt(),
-            bedrooms = currentState.bedrooms!!.toInt(),
-            bathrooms = currentState.bathrooms!!.toInt(),
-            description = currentState.description!!,
-            amenities = currentState.amenities,
-            agentId = currentState.agent!!.id
-        )
+        if (isPositionExist()) {
+            val realEstateToCreate = RealEstateToCreate(
+                type = currentState.type!!,
+                photos = currentState.photos.map { photo ->
+                    Photo(
+                        id = photo.id,
+                        urlPhoto = photo.uri,
+                        label = photo.label
+                    )
+                },
+                address = currentState.address!!.trim(),
+                city = currentState.city!!.trim(),
+                price = currentState.price!!.toFloat(),
+                surface = currentState.surface!!.toInt(),
+                rooms = currentState.rooms!!.toInt(),
+                bedrooms = currentState.bedrooms!!.toInt(),
+                bathrooms = currentState.bathrooms!!.toInt(),
+                description = currentState.description!!,
+                amenities = currentState.amenities,
+                agentId = currentState.agent!!.id
+            )
 
-        viewModelScope.launch {
-            repository.createRealEstate(realEstateToCreate)
+            viewModelScope.launch {
+                repository.createRealEstate(realEstateToCreate)
+            }
+
+            _isCreatedFlow.trySend(CreationEvents.isCreated)
         }
 
     }
 
-    fun isPositionExist(address: String): Boolean {
+    /**
+     * Boolean to know if address enter by user exist, if so means also there is an internet connectivity
+     */
+    fun isPositionExist(): Boolean {
         if (connectivityChecker.isInternetAvailable()) {
-            return repository.isPositionExist(address)
+            return repository.isPositionExist(_createdRealEstateMutableStateFlow.value.address.toString())
         }
         return false
     }
 
+    /**
+     * To update the type of real estate
+     */
     fun updateType(buildingType: BuildingType) {
         // ?: si null faire ce qui est a droite
         val currentState = _createdRealEstateMutableStateFlow.value
@@ -114,55 +114,81 @@ class CreateViewModel(
         Log.i("createVM", "typeBuilding : ${_createdRealEstateMutableStateFlow.value}")
     }
 
+    /**
+     * To update the real estate's address
+     */
     fun updateAddress(address: String) {
         val currentState = _createdRealEstateMutableStateFlow.value
         _createdRealEstateMutableStateFlow.value = currentState.copy(address = address)
         Log.i("createVM", "address :${_createdRealEstateMutableStateFlow.value}")
     }
 
+    /**
+     * To update the city
+     */
     fun updateCity(city: String) {
         val currentState = _createdRealEstateMutableStateFlow.value
         _createdRealEstateMutableStateFlow.value = currentState.copy(city = city)
         Log.i("createVM", "city :${_createdRealEstateMutableStateFlow.value}")
     }
 
+    /**
+     * To update surface in m2
+     */
     fun updatePrice(price: String) {
         val currentState = _createdRealEstateMutableStateFlow.value
         _createdRealEstateMutableStateFlow.value = currentState.copy(price = price)
         Log.i("createVM", "price :${_createdRealEstateMutableStateFlow.value}")
     }
 
+    /**
+     * To update surface
+     */
     fun updateSurface(surface: String) {
         val currentState = _createdRealEstateMutableStateFlow.value
         _createdRealEstateMutableStateFlow.value = currentState.copy(surface = surface)
         Log.i("createVM", "surface :${_createdRealEstateMutableStateFlow.value}")
     }
 
+    /**
+     * To update number of rooms
+     */
     fun updateRooms(rooms: String) {
         val currentState = _createdRealEstateMutableStateFlow.value
         _createdRealEstateMutableStateFlow.value = currentState.copy(rooms = rooms)
         Log.i("createVM", "rooms : ${_createdRealEstateMutableStateFlow.value}")
     }
 
+    /**
+     * To update number of bedrooms
+     */
     fun updateBedrooms(bedrooms: String) {
         val currentState = _createdRealEstateMutableStateFlow.value
         _createdRealEstateMutableStateFlow.value = currentState.copy(bedrooms = bedrooms)
         Log.i("createVM", "bedrooms :${_createdRealEstateMutableStateFlow.value}")
     }
 
+    /**
+     * To update number of bathroom
+     */
     fun updateBathrooms(bathrooms: String) {
         val currentState = _createdRealEstateMutableStateFlow.value
         _createdRealEstateMutableStateFlow.value = currentState.copy(bathrooms = bathrooms)
         Log.i("createVM", "bathrooms :${_createdRealEstateMutableStateFlow.value}")
     }
 
+    /**
+     * To update real estate's description
+     */
     fun updateDescription(description: String) {
         val currentState = _createdRealEstateMutableStateFlow.value
         _createdRealEstateMutableStateFlow.value = currentState.copy(description = description)
         Log.i("createVM", "description :${_createdRealEstateMutableStateFlow.value}")
     }
 
-
+    /**
+     * To update amenities
+     */
     fun updateAmenities(amenity: Amenity, isChosen: Boolean) {
         val currentState = _createdRealEstateMutableStateFlow.value
         val listAmenities: MutableList<Amenity> = currentState.amenities.toMutableList()
@@ -176,12 +202,18 @@ class CreateViewModel(
         Log.i("createVM", "amenities :${_createdRealEstateMutableStateFlow.value}")
     }
 
+    /**
+     * To update agent's name
+     */
     fun updateAgentName(agent: RealEstateAgent) {
         val currentState = _createdRealEstateMutableStateFlow.value
         _createdRealEstateMutableStateFlow.value = currentState.copy(agent = agent)
         Log.i("createVM", "agent :${_createdRealEstateMutableStateFlow.value}")
     }
 
+    /**
+     * To update a photo
+     */
     fun updatePhotos(uris: List<Uri>) {
         val currentState = _createdRealEstateMutableStateFlow.value
         //check if photo selected is in the list, if not add it into the list
@@ -208,6 +240,9 @@ class CreateViewModel(
         Log.i("createVM", "photos :${_createdRealEstateMutableStateFlow.value}")
     }
 
+    /**
+     * To delete a photo
+     */
     fun deletePhoto(id: String) {
 
         val currentState = _createdRealEstateMutableStateFlow.value
@@ -221,6 +256,9 @@ class CreateViewModel(
         Log.i("createVM", "photos without deleted one :${_createdRealEstateMutableStateFlow.value}")
     }
 
+    /**
+     * To update the photo's label
+     */
     fun updateLabel(label: String, id: String) {
         val currentState = _createdRealEstateMutableStateFlow.value
         val photosUpdated: List<PhotoSelectedViewState> = currentState.photos.map { photo ->
@@ -235,6 +273,9 @@ class CreateViewModel(
         Log.i("createVM", "labelUpdated :${_createdRealEstateMutableStateFlow.value}")
     }
 
+    /**
+     * To add a picture taken by device
+     */
     fun addPictureTaken(pictureTaken: String) {
         val currentState = _createdRealEstateMutableStateFlow.value
         val photoTaken = PhotoSelectedViewState(
@@ -267,7 +308,6 @@ data class RealEstateCreatedState(
     val amenities: List<Amenity> = emptyList(),
     val agent: RealEstateAgent? = null,
     val photos: List<PhotoSelectedViewState> = emptyList(),
-    val isAddressValid: Boolean? = null
 ) : Parcelable {
 
     fun isCreatedEnabled(): Boolean {
@@ -284,7 +324,6 @@ data class RealEstateCreatedState(
         ).none { it.isNullOrBlank() }
                 && agent != null
                 && photos.isNotEmpty()
-                && isAddressValid == true
     }
 }
 

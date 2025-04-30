@@ -29,10 +29,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 
 class ListMapDetailViewModel(
     private val repository: Repository,
-    private val geocoderRepository: GeocoderRepository,
     private val saveStateHandle: SavedStateHandle,
 ) : ViewModel() {
-
 
 
     //state of Pane : open or close, depending if there is id or not, to display the right fragment
@@ -137,7 +135,7 @@ class ListMapDetailViewModel(
         repository.getAllRealEstates().combine(_detailPaneIdStateFlow) { realEstateList, idSelected ->
             realEstateList.mapNotNull { realEstate ->
 
-                if (realEstate.latitude != null && realEstate.longitude != null) {
+                if (true) {
                     MapState(
                         id = realEstate.id,
                         city = realEstate.city,

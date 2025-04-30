@@ -3,9 +3,10 @@ package com.openclassrooms.realestatemanager.ui.create
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,9 +15,10 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.os.bundleOf
+import androidx.core.view.doOnDetach
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -29,8 +31,7 @@ import com.openclassrooms.realestatemanager.databinding.FragmentCreateBinding
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
 import com.openclassrooms.realestatemanager.ui.list_map_details.PhotosAdapter
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
-import com.openclassrooms.realestatemanager.utils.events.CreationSucceedEvent
-import com.openclassrooms.realestatemanager.utils.events.InternetEvent
+import com.openclassrooms.realestatemanager.utils.events.CreationEvents
 import com.openclassrooms.realestatemanager.utils.observeAsEvents
 import java.io.File
 import kotlin.random.Random
@@ -38,7 +39,10 @@ import kotlin.random.Random
 class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
 
     companion object {
-        fun newInstance() = CreateFragment()
+        fun newInstance(id: String?) = CreateFragment().apply{
+            //put id in bundle in argument
+            arguments = bundleOf("REAL_ESTATE_ID" to id)
+        }
         const val TAG = "CREATE_BOTTOM_SHEET"
         const val CLASS_NAME = "CREATE_FRAGMENT"
     }
@@ -60,45 +64,37 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
 
         //create a realEstate
         binding.createBtn.setOnClickListener {
-            viewModel.createRealEstate()
-            Log.i("CreateFragment", "onViewCreated:  create RealEstate")
-            //observe event to close creation dialog after real estate's creation succeed
-            //TODO : trouver pourquoi ça ne veux pas dismiss
-            observeAsEvents(viewModel.isCreatedFlow) { event ->
-                when (event) {
-                    CreationSucceedEvent.isCreated -> {
-                        dismiss()
-                        Log.i("CreateFragment", "onViewCreated:  là ça dismiss")
-                    }
-
-                }
+            if(viewModel.isPositionExist()){
+                viewModel.createRealEstate()
+                Log.i("CreateFragment", "onViewCreated:  create RealEstate")
+                binding.textInputLytAddress.helperText = null
+            }else{
+                binding.textInputLytAddress.helperText =
+                    ContextCompat.getString(context, R.string.address_invalid)
             }
-        }
 
-        //observeEvent for internet connexion
-        observeAsEvents(viewModel.internetEventFlow) { event ->
+        }
+        //observe events to close creation dialog after real estate's creation succeed
+        //or to notify if there is internet
+        observeAsEvents(viewModel.isCreatedFlow) { event ->
             when (event) {
-                InternetEvent.NoInternetToast -> Toast.makeText(
-                    requireContext(),
-                    R.string.no_internet,
-                    Toast.LENGTH_LONG
-                ).show()
+                CreationEvents.isCreated -> {
+                    Toast.makeText(requireContext(), R.string.creation_succeed, Toast.LENGTH_SHORT).show()
+                    dismiss()
+                }
+
+                CreationEvents.isInternetAvailable -> Toast.makeText(requireContext(), R.string.no_internet,
+                    Toast.LENGTH_SHORT).show()
             }
         }
+
 
 
         //inputs listeners
+
         binding.tvAddress.doAfterTextChanged {
-            if (viewModel.isPositionExist(it.toString())) {
                 viewModel.updateAddress(it.toString())
-                viewModel.addressValid()
-                binding.textInputLytAddress.helperText = null
-            } else {
-                binding.textInputLytAddress.helperText =
-                    ContextCompat.getString(context, R.string.address_invalid)
-                viewModel.addressInvalid()
-                viewModel.updateAddress(it.toString())
-            }
+
         }
         binding.tvCity.doAfterTextChanged { viewModel.updateCity(it.toString()) }
         binding.tvPrice.doAfterTextChanged { viewModel.updatePrice(it.toString()) }

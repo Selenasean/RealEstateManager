@@ -9,6 +9,7 @@ import com.openclassrooms.realestatemanager.AppApplication
 class ConnectivityChecker(
     private val connectivityManager : ConnectivityManager
 ) {
+
     /**
      * Vérification de la connexion réseau
      * NOTE : NE PAS SUPPRIMER, A MONTRER DURANT LA SOUTENANCE
@@ -16,7 +17,6 @@ class ConnectivityChecker(
      * @param context
      * @return
      */
-
     fun isInternetAvailable(): Boolean {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

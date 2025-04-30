@@ -1,10 +1,13 @@
 package com.openclassrooms.realestatemanager.ui.list_map_details
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -52,7 +55,26 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
 
     override fun onMapReady(map: GoogleMap) {
-        zoomOnMap(map) //zoom on Paris, France
+
+        //zoom user's location
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION),
+                0
+            )
+        }else{
+            map.isMyLocationEnabled = true;
+            zoomOnMap(map) //zoom on Paris, France
+        }
+
         viewModel.mapList.observe(viewLifecycleOwner, Observer { list ->
             map.clear()
             list.forEach { item ->
@@ -72,6 +94,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     private fun zoomOnMap(
         map: GoogleMap,
     ) {
+        //TODO: centrer map sur current location
         val parisGPS = LatLng(48.864716, 2.333333)
         //zoom on Paris, France
         map.moveCamera(
@@ -106,21 +129,18 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             clickCount = 0
         )
 
+
+
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
         val markerData = marker.tag as? MarkerData
-        val newClickCount: Int
         markerData?.clickCount?.let { clickCount ->
             when (clickCount) {
-                0 -> {
-                    markerData.clickCount = clickCount + 1
-                    Log.i("clickCount", "normalement =1 car +1 : ${markerData.clickCount}")
-                }
+                0 -> markerData.clickCount = clickCount + 1
 
                 1 -> {
                     viewModel.onRealEstateClick(markerData.id)
-                    Log.i("clickCount", "normalement = 1 : $clickCount, id = ${markerData.id}")
                     markerData.clickCount = 0
                 }
 
@@ -128,6 +148,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         }
         return false
     }
+
+    //TODO : locate user on map
 
 
 }

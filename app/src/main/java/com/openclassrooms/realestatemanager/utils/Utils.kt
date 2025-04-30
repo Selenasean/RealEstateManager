@@ -1,8 +1,11 @@
 package com.openclassrooms.realestatemanager.utils
 
+import android.annotation.SuppressLint
 import java.text.DateFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDateTime
 import java.util.Currency
 import java.util.Date
 import java.util.Locale
@@ -42,19 +45,25 @@ object Utils {
 
     }
 
+    //TODO : tchecker format date
     val todayDate: String
         /**
          * Conversion de la date d'aujourd'hui en un format plus approprié
+         * Format : "dd/MM/yyyy"
          * NOTE : NE PAS SUPPRIMER, A MONTRER DURANT LA SOUTENANCE
          *
          * @return
          */
+        @SuppressLint("SimpleDateFormat")
         get() {
-            val dateFormat: DateFormat = SimpleDateFormat("yyyy/MM/dd")
+            val dateFormat: DateFormat = SimpleDateFormat("dd/MM/yyyy")
             return dateFormat.format(Date())
         }
 
-
+    fun instantToDate(instant: Instant): String {
+        val date = instantToDate(instant)
+        return date.format("dd/MM/yyyy")
+    }
 }
 
 

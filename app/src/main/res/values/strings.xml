@@ -68,6 +68,7 @@
     <string name="address_invalid">Invalid address OR no internet connectivity</string>
     <string name="internet_info">Info : You will need Internet to create your Real Estate</string>
     <string name="button_update">"Button to update "</string>
+    <string name="creation_succeed">Creation succeed !</string>
 
 
 </resources>

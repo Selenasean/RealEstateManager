@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.ui
 
+import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -38,16 +40,21 @@ class ViewModelFactory : ViewModelProvider.Factory {
         val savedStateHandle: SavedStateHandle = extras.createSavedStateHandle()
         val connectivityChecker: ConnectivityChecker = application.connectivityChecker
 
+        
         if (modelClass.isAssignableFrom(ListMapDetailViewModel::class.java)) {
             return ListMapDetailViewModel(
                 application.repository,
-                application.geocoderRepository,
                 savedStateHandle
             ) as T
         }
         if (modelClass.isAssignableFrom(CreateViewModel::class.java)) {
+            val realEstateId: String? = savedStateHandle["REAL_ESTATE_ID"]
+            Log.i("VMFact", "realEstateid: $realEstateId")
             return CreateViewModel(
-                application.repository, savedStateHandle, connectivityChecker) as T
+                realEstateId,
+                application.repository,
+                savedStateHandle,
+                connectivityChecker) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

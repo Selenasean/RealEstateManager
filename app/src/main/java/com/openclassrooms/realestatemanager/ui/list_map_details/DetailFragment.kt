@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -16,6 +17,7 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.data.Position
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
+import com.openclassrooms.realestatemanager.ui.create.CreateFragment
 import com.openclassrooms.realestatemanager.utils.CurrencyCode
 import com.openclassrooms.realestatemanager.utils.Utils
 
@@ -44,7 +46,27 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
         val binding = FragmentDetailBinding.bind(view)
         setRecyclerView(binding)
         binding.noItemLytContainer.visibility = View.GONE
-        viewModel.detailState.observe(viewLifecycleOwner) { render(it, binding) }
+        viewModel.detailState.observe(viewLifecycleOwner) {
+            render(
+                it,
+                binding,
+
+            )
+        }
+
+        //TODO :listener on FAB update + get realestate id into intent
+        binding.fabUpdate.setOnClickListener {
+            val id = viewModel.detailState.value?.id
+            if (id!= null) {
+                val createBottomSheet = CreateFragment.newInstance(
+                    id = id
+                )
+                val fragmentManager = (activity as FragmentActivity).supportFragmentManager
+                fragmentManager.let { createBottomSheet.show(it, CreateFragment.TAG) }
+            }
+
+
+        }
 
         //map view displayed
         val mapView = binding.mapSnapshot
@@ -55,11 +77,17 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
     /**
      * To render elements on UI
      */
-    private fun render(realEstate: RealEstateDetailViewState?, binding: FragmentDetailBinding) {
+    private fun render(
+        realEstate: RealEstateDetailViewState?,
+        binding: FragmentDetailBinding,
+
+    ) {
         if (realEstate == null) {
             binding.noItemLytContainer.visibility = View.VISIBLE
             binding.constraintlayoutContainer.visibility = View.GONE
         } else {
+
+
             val context = binding.root.context
             binding.constraintlayoutContainer.visibility = View.VISIBLE
             binding.noItemLytContainer.visibility = View.GONE
@@ -100,6 +128,7 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
                 )
             )
         }
+
 
     }
 

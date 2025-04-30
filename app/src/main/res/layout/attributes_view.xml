@@ -31,6 +31,7 @@
                 android:layout_width="@dimen/small_double_24"
                 android:layout_height="@dimen/small_double_24"
                 android:layout_marginEnd="@dimen/small"
+                app:tint="@color/md_theme_onTertiaryFixed"
                 android:contentDescription="@null"
                 android:src="@drawable/status_icon" />
 
@@ -39,6 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAllCaps="true"
+                android:textColor="@color/md_theme_onTertiaryFixed"
                 tools:text="SOLD" />
 
         </LinearLayout>
@@ -57,18 +59,21 @@
                 android:layout_height="24dp"
                 android:layout_marginEnd="10dp"
                 android:contentDescription="@null"
+                app:tint="@color/md_theme_onTertiaryFixed"
                 android:src="@drawable/price_icon" />
 
             <TextView
                 android:id="@+id/price_tv"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
+                android:textColor="@color/md_theme_onTertiaryFixed"
                 android:text="@string/price" />
 
             <TextView
                 android:id="@+id/price_value_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/md_theme_onTertiaryFixed"
                 tools:text="20000 €" />
 
         </LinearLayout>
@@ -87,18 +92,21 @@
                 android:layout_height="24dp"
                 android:layout_marginEnd="10dp"
                 android:contentDescription="@null"
+                app:tint="@color/md_theme_onTertiaryFixed"
                 android:src="@drawable/surface_icon" />
 
             <TextView
                 android:id="@+id/surface_tv"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
+                android:textColor="@color/md_theme_onTertiaryFixed"
                 android:text="@string/surface" />
 
             <TextView
                 android:id="@+id/surface_value_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/md_theme_onTertiaryFixed"
                 tools:text="200m²" />
 
         </LinearLayout>
@@ -117,18 +125,21 @@
                 android:layout_height="24dp"
                 android:layout_marginEnd="10dp"
                 android:contentDescription="@null"
+                app:tint="@color/md_theme_onTertiaryFixed"
                 android:src="@drawable/house_icon" />
 
             <TextView
                 android:id="@+id/room_tv"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
+                android:textColor="@color/md_theme_onTertiaryFixed"
                 android:text="@string/number_room" />
 
             <TextView
                 android:id="@+id/rooms_value_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/md_theme_onTertiaryFixed"
                 tools:text="6" />
 
         </LinearLayout>
@@ -147,18 +158,21 @@
                 android:layout_height="24dp"
                 android:layout_marginEnd="10dp"
                 android:contentDescription="@null"
+                app:tint="@color/md_theme_onTertiaryFixed"
                 android:src="@drawable/bathroom_icon" />
 
             <TextView
                 android:id="@+id/bathroom_tv"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
+                android:textColor="@color/md_theme_onTertiaryFixed"
                 android:text="@string/number_bathroom" />
 
             <TextView
                 android:id="@+id/bathrooms_value_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/md_theme_onTertiaryFixed"
                 tools:text="2" />
         </LinearLayout>
 
@@ -176,18 +190,21 @@
                 android:layout_height="24dp"
                 android:layout_marginEnd="10dp"
                 android:contentDescription="@null"
+                app:tint="@color/md_theme_onTertiaryFixed"
                 android:src="@drawable/bedroom_icon" />
 
             <TextView
                 android:id="@+id/bedroom_tv"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
+                android:textColor="@color/md_theme_onTertiaryFixed"
                 android:text="@string/number_bedroom" />
 
             <TextView
                 android:id="@+id/bedrooms_value_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/md_theme_onTertiaryFixed"
                 tools:text="4" />
         </LinearLayout>
     </LinearLayout>
