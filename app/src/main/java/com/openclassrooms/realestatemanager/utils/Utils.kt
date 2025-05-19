@@ -5,7 +5,9 @@ import java.text.DateFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.time.Instant
-import java.time.LocalDateTime
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Currency
 import java.util.Date
 import java.util.Locale
@@ -60,9 +62,15 @@ object Utils {
             return dateFormat.format(Date())
         }
 
+    @JvmStatic
     fun instantToDate(instant: Instant): String {
-        val date = instantToDate(instant)
-        return date.format("dd/MM/yyyy")
+        val FORMAT_DATE = "dd/MM/yyyy"
+        val formatter = DateTimeFormatter.ofPattern(FORMAT_DATE)
+
+        val date = LocalDate.ofInstant(instant, ZoneId.systemDefault())
+
+
+        return date.format(formatter)
     }
 }
 

@@ -1,12 +1,10 @@
-package com.openclassrooms.realestatemanager.ui.create
+package com.openclassrooms.realestatemanager.ui.create_edit
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,12 +16,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
-import androidx.core.view.doOnDetach
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.openclassrooms.realestatemanager.BuildConfig
+
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.data.model.Amenity
 import com.openclassrooms.realestatemanager.data.model.BuildingType
@@ -47,7 +45,7 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         const val CLASS_NAME = "CREATE_FRAGMENT"
     }
 
-    private val viewModel by viewModels<CreateViewModel> { ViewModelFactory.getInstance() }
+    private val viewModel by viewModels<CreateEditViewModel> { ViewModelFactory.getInstance() }
     private lateinit var adapter: PhotosAdapter
     private var currentPhotoUri: Uri? = null
 

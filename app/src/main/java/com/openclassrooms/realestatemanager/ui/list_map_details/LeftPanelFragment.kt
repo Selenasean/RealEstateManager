@@ -15,8 +15,9 @@ import androidx.slidingpanelayout.widget.SlidingPaneLayout
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentLeftPanelBinding
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
-import com.openclassrooms.realestatemanager.ui.create.CreateFragment
-import com.openclassrooms.realestatemanager.utils.events.EventDetailPane
+import com.openclassrooms.realestatemanager.ui.create_edit.CreateFragment
+import com.openclassrooms.realestatemanager.utils.events.ListMapDetailEvent
+import com.openclassrooms.realestatemanager.utils.events.MapEvent
 import com.openclassrooms.realestatemanager.utils.observeAsEvents
 
 class LeftPanelFragment : Fragment() {
@@ -55,7 +56,7 @@ class LeftPanelFragment : Fragment() {
         //Event to open Detail Pane from the SlidingPaneLayout
         observeAsEvents(viewModel.eventsFlow) { event ->
             when (event) {
-                is EventDetailPane.OpenDetails -> slidingPaneLayout.openPane()
+                is ListMapDetailEvent.OpenDetails -> slidingPaneLayout.openPane()
             }
         }
 

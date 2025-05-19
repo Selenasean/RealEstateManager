@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import coil.load
 import com.openclassrooms.realestatemanager.databinding.ImageItemBinding
 
-import com.openclassrooms.realestatemanager.ui.create.CreateFragment
+import com.openclassrooms.realestatemanager.ui.create_edit.CreateFragment
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
 
 

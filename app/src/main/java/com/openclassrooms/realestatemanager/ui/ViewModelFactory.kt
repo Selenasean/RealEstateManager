@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.ui
 
-import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -9,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.openclassrooms.realestatemanager.AppApplication
-import com.openclassrooms.realestatemanager.ui.create.CreateViewModel
+import com.openclassrooms.realestatemanager.ui.create_edit.CreateEditViewModel
 import com.openclassrooms.realestatemanager.ui.list_map_details.ListMapDetailViewModel
 import com.openclassrooms.realestatemanager.utils.internetConnectivity.ConnectivityChecker
 
@@ -40,17 +39,19 @@ class ViewModelFactory : ViewModelProvider.Factory {
         val savedStateHandle: SavedStateHandle = extras.createSavedStateHandle()
         val connectivityChecker: ConnectivityChecker = application.connectivityChecker
 
-        
+
         if (modelClass.isAssignableFrom(ListMapDetailViewModel::class.java)) {
             return ListMapDetailViewModel(
                 application.repository,
-                savedStateHandle
+                savedStateHandle,
+                application.locationRepository
             ) as T
+            
         }
-        if (modelClass.isAssignableFrom(CreateViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(CreateEditViewModel::class.java)) {
             val realEstateId: String? = savedStateHandle["REAL_ESTATE_ID"]
             Log.i("VMFact", "realEstateid: $realEstateId")
-            return CreateViewModel(
+            return CreateEditViewModel(
                 realEstateId,
                 application.repository,
                 savedStateHandle,

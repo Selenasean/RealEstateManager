@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.create
+package com.openclassrooms.realestatemanager.ui.create_edit
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -8,7 +8,6 @@ import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import coil.load
 import com.openclassrooms.realestatemanager.R
@@ -26,7 +25,7 @@ private const val ARG_PARAM1 = "param1"
  */
 class CreateLabelDialogFragment() : DialogFragment() {
 
-    private val viewModel by viewModels<CreateViewModel>(ownerProducer = {requireParentFragment()}) { ViewModelFactory.getInstance() }
+    private val viewModel by viewModels<CreateEditViewModel>(ownerProducer = {requireParentFragment()}) { ViewModelFactory.getInstance() }
 
     companion object{
         fun newInstance(state: PhotoSelectedViewState): CreateLabelDialogFragment{

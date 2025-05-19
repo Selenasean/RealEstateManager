@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.create
+package com.openclassrooms.realestatemanager.ui.create_edit
 
 import android.net.Uri
 import android.os.Parcelable
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.util.UUID
 
-class CreateViewModel(
+class CreateEditViewModel(
     realEstateId: String?,
     private val repository: Repository,
     savedStateHandle: SavedStateHandle,
@@ -33,10 +33,10 @@ class CreateViewModel(
 
     init {
         if (realEstateId == null) {
-            //on create fragment
+            //on create fragment : state vide
             Log.i("init createVM", "null")
         } else {
-            //on update fragment
+            //on update fragment : state deja existant
             Log.i("init createVM", realEstateId)
         }
     }
@@ -108,7 +108,6 @@ class CreateViewModel(
      * To update the type of real estate
      */
     fun updateType(buildingType: BuildingType) {
-        // ?: si null faire ce qui est a droite
         val currentState = _createdRealEstateMutableStateFlow.value
         _createdRealEstateMutableStateFlow.value = currentState.copy(type = buildingType)
         Log.i("createVM", "typeBuilding : ${_createdRealEstateMutableStateFlow.value}")

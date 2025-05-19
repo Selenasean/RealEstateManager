@@ -17,7 +17,7 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.data.Position
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
-import com.openclassrooms.realestatemanager.ui.create.CreateFragment
+import com.openclassrooms.realestatemanager.ui.create_edit.CreateFragment
 import com.openclassrooms.realestatemanager.utils.CurrencyCode
 import com.openclassrooms.realestatemanager.utils.Utils
 

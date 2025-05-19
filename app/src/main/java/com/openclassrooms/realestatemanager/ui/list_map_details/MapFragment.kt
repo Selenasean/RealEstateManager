@@ -3,10 +3,10 @@ package com.openclassrooms.realestatemanager.ui.list_map_details
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -25,6 +25,8 @@ import com.openclassrooms.realestatemanager.databinding.FragmentMapBinding
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
 import com.openclassrooms.realestatemanager.utils.CurrencyCode
 import com.openclassrooms.realestatemanager.utils.Utils
+import com.openclassrooms.realestatemanager.utils.events.MapEvent
+import com.openclassrooms.realestatemanager.utils.observeAsEvents
 
 class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -42,6 +44,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         return FragmentMapBinding.inflate(layoutInflater, container, false).root
     }
 
+    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentMapBinding.bind(view)
@@ -49,7 +52,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         val mapFragment =
             childFragmentManager.findFragmentById(binding.fragmentContainerMap.id) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
-
+//        viewModel.getUserLocation()
 
     }
 
@@ -91,17 +94,28 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         })
     }
 
+    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     private fun zoomOnMap(
         map: GoogleMap,
     ) {
         //TODO: centrer map sur current location
-        val parisGPS = LatLng(48.864716, 2.333333)
-        //zoom on Paris, France
-        map.moveCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                parisGPS, 10f
-            )
-        )
+
+
+        observeAsEvents(viewModel.eventMapFlow) { event ->
+            when(event) {
+                is MapEvent.CenterUserLocation ->  {
+                    //zoom on map
+                    map.moveCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            LatLng(event.location.latitude, event.location.longitude), 10f
+                        )
+                    )
+                }
+            }
+        }
+        // get location
+        viewModel.onLocationPermission()
+
     }
 
     private fun createMarkers(
@@ -111,7 +125,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         val iconColor = if (item.status == Status.FOR_SALE) {
             BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)
         } else {
-            BitmapDescriptorFactory.defaultMarker()
+            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
         }
 
         val realEstateMarker = map.addMarker(
@@ -149,7 +163,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         return false
     }
 
-    //TODO : locate user on map
 
 
 }
