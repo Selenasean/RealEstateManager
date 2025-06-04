@@ -10,8 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import coil.load
 import com.openclassrooms.realestatemanager.databinding.ImageItemBinding
+import com.openclassrooms.realestatemanager.ui.create_edit.CreateEditFragment
 
-import com.openclassrooms.realestatemanager.ui.create_edit.CreateFragment
+
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
 
 
@@ -71,7 +72,7 @@ class PhotosAdapter(
                 deleteBtn.visibility = View.GONE
                 labelBtn.visibility = View.GONE
             }
-            if (className == CreateFragment.CLASS_NAME) {
+            if (className == CreateEditFragment.CLASS_NAME) {
                 deleteBtn.visibility = View.VISIBLE
                 labelBtn.visibility = View.VISIBLE
 

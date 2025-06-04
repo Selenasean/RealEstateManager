@@ -14,12 +14,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/small_plus"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal">
 
         <!-- LOCATION -->
         <LinearLayout
             android:id="@+id/lyt_location"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             tools:ignore="MissingConstraints">
@@ -42,7 +43,7 @@
 
             <TextView
                 android:id="@+id/location_value_tv"
-                android:layout_width="200dp"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:lineBreakWordStyle="phrase"
                 tools:targetApi="tiramisu"
@@ -54,7 +55,7 @@
         <!-- AMENITIES -->
         <LinearLayout
             android:id="@+id/lyt_amenities"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingTop="10dp"
@@ -78,7 +79,7 @@
 
             <TextView
                 android:id="@+id/amenities_value_tv"
-                android:layout_width="200dp"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:lineBreakWordStyle="phrase"
                 tools:targetApi="tiramisu"

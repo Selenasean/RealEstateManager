@@ -16,7 +16,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/realestate_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:backgroundTint="@color/md_theme_secondaryContainer">
 
         <ImageView
             android:id="@+id/image_realestate"
@@ -43,17 +44,32 @@
             app:layout_constraintStart_toEndOf="@id/image_realestate"
             tools:text="@tools:sample/first_names"/>
 
-        <TextView
-            android:id="@+id/status_display_tv"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/status_display_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="30dp"
-            android:layout_marginTop="10dp"
-            android:textSize="20sp"
-            android:textAllCaps="true"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="@tools:sample/last_names" />
+            app:cardCornerRadius="@dimen/small"
+            android:clickable="false"
+            android:layout_marginEnd="@dimen/small"
+            android:layout_marginTop="@dimen/small"
+            android:padding="@dimen/extra_small"
+            app:cardBackgroundColor="@color/md_theme_error">
+
+            <TextView
+                android:id="@+id/status_display_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/extra_small"
+                android:textSize="10sp"
+                android:textAllCaps="true"
+                android:textColor="@color/md_theme_onSurface"
+                tools:text="@tools:sample/last_names"
+                tools:ignore="SmallSp" />
+
+        </androidx.cardview.widget.CardView>
+
 
         <TextView
             android:id="@+id/city_tv"

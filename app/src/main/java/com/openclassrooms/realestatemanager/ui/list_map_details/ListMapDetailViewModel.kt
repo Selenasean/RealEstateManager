@@ -16,6 +16,7 @@ import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.data.model.Status
 import com.openclassrooms.realestatemanager.domain.Photo
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
+import com.openclassrooms.realestatemanager.utils.Utils
 import com.openclassrooms.realestatemanager.utils.events.ListMapDetailEvent
 import com.openclassrooms.realestatemanager.utils.events.MapEvent
 import com.openclassrooms.realestatemanager.utils.toPhotoSelectedViewState
@@ -81,7 +82,8 @@ class ListMapDetailViewModel(
                         status = realEstate.status,
                         amenities = realEstate.amenities,
                         latitude = realEstate.latitude,
-                        longitude = realEstate.longitude
+                        longitude = realEstate.longitude,
+                        dateOfSale = realEstate.dateOfSale?.let{Utils.instantToDate(it)}
                     )
 
                 }
@@ -129,7 +131,8 @@ class ListMapDetailViewModel(
                             description = realEstate.description,
                             address = realEstate.address,
                             status = realEstate.status,
-                            amenities = realEstate.amenities
+                            amenities = realEstate.amenities,
+                            dateOfSale = realEstate.dateOfSale?.let { Utils.instantToDate(it) }
                         )
                     )
                 }
@@ -209,7 +212,8 @@ data class RealEstateViewState(
     val description: String,
     val address: String,
     val status: Status,
-    val amenities: List<Amenity>
+    val amenities: List<Amenity>,
+    val dateOfSale : String?
 )
 
 /**
@@ -231,7 +235,8 @@ data class RealEstateDetailViewState(
     val status: Status,
     val amenities: List<Amenity>,
     val latitude: Double?,
-    val longitude: Double?
+    val longitude: Double?,
+    val dateOfSale: String?
 )
 
 /**

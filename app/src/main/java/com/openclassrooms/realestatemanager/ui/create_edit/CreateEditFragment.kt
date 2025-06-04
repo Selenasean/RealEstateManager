@@ -8,7 +8,9 @@ import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Adapter
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
@@ -21,7 +23,6 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.openclassrooms.realestatemanager.BuildConfig
-
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.data.model.Amenity
 import com.openclassrooms.realestatemanager.data.model.BuildingType
@@ -31,39 +32,50 @@ import com.openclassrooms.realestatemanager.ui.list_map_details.PhotosAdapter
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
 import com.openclassrooms.realestatemanager.utils.events.CreationEvents
 import com.openclassrooms.realestatemanager.utils.observeAsEvents
+import kotlinx.serialization.StringFormat
 import java.io.File
 import kotlin.random.Random
 
-class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
+class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
 
     companion object {
-        fun newInstance(id: String?) = CreateFragment().apply{
-            //put id in bundle in argument
-            arguments = bundleOf("REAL_ESTATE_ID" to id)
-        }
         const val TAG = "CREATE_BOTTOM_SHEET"
         const val CLASS_NAME = "CREATE_FRAGMENT"
+        const val REAL_ESTATE_ID = "REAL_ESTATE_ID"
+
+        fun newInstance(id: String?) = CreateEditFragment().apply{
+            //put id in argument within bundle
+            arguments = bundleOf( REAL_ESTATE_ID to id)
+        }
+
     }
 
-    private val viewModel by viewModels<CreateEditViewModel> { ViewModelFactory.getInstance() }
+    private val viewModel by viewModels<CreateEditViewModel> { ViewModelFactory.Companion.getInstance() }
     private lateinit var adapter: PhotosAdapter
     private var currentPhotoUri: Uri? = null
+    private lateinit var typeAdapter : ArrayAdapter<String>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentCreateBinding.bind(view)
         val context = binding.root.context
 
+        typeAdapter = ArrayAdapter(
+            requireContext(),
+            R.layout.dropdown_menu_create,
+            BuildingType.entries.map { ContextCompat.getString(context, it.displayName) }
+        )
+
         //settings for dropDown menus, chips, viewModel & recyclerView
         dropDownMenusSettings(binding, context)
         displayAmenitiesChips(binding, context)
-        viewModel.state.observe(viewLifecycleOwner) { render(it, binding) }
+        viewModel.state.observe(viewLifecycleOwner) { render(it, binding, context) }
         setRecyclerView(binding)
 
         //create a realEstate
         binding.createBtn.setOnClickListener {
             if(viewModel.isPositionExist()){
-                viewModel.createRealEstate()
+                viewModel.saveRealEstate()
                 Log.i("CreateFragment", "onViewCreated:  create RealEstate")
                 binding.textInputLytAddress.helperText = null
             }else{
@@ -102,7 +114,7 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         binding.tvBathrooms.doAfterTextChanged { viewModel.updateBathrooms(it.toString()) }
         binding.tvDescription.doAfterTextChanged { viewModel.updateDescription(it.toString()) }
 
-        //photopicker media & listener
+        //photo picker media & listener
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
                 if (uris.isNotEmpty()) {
@@ -148,15 +160,60 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
     /**
      * Display recyclerView of photos or not depending on the size of the photo's list
      */
-    private fun render(it: RealEstateCreatedState, binding: FragmentCreateBinding) {
-        binding.createBtn.isEnabled = it.isCreatedEnabled()
+    private fun render(it: RealEstateToSaveState, binding: FragmentCreateBinding, context: Context) {
+        if(it.isUpdated) binding.titleTv.text = getString(R.string.update_title)
+        binding.createBtn.isEnabled = it.isInputsCompleted()
+        //render type
+
+        if(it.type != null && binding.tvType.text.toString() != ContextCompat.getString(context, it.type.displayName)){
+            binding.tvType.setText(ContextCompat.getString(context, it.type.displayName))
+            //TODO : obliger de reconstruire mon adapter ?
+            typeAdapterBuilder(binding.tvType)
+        }
+        //render photo
         if (it.photos.isEmpty()) {
             binding.rvPhotosSelected.visibility = View.GONE
         } else {
             binding.rvPhotosSelected.visibility = View.VISIBLE
             adapter.submitList(it.photos)
         }
-
+        //render address, city, price, surface, rooms, bedrooms, bathrooms, description
+        if( binding.tvAddress.text.toString() != it.address){
+            binding.tvAddress.setText(it.address)
+        }
+        if(binding.tvCity.text.toString() != it.city){
+            binding.tvCity.setText(it.city)
+        }
+        //render price
+        if(binding.tvPrice.text.toString() != it.price){
+            binding.tvPrice.setText(it.price)
+        }
+        //render surface
+        if(binding.tvSurface.text.toString() != it.surface){
+            binding.tvSurface.setText(it.surface)
+        }
+        //render rooms
+        if(binding.tvRooms.text.toString() != it.rooms){
+            binding.tvRooms.setText(it.rooms)
+        }
+        //render bedrooms
+        if(binding.tvBedrooms.text.toString() != it.bedrooms){
+            binding.tvBedrooms.setText(it.bedrooms)
+        }
+        //render bathrooms
+        if (binding.tvBathrooms.text.toString() != it.bathrooms){
+            binding.tvBathrooms.setText(it.bathrooms)
+        }
+        //render description
+        if(binding.tvDescription.text.toString() != it.description){
+            binding.tvDescription.setText(it.description)
+        }
+        //render amenities
+        //TODO : maj amenities
+        //render agent's name
+        if(it.agent != null && binding.tvAgent.text.toString() != it.agent.name){
+            binding.tvAgent.setText(it.agent.name)
+        }
     }
 
 
@@ -195,7 +252,7 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
             chip.text = ContextCompat.getString(context, amenity.displayName)
 
             //attributes id to each chip
-            chip.id = Random.nextInt()
+            chip.id = Random.Default.nextInt()
             chipsGroup.addView(chip)
 
             //listener
@@ -211,21 +268,14 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
      */
     private fun dropDownMenusSettings(binding: FragmentCreateBinding, context: Context) {
         //for type of real estate menu
-        val typeItems =
-            BuildingType.entries.map { ContextCompat.getString(context, it.displayName) }
-        val typeAdapter = ArrayAdapter(
-            requireContext(),
-            R.layout.dropdown_menu_create,
-            typeItems
-        )
-        binding.tvType.setAdapter(typeAdapter)
-
+        typeAdapterBuilder(binding.tvType)
         //listener
         binding.tvType.setOnItemClickListener { _, _, position, _ ->
             viewModel.updateType(BuildingType.entries[position])
         }
 
         //for agent's name menu
+        //TODO : modifier la fonction pour recup les agents sans observer pcq pas besoin
         viewModel.getAgents().observe(viewLifecycleOwner) { agents ->
             val agentAdapter = ArrayAdapter(
                 requireContext(),
@@ -242,8 +292,13 @@ class CreateFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
 
     }
 
+    private fun typeAdapterBuilder(typeTv : AutoCompleteTextView){
+        typeAdapter = ArrayAdapter(
+            requireContext(),
+            R.layout.dropdown_menu_create,
+            BuildingType.entries.map { ContextCompat.getString(context, it.displayName) }
+        )
+        typeTv.setAdapter(typeAdapter)
+    }
+
 }
-
-
-
-

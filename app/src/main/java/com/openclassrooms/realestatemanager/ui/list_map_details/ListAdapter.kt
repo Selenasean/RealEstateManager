@@ -58,10 +58,13 @@ class ListAdapter(private val clickedListener: (id: String) -> Unit) :
             val context = binding.root.context
             //set text
             binding.statusDisplayTv.text = ContextCompat.getString(context, realestate.status.state)
+
             if(realestate.status.state == R.string.for_sale){
-                binding.statusDisplayTv.setTextColor(ContextCompat.getColor(context, R.color.md_theme_tertiaryFixed_mediumContrast))
+                binding.statusDisplayCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.md_theme_tertiaryFixed_mediumContrast))
+                binding.statusDisplayTv.setTextColor(ContextCompat.getColor(context, R.color.md_theme_onTertiary_mediumContrast))
             }else{
-                binding.statusDisplayTv.setTextColor(ContextCompat.getColor(context, R.color.md_theme_error_mediumContrast))
+                binding.statusDisplayCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.md_theme_error_mediumContrast))
+                binding.statusDisplayTv.setTextColor(ContextCompat.getColor(context, R.color.md_theme_onError_mediumContrast))
             }
             binding.cityTv.text = realestate.city
             binding.buildingTypeTv.text = ContextCompat.getString(context, realestate.type.displayName)

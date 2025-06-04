@@ -15,7 +15,8 @@ import androidx.slidingpanelayout.widget.SlidingPaneLayout
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentLeftPanelBinding
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
-import com.openclassrooms.realestatemanager.ui.create_edit.CreateFragment
+import com.openclassrooms.realestatemanager.ui.create_edit.CreateEditFragment
+
 import com.openclassrooms.realestatemanager.utils.events.ListMapDetailEvent
 import com.openclassrooms.realestatemanager.utils.events.MapEvent
 import com.openclassrooms.realestatemanager.utils.observeAsEvents
@@ -76,13 +77,16 @@ class LeftPanelFragment : Fragment() {
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.app_bar_create -> {
-                    val createBottomSheet = CreateFragment()
+                    val createBottomSheet = CreateEditFragment()
                     val fragmentManager = (activity as FragmentActivity).supportFragmentManager
-                    fragmentManager.let { createBottomSheet.show(it, CreateFragment.TAG) }
+                    fragmentManager.let { createBottomSheet.show(it, CreateEditFragment.TAG) }
                     true
                 }
 
                 R.id.app_bar_filter -> {
+                    val filterSideSheet = FilterFragment()
+                    val fragmentManager = (activity as FragmentActivity).supportFragmentManager
+
                     Log.i("listEstateFragment", "filter")
                     true
                 }

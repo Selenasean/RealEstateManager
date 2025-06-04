@@ -24,6 +24,7 @@
     <string name="filter">Filter</string>
     <string name="create">Create</string>
     <string name="details">Details</string>
+    <string name="since">since</string>
 
     //CREATE FRAGMENT
     <string name="create_title">Create your real estate</string>
@@ -40,7 +41,7 @@
     <string name="amenities_tv">Amenities</string>
     <string name="realEstateAgent_tv">Your name</string>
     <string name="photos_tv">Upload photos :</string>
-    <string name="create_btn">Create</string>
+    <string name="save_btn">Save</string>
     <string name="select_picture_btn">Select picture</string>
     <string name="take_picture_btn">Take picture</string>
 
@@ -66,9 +67,18 @@
     <string name="no_internet">No internet connexion, real estate impossible to create</string>
     <string name="wrong_address">Address does\'nt exist !</string>
     <string name="address_invalid">Invalid address OR no internet connectivity</string>
-    <string name="internet_info">Info : You will need Internet to create your Real Estate</string>
+    <string name="internet_info">Info : You will need Internet </string>
     <string name="button_update">"Button to update "</string>
     <string name="creation_succeed">Creation succeed !</string>
+
+    //UPDATE FRAGMENT
+    <string name="update_title">Update your real estate</string>
+    <string name="filter_title">Select filters</string>
+    <string name="apply_btn">Apply</string>
+    <string name="surface_max_tv">Surface maximum</string>
+    <string name="surface_min_tv">Surface minimum</string>
+    <string name="price_max_tv">Price maximum</string>
+    <string name="price_min_tv">Price minimum</string>
 
 
 </resources>

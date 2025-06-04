@@ -226,9 +226,14 @@ abstract class AppDataBase : RoomDatabase() {
                            city = "Houilles",
                            status = Status.SOLD,
                            amenities = listOf(Amenity.BAKERY, Amenity.SCHOOL),
-                           dateCreated = LocalDateTime.of(LocalDate.of(2024,7,30), LocalTime.of(14,0)).toInstant(
-                               ZoneOffset.UTC),
-                           dateOfSale = null,
+                           dateCreated = LocalDateTime.of(
+                               LocalDate.of(2024,7,30),
+                               LocalTime.of(14,0))
+                               .toInstant(ZoneOffset.UTC),
+                           dateOfSale = LocalDateTime.of(
+                               LocalDate.of(2025,5,23),
+                               LocalTime.of(14,0))
+                               .toInstant(ZoneOffset.UTC),
                            realEstateAgentId = agentId3,
                            latitude = 48.925588014035,
                            longitude = 2.184905001048

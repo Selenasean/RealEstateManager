@@ -16,6 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
         android:padding="@dimen/small_plus">
 
         <!-- SOLD -->
@@ -24,6 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_gravity="center"
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
@@ -31,17 +33,40 @@
                 android:layout_width="@dimen/small_double_24"
                 android:layout_height="@dimen/small_double_24"
                 android:layout_marginEnd="@dimen/small"
-                app:tint="@color/md_theme_onTertiaryFixed"
                 android:contentDescription="@null"
-                android:src="@drawable/status_icon" />
+                android:src="@drawable/status_icon"
+                app:tint="@color/md_theme_onTertiaryFixed" />
 
-            <TextView
-                android:id="@+id/status_value_tv"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/status_display_card"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAllCaps="true"
-                android:textColor="@color/md_theme_onTertiaryFixed"
-                tools:text="SOLD" />
+                app:cardCornerRadius="@dimen/small"
+                android:clickable="false"
+                android:padding="@dimen/extra_small"
+                app:cardBackgroundColor="@color/md_theme_error">
+
+                <TextView
+                    android:id="@+id/status_value_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/extra_small"
+                    android:textSize="10sp"
+                    android:textAllCaps="true"
+                    android:textColor="@color/md_theme_onSurface"
+                    tools:text="@tools:sample/last_names"
+                    tools:ignore="SmallSp" />
+
+            </androidx.cardview.widget.CardView>
+
+
+            <TextView
+                android:id="@+id/date_of_sale_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/small_plus"
+                tools:text="since 23/05/25"
+                android:textColor="?attr/colorError"/>
 
         </LinearLayout>
 

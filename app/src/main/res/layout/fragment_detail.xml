@@ -12,7 +12,8 @@
         android:id="@+id/fab_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/small_double_24"
+        android:layout_marginBottom="@dimen/medium_plus"
+        android:layout_marginEnd="@dimen/medium"
         android:contentDescription="@string/button_update"
         android:src="@drawable/create_icon"
         app:tint="@color/md_theme_onPrimary"
@@ -32,7 +33,7 @@
             <LinearLayout
                 android:id="@+id/no_item_lyt_container"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/medium_plus"
                 android:gravity="center"
@@ -71,7 +72,7 @@
                     android:layout_marginStart="@dimen/small_double"
                     android:layout_marginTop="@dimen/small"
                     android:text="@string/media"
-                    android:textColor="@color/md_theme_onPrimaryContainer"
+                    android:textColor="?attr/colorPrimary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -85,8 +86,8 @@
                     android:contentDescription="@string/content_description_rv"
                     android:importantForAccessibility="auto"
                     android:orientation="horizontal"
-                    android:paddingStart="@dimen/small_plus"
-                    android:paddingEnd="@dimen/small_plus"
+                    android:paddingStart="@dimen/small"
+                    android:paddingEnd="@dimen/small"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textview_detail_media"
@@ -101,7 +102,7 @@
                     android:layout_marginStart="@dimen/small_double"
                     android:layout_marginTop="@dimen/small"
                     android:text="@string/description_detail"
-                    android:textColor="@color/md_theme_onPrimaryContainer"
+                    android:textColor="?attr/colorPrimary"
                     app:layout_constraintBottom_toTopOf="@id/description_content"
                     app:layout_constraintTop_toBottomOf="@id/images_rv" />
 
@@ -109,14 +110,14 @@
                     android:id="@+id/description_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/small"
+                    android:layout_marginTop="8dp"
                     android:ellipsize="end"
                     android:paddingStart="@dimen/small_double_24"
                     android:paddingEnd="@dimen/small_double_24"
                     android:textSize="16sp"
                     app:layout_constraintTop_toBottomOf="@id/description_tv"
                     tools:ignore="UnusedAttribute"
-                    tools:layout_editor_absoluteX="0dp"
+                    tools:layout_editor_absoluteX="-16dp"
                     tools:text="@tools:sample/lorem/random" />
 
                 <TextView
@@ -128,7 +129,7 @@
                     android:layout_marginTop="@dimen/small"
                     android:layout_marginBottom="@dimen/small"
                     android:text="@string/details"
-                    android:textColor="@color/md_theme_onPrimaryContainer"
+                    android:textColor="?attr/colorPrimary"
                     app:layout_constraintTop_toBottomOf="@id/description_content" />
 
                 <include
@@ -162,9 +163,9 @@
                     android:id="@+id/flow"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/small_double_24"
+                    android:layout_marginStart="@dimen/small"
                     android:layout_marginTop="@dimen/small"
-                    android:layout_marginEnd="@dimen/small_double_24"
+                    android:layout_marginEnd="@dimen/small"
                     android:paddingBottom="@dimen/small"
                     app:constraint_referenced_ids="lyt_attributes, lyt_location_amenities, lyt_map"
                     app:flow_horizontalBias="0"

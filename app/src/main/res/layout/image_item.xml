@@ -28,7 +28,7 @@
         <TextView
             android:id="@+id/label_item"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="32dp"
             android:gravity="center"
             tools:text="LABEL"
             android:background="#CDCDCDC3"

@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.data
 
 import com.openclassrooms.realestatemanager.data.model.PhotoDb
+import com.openclassrooms.realestatemanager.data.model.RealEstateAgentDb
 import com.openclassrooms.realestatemanager.data.model.RealEstateDb
 import com.openclassrooms.realestatemanager.data.model.Status
 import com.openclassrooms.realestatemanager.domain.Photo
@@ -46,47 +47,34 @@ class Repository(
                     status = it.key.status,
                     amenities = it.key.amenities,
                     latitude = it.key.latitude,
-                    longitude = it.key.longitude
+                    longitude = it.key.longitude,
+                    agentId = it.key.realEstateAgentId,
+                    dateCreated = it.key.dateCreated,
+                    dateOfSale = it.key.dateOfSale
                 )
             }
         }
     }
 
     /**
-     * Get One RealEstates
+     * Get One RealEstate
+     * type Flow<RealEstate>
      */
     fun getOneRealEstates(realEstateId: String): Flow<RealEstate> {
         return appdatabase.realEstateDao().getOneRealEstate(realEstateId.toLong())
             .map { realEstateDb ->
-                val entry = realEstateDb.entries.first()
-                val photos: List<PhotoDb> = entry.value
-                RealEstate(
-                    id = entry.key.id.toString(),
-                    title = entry.key.name,
-                    city = entry.key.city,
-                    priceTag = entry.key.price,
-                    type = entry.key.type,
-                    photos = photos.map { photoDb ->
-                        Photo(
-                            id = photoDb.id,
-                            urlPhoto = photoDb.urlPhoto,
-                            label = photoDb.label
-                        )
-                    },
-                    surface = entry.key.surface,
-                    rooms = entry.key.rooms,
-                    bathrooms = entry.key.bathrooms,
-                    bedrooms = entry.key.bedrooms,
-                    description = entry.key.description,
-                    address = entry.key.address,
-                    status = entry.key.status,
-                    amenities = entry.key.amenities,
-                    latitude = entry.key.latitude,
-                    longitude = entry.key.longitude
-                )
-
+                realEstateDb.toRealEstate()
             }
 
+    }
+
+
+    /**
+     * To get one particular real estate
+     * type RealEstate
+     */
+    suspend fun fetchOneRealEstate(realEstateId: String): RealEstate{
+        return appdatabase.realEstateDao().fetchOneRealEstate(realEstateId.toLong()).toRealEstate()
     }
 
     /**
@@ -95,13 +83,25 @@ class Repository(
     fun getAllAgents(): Flow<List<RealEstateAgent>> {
         return appdatabase.realEstateAgentDao().getAllAgents().map { realEstateAgentDb ->
             realEstateAgentDb.map {
-                RealEstateAgent(
-                    id = it.id,
-                    name = it.name
-                )
+                it.toRealEstateAgent()
             }
         }
+    }
 
+    /**
+     * To get all agents
+     */
+    suspend fun fetchAllAgents(): List<RealEstateAgent>{
+        return appdatabase.realEstateAgentDao().fetchAllAgents().map { agent ->
+            agent.toRealEstateAgent()
+        }
+    }
+
+    /**
+     * To get one specific agent
+     */
+    suspend fun fetchOneAgent(agentId: Long): RealEstateAgent{
+        return appdatabase.realEstateAgentDao().fetchOneAgent(agentId).toRealEstateAgent()
     }
 
     /**
@@ -149,7 +149,7 @@ class Repository(
     }
 
     /**
-     * To know if localisation actualy exist
+     * To know if localisation actually exist
      */
     fun isPositionExist(address: String): Boolean {
         val position = geocoderRepository.getLongLat(address)
@@ -157,4 +157,43 @@ class Repository(
     }
 
     //TODO : function mapping here ?
+    fun Map<RealEstateDb, List<PhotoDb>>.toRealEstate() : RealEstate{
+        val entry = this.entries.first()
+        val photos: List<PhotoDb> = entry.value
+        return RealEstate(
+            id = entry.key.id.toString(),
+            title = entry.key.name,
+            city = entry.key.city,
+            priceTag = entry.key.price,
+            type = entry.key.type,
+            photos = photos.map { photoDb ->
+                Photo(
+                    id = photoDb.id,
+                    urlPhoto = photoDb.urlPhoto,
+                    label = photoDb.label
+                )
+            },
+            surface = entry.key.surface,
+            rooms = entry.key.rooms,
+            bathrooms = entry.key.bathrooms,
+            bedrooms = entry.key.bedrooms,
+            description = entry.key.description,
+            address = entry.key.address,
+            status = entry.key.status,
+            amenities = entry.key.amenities,
+            latitude = entry.key.latitude,
+            longitude = entry.key.longitude,
+            agentId = entry.key.realEstateAgentId,
+            dateCreated = entry.key.dateCreated,
+            dateOfSale = entry.key.dateOfSale
+        )
+
+    }
+
+    fun RealEstateAgentDb.toRealEstateAgent() : RealEstateAgent{
+        return RealEstateAgent(
+            id = this.id,
+            name = this.name
+        )
+    }
 }

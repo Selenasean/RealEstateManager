@@ -47,7 +47,6 @@ object Utils {
 
     }
 
-    //TODO : tchecker format date
     val todayDate: String
         /**
          * Conversion de la date d'aujourd'hui en un format plus approprié
@@ -66,10 +65,7 @@ object Utils {
     fun instantToDate(instant: Instant): String {
         val FORMAT_DATE = "dd/MM/yyyy"
         val formatter = DateTimeFormatter.ofPattern(FORMAT_DATE)
-
         val date = LocalDate.ofInstant(instant, ZoneId.systemDefault())
-
-
         return date.format(formatter)
     }
 }

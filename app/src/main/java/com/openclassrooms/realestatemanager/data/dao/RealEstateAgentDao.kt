@@ -14,7 +14,12 @@ interface RealEstateAgentDao {
     @Query("SELECT * FROM realEstateAgents WHERE id = :agentId")
     fun getOneAgent(agentId: Int): Flow<RealEstateAgentDb>
 
+    @Query("SELECT * FROM realEstateAgents WHERE id = :agentId")
+    suspend fun fetchOneAgent(agentId: Long): RealEstateAgentDb
+
     @Query("SELECT * FROM realEstateAgents")
     fun getAllAgents(): Flow<List<RealEstateAgentDb>>
 
+    @Query("SELECT * FROM realEstateAgents")
+    suspend fun fetchAllAgents(): List<RealEstateAgentDb>
 }

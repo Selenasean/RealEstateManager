@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.domain
 import com.openclassrooms.realestatemanager.data.model.Amenity
 import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.data.model.Status
+import java.time.Instant
 
 data class RealEstate(
     val id: String,
@@ -20,6 +21,9 @@ data class RealEstate(
     val status : Status,
     val amenities : List<Amenity>,
     val latitude: Double,
-    val longitude: Double
+    val longitude: Double,
+    val agentId: Long,
+    val dateCreated : Instant,
+    val dateOfSale : Instant?
 
 )

@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.create_edit
 
 import android.net.Uri
-import android.os.Parcelable
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
@@ -17,10 +16,13 @@ import com.openclassrooms.realestatemanager.domain.RealEstateToCreate
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
 import com.openclassrooms.realestatemanager.utils.events.CreationEvents
 import com.openclassrooms.realestatemanager.utils.internetConnectivity.ConnectivityChecker
+import com.openclassrooms.realestatemanager.utils.toPhotoSelectedViewState
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
 import java.util.UUID
 
 class CreateEditViewModel(
@@ -30,6 +32,9 @@ class CreateEditViewModel(
     private val connectivityChecker: ConnectivityChecker
 ) : ViewModel() {
 
+    companion object{
+        val KEY_STATE = "KEY_STATE"
+    }
 
     init {
         if (realEstateId == null) {
@@ -38,6 +43,31 @@ class CreateEditViewModel(
         } else {
             //on update fragment : state deja existant
             Log.i("init createVM", realEstateId)
+            //if there is nothing in savedStateHandle means it the first time that the VM is created
+            if(!savedStateHandle.contains(KEY_STATE)){
+                viewModelScope.launch {
+                    val realEstate = repository.fetchOneRealEstate(realEstateId)
+                    val agent = repository.fetchOneAgent(realEstate.agentId)
+                    val realEstateToDisplay =  RealEstateToSaveState(
+                        type = realEstate.type,
+                        address = realEstate.address,
+                        city = realEstate.city,
+                        price = realEstate.priceTag.toString(),
+                        surface = realEstate.surface.toString(),
+                        rooms = realEstate.rooms.toString(),
+                        bedrooms = realEstate.rooms.toString(),
+                        bathrooms = realEstate.bathrooms.toString(),
+                        description = realEstate.description,
+                        amenities = realEstate.amenities,
+                        agent = agent,
+                        photos = realEstate.photos.map { photo ->
+                            photo.toPhotoSelectedViewState()
+                        },
+                        isUpdated = true
+                    )
+                    savedStateHandle[KEY_STATE] = realEstateToDisplay
+                }
+            }
         }
     }
 
@@ -48,10 +78,10 @@ class CreateEditViewModel(
 
     //state of data stored in Bundle
     private val _createdRealEstateMutableStateFlow =
-        savedStateHandle.getMutableStateFlow("KEY_STATE", RealEstateCreatedState())
+        savedStateHandle.getMutableStateFlow(KEY_STATE, RealEstateToSaveState())
 
     //state of data for UI
-    val state: LiveData<RealEstateCreatedState> = _createdRealEstateMutableStateFlow.asLiveData()
+    val state: LiveData<RealEstateToSaveState> = _createdRealEstateMutableStateFlow.asLiveData()
 
     //Flow to be observe in UI, notifying creation success of real estate
     private val _isCreatedFlow = Channel<CreationEvents>()
@@ -60,7 +90,8 @@ class CreateEditViewModel(
     /**
      * Create a realEstate from info enter by user
      */
-    fun createRealEstate() {
+        //TODO : change name to save and tchek if its an update or a creation
+    fun saveRealEstate() {
         val currentState = _createdRealEstateMutableStateFlow.value
 
         if (isPositionExist()) {
@@ -286,43 +317,6 @@ class CreateEditViewModel(
         photos.add(0, photoTaken)
         _createdRealEstateMutableStateFlow.value = currentState.copy(photos = photos)
         Log.i("createVM", "photo taken :${_createdRealEstateMutableStateFlow.value}")
-    }
-}
-
-
-/**
- * State to store data & enabled creation button
- */
-@Parcelize
-data class RealEstateCreatedState(
-    val type: BuildingType? = null,
-    val address: String? = null,
-    val city: String? = null,
-    val price: String? = null,
-    val surface: String? = null,
-    val rooms: String? = null,
-    val bedrooms: String? = null,
-    val bathrooms: String? = null,
-    val description: String? = null,
-    val amenities: List<Amenity> = emptyList(),
-    val agent: RealEstateAgent? = null,
-    val photos: List<PhotoSelectedViewState> = emptyList(),
-) : Parcelable {
-
-    fun isCreatedEnabled(): Boolean {
-        return listOf(
-            type.toString(),
-            address,
-            city,
-            price,
-            surface,
-            rooms,
-            bedrooms,
-            bathrooms,
-            description,
-        ).none { it.isNullOrBlank() }
-                && agent != null
-                && photos.isNotEmpty()
     }
 }
 

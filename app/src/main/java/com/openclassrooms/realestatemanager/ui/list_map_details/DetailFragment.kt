@@ -17,7 +17,8 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.data.Position
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
-import com.openclassrooms.realestatemanager.ui.create_edit.CreateFragment
+import com.openclassrooms.realestatemanager.ui.create_edit.CreateEditFragment
+
 import com.openclassrooms.realestatemanager.utils.CurrencyCode
 import com.openclassrooms.realestatemanager.utils.Utils
 
@@ -50,19 +51,18 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
             render(
                 it,
                 binding,
-
             )
         }
 
-        //TODO :listener on FAB update + get realestate id into intent
         binding.fabUpdate.setOnClickListener {
+            //pass id to CreateEditFragment
             val id = viewModel.detailState.value?.id
-            if (id!= null) {
-                val createBottomSheet = CreateFragment.newInstance(
+            if (id != null) {
+                val createBottomSheet = CreateEditFragment.newInstance(
                     id = id
                 )
                 val fragmentManager = (activity as FragmentActivity).supportFragmentManager
-                fragmentManager.let { createBottomSheet.show(it, CreateFragment.TAG) }
+                fragmentManager.let { createBottomSheet.show(it, CreateEditFragment.TAG) }
             }
 
 
@@ -85,9 +85,9 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
         if (realEstate == null) {
             binding.noItemLytContainer.visibility = View.VISIBLE
             binding.constraintlayoutContainer.visibility = View.GONE
+            binding.fabUpdate.visibility = View.GONE
         } else {
-
-
+            binding.fabUpdate.visibility = View.VISIBLE
             val context = binding.root.context
             binding.constraintlayoutContainer.visibility = View.VISIBLE
             binding.noItemLytContainer.visibility = View.GONE
@@ -96,19 +96,32 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
             binding.lytAttributes.statusValueTv.text =
                 ContextCompat.getString(context, realEstate.status.state)
             if (realEstate.status.state == R.string.for_sale) {
+                binding.lytAttributes.statusDisplayCard
+                    .setCardBackgroundColor(ContextCompat.getColor(
+                        context,
+                        R.color.md_theme_tertiaryFixed_mediumContrast)
+                    )
                 binding.lytAttributes.statusValueTv.setTextColor(
                     ContextCompat.getColor(
                         context,
-                        R.color.md_theme_tertiaryFixed_mediumContrast
+                        R.color.md_theme_onTertiary_mediumContrast
                     )
                 )
+                binding.lytAttributes.dateOfSaleTv.visibility = View.GONE
             } else {
+                binding.lytAttributes.statusDisplayCard
+                    .setCardBackgroundColor(ContextCompat.getColor(
+                        context,
+                        R.color.md_theme_error_mediumContrast)
+                    )
                 binding.lytAttributes.statusValueTv.setTextColor(
                     ContextCompat.getColor(
                         context,
-                        R.color.md_theme_error_mediumContrast
+                        R.color.md_theme_onError_mediumContrast
                     )
                 )
+                binding.lytAttributes.dateOfSaleTv.visibility = View.VISIBLE
+                binding.lytAttributes.dateOfSaleTv.text = getString(R.string.since).plus(" " + realEstate.dateOfSale)
             }
             binding.lytAttributes.priceValueTv.text =
                 Utils.priceFormatter(price = realEstate.priceTag, CurrencyCode.EURO)
