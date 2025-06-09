@@ -18,9 +18,6 @@ import com.openclassrooms.realestatemanager.utils.events.CreationEvents
 import com.openclassrooms.realestatemanager.utils.internetConnectivity.ConnectivityChecker
 import com.openclassrooms.realestatemanager.utils.toPhotoSelectedViewState
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.util.UUID
@@ -32,23 +29,23 @@ class CreateEditViewModel(
     private val connectivityChecker: ConnectivityChecker
 ) : ViewModel() {
 
-    companion object{
+    companion object {
         val KEY_STATE = "KEY_STATE"
     }
 
+    private val _isCreation: Boolean = realEstateId == null
+    val isCreation= _isCreation
+
     init {
-        if (realEstateId == null) {
-            //on create fragment : state vide
-            Log.i("init createVM", "null")
-        } else {
+        if (realEstateId != null) {
             //on update fragment : state deja existant
             Log.i("init createVM", realEstateId)
             //if there is nothing in savedStateHandle means it the first time that the VM is created
-            if(!savedStateHandle.contains(KEY_STATE)){
+            if (!savedStateHandle.contains(KEY_STATE)) {
                 viewModelScope.launch {
                     val realEstate = repository.fetchOneRealEstate(realEstateId)
                     val agent = repository.fetchOneAgent(realEstate.agentId)
-                    val realEstateToDisplay =  RealEstateToSaveState(
+                    val realEstateToDisplay = RealEstateToSaveState(
                         type = realEstate.type,
                         address = realEstate.address,
                         city = realEstate.city,
@@ -63,17 +60,19 @@ class CreateEditViewModel(
                         photos = realEstate.photos.map { photo ->
                             photo.toPhotoSelectedViewState()
                         },
-                        isUpdated = true
                     )
                     savedStateHandle[KEY_STATE] = realEstateToDisplay
                 }
+
             }
         }
     }
 
+
     //to get a list of agent's name
-    fun getAgents(): LiveData<List<RealEstateAgent>> {
-        return repository.getAllAgents().asLiveData()
+    suspend fun fetchAgents(): List<RealEstateAgent> {
+        return repository.fetchAllAgents()
+
     }
 
     //state of data stored in Bundle
@@ -81,7 +80,8 @@ class CreateEditViewModel(
         savedStateHandle.getMutableStateFlow(KEY_STATE, RealEstateToSaveState())
 
     //state of data for UI
-    val state: LiveData<RealEstateToSaveState> = _createdRealEstateMutableStateFlow.asLiveData()
+    val state: LiveData<RealEstateToSaveState> =
+        _createdRealEstateMutableStateFlow.asLiveData()
 
     //Flow to be observe in UI, notifying creation success of real estate
     private val _isCreatedFlow = Channel<CreationEvents>()
@@ -90,38 +90,43 @@ class CreateEditViewModel(
     /**
      * Create a realEstate from info enter by user
      */
-        //TODO : change name to save and tchek if its an update or a creation
+    //TODO : change name to save and tchek if its an update or a creation
     fun saveRealEstate() {
         val currentState = _createdRealEstateMutableStateFlow.value
 
-        if (isPositionExist()) {
-            val realEstateToCreate = RealEstateToCreate(
-                type = currentState.type!!,
-                photos = currentState.photos.map { photo ->
-                    Photo(
-                        id = photo.id,
-                        urlPhoto = photo.uri,
-                        label = photo.label
-                    )
-                },
-                address = currentState.address!!.trim(),
-                city = currentState.city!!.trim(),
-                price = currentState.price!!.toFloat(),
-                surface = currentState.surface!!.toInt(),
-                rooms = currentState.rooms!!.toInt(),
-                bedrooms = currentState.bedrooms!!.toInt(),
-                bathrooms = currentState.bathrooms!!.toInt(),
-                description = currentState.description!!,
-                amenities = currentState.amenities,
-                agentId = currentState.agent!!.id
-            )
+        if(_isCreation){
+            if (isPositionExist()) {
+                val realEstateToCreate = RealEstateToCreate(
+                    type = currentState.type!!,
+                    photos = currentState.photos.map { photo ->
+                        Photo(
+                            id = photo.id,
+                            urlPhoto = photo.uri,
+                            label = photo.label
+                        )
+                    },
+                    address = currentState.address!!.trim(),
+                    city = currentState.city!!.trim(),
+                    price = currentState.price!!.toFloat(),
+                    surface = currentState.surface!!.toInt(),
+                    rooms = currentState.rooms!!.toInt(),
+                    bedrooms = currentState.bedrooms!!.toInt(),
+                    bathrooms = currentState.bathrooms!!.toInt(),
+                    description = currentState.description!!,
+                    amenities = currentState.amenities,
+                    agentId = currentState.agent!!.id
+                )
 
-            viewModelScope.launch {
-                repository.createRealEstate(realEstateToCreate)
+                viewModelScope.launch {
+                    repository.createRealEstate(realEstateToCreate)
+                }
+
+                _isCreatedFlow.trySend(CreationEvents.isCreated)
             }
-
-            _isCreatedFlow.trySend(CreationEvents.isCreated)
+        }else{
+            //todo
         }
+
 
     }
 
@@ -212,7 +217,8 @@ class CreateEditViewModel(
      */
     fun updateDescription(description: String) {
         val currentState = _createdRealEstateMutableStateFlow.value
-        _createdRealEstateMutableStateFlow.value = currentState.copy(description = description)
+        _createdRealEstateMutableStateFlow.value =
+            currentState.copy(description = description)
         Log.i("createVM", "description :${_createdRealEstateMutableStateFlow.value}")
     }
 
@@ -228,7 +234,8 @@ class CreateEditViewModel(
             listAmenities.remove(amenity)
         }
         //update the state
-        _createdRealEstateMutableStateFlow.value = currentState.copy(amenities = listAmenities)
+        _createdRealEstateMutableStateFlow.value =
+            currentState.copy(amenities = listAmenities)
         Log.i("createVM", "amenities :${_createdRealEstateMutableStateFlow.value}")
     }
 
@@ -283,7 +290,10 @@ class CreateEditViewModel(
 
         _createdRealEstateMutableStateFlow.value = currentState.copy(photos = photos)
         Log.i("createVM", "${photos}")
-        Log.i("createVM", "photos without deleted one :${_createdRealEstateMutableStateFlow.value}")
+        Log.i(
+            "createVM",
+            "photos without deleted one :${_createdRealEstateMutableStateFlow.value}"
+        )
     }
 
     /**

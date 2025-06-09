@@ -24,7 +24,6 @@ data class RealEstateToSaveState(
     val amenities: List<Amenity> = emptyList(),
     val agent: RealEstateAgent? = null,
     val photos: List<PhotoSelectedViewState> = emptyList(),
-    val isUpdated : Boolean = false,
 ) : Parcelable {
 
     fun isInputsCompleted(): Boolean {

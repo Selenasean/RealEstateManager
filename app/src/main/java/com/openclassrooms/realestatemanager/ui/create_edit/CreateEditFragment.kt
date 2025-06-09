@@ -18,20 +18,26 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
+import androidx.core.view.children
+import androidx.core.view.forEach
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.openclassrooms.realestatemanager.BuildConfig
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.data.model.Amenity
 import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.databinding.FragmentCreateBinding
+import com.openclassrooms.realestatemanager.domain.RealEstateAgent
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
 import com.openclassrooms.realestatemanager.ui.list_map_details.PhotosAdapter
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
 import com.openclassrooms.realestatemanager.utils.events.CreationEvents
 import com.openclassrooms.realestatemanager.utils.observeAsEvents
+import kotlinx.coroutines.launch
 import kotlinx.serialization.StringFormat
 import java.io.File
 import kotlin.random.Random
@@ -68,7 +74,6 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
 
         //settings for dropDown menus, chips, viewModel & recyclerView
         dropDownMenusSettings(binding, context)
-        displayAmenitiesChips(binding, context)
         viewModel.state.observe(viewLifecycleOwner) { render(it, binding, context) }
         setRecyclerView(binding)
 
@@ -161,14 +166,11 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
      * Display recyclerView of photos or not depending on the size of the photo's list
      */
     private fun render(it: RealEstateToSaveState, binding: FragmentCreateBinding, context: Context) {
-        if(it.isUpdated) binding.titleTv.text = getString(R.string.update_title)
+        if(!viewModel.isCreation) binding.titleTv.text = getString(R.string.update_title)
         binding.createBtn.isEnabled = it.isInputsCompleted()
         //render type
-
         if(it.type != null && binding.tvType.text.toString() != ContextCompat.getString(context, it.type.displayName)){
-            binding.tvType.setText(ContextCompat.getString(context, it.type.displayName))
-            //TODO : obliger de reconstruire mon adapter ?
-            typeAdapterBuilder(binding.tvType)
+            binding.tvType.setText(ContextCompat.getString(context, it.type.displayName), false)
         }
         //render photo
         if (it.photos.isEmpty()) {
@@ -209,10 +211,12 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
             binding.tvDescription.setText(it.description)
         }
         //render amenities
-        //TODO : maj amenities
+        renderAmenitiesChips(binding, context, it.amenities)
+
         //render agent's name
         if(it.agent != null && binding.tvAgent.text.toString() != it.agent.name){
-            binding.tvAgent.setText(it.agent.name)
+            binding.tvAgent.setText(it.agent.name, false )
+
         }
     }
 
@@ -243,8 +247,9 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
     /**
      * To display amenities chips and listener
      */
-    private fun displayAmenitiesChips(binding: FragmentCreateBinding, context: Context) {
+    private fun renderAmenitiesChips(binding: FragmentCreateBinding, context: Context, amenitiesSelected: List<Amenity>) {
         val chipsGroup = binding.chipGroup
+        chipsGroup.removeAllViews()
 
         Amenity.entries.forEach { amenity ->
             val chip = LayoutInflater.from(context)
@@ -254,6 +259,8 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
             //attributes id to each chip
             chip.id = Random.Default.nextInt()
             chipsGroup.addView(chip)
+
+            chip.isChecked = amenitiesSelected.contains(amenity)
 
             //listener
             chip.setOnCheckedChangeListener { _, isChecked ->
@@ -268,31 +275,34 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
      */
     private fun dropDownMenusSettings(binding: FragmentCreateBinding, context: Context) {
         //for type of real estate menu
-        typeAdapterBuilder(binding.tvType)
+        typeAdapterBuilder(binding.tvType, context)
         //listener
         binding.tvType.setOnItemClickListener { _, _, position, _ ->
             viewModel.updateType(BuildingType.entries[position])
         }
 
         //for agent's name menu
-        //TODO : modifier la fonction pour recup les agents sans observer pcq pas besoin
-        viewModel.getAgents().observe(viewLifecycleOwner) { agents ->
+        agentsAdapterSettings(binding.tvAgent)
+
+    }
+
+    private fun agentsAdapterSettings(tvAgent: AutoCompleteTextView) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val agents = viewModel.fetchAgents()
             val agentAdapter = ArrayAdapter(
                 requireContext(),
                 R.layout.dropdown_menu_create,
                 agents.map { agent -> agent.name }
             )
-            binding.tvAgent.setAdapter(agentAdapter)
-
+            tvAgent.setAdapter(agentAdapter)
             //listener
-            binding.tvAgent.setOnItemClickListener { _, _, position, _ ->
+            tvAgent.setOnItemClickListener { _, _, position, _ ->
                 viewModel.updateAgentName(agents[position])
             }
         }
-
     }
 
-    private fun typeAdapterBuilder(typeTv : AutoCompleteTextView){
+    private fun typeAdapterBuilder(typeTv : AutoCompleteTextView, context: Context){
         typeAdapter = ArrayAdapter(
             requireContext(),
             R.layout.dropdown_menu_create,
