@@ -17,6 +17,7 @@
         android:contentDescription="@string/button_update"
         android:src="@drawable/create_icon"
         app:tint="@color/md_theme_onPrimary"
+        android:alpha="0.8"
         android:backgroundTint="@color/md_theme_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

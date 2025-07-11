@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.create_edit
 
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -8,7 +9,6 @@ import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Adapter
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
@@ -18,28 +18,27 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
-import androidx.core.view.children
-import androidx.core.view.forEach
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import com.openclassrooms.realestatemanager.BuildConfig
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.data.model.Amenity
 import com.openclassrooms.realestatemanager.data.model.BuildingType
+import com.openclassrooms.realestatemanager.data.model.Status
 import com.openclassrooms.realestatemanager.databinding.FragmentCreateBinding
-import com.openclassrooms.realestatemanager.domain.RealEstateAgent
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
 import com.openclassrooms.realestatemanager.ui.list_map_details.PhotosAdapter
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
 import com.openclassrooms.realestatemanager.utils.events.CreationEvents
 import com.openclassrooms.realestatemanager.utils.observeAsEvents
 import kotlinx.coroutines.launch
-import kotlinx.serialization.StringFormat
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import kotlin.random.Random
 
 class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
@@ -60,6 +59,7 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
     private lateinit var adapter: PhotosAdapter
     private var currentPhotoUri: Uri? = null
     private lateinit var typeAdapter : ArrayAdapter<String>
+    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -72,13 +72,13 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
             BuildingType.entries.map { ContextCompat.getString(context, it.displayName) }
         )
 
-        //settings for dropDown menus, chips, viewModel & recyclerView
+        //settings for dropDown menus, viewModel & recyclerView
         dropDownMenusSettings(binding, context)
         viewModel.state.observe(viewLifecycleOwner) { render(it, binding, context) }
         setRecyclerView(binding)
 
         //create a realEstate
-        binding.createBtn.setOnClickListener {
+        binding.saveBtn.setOnClickListener {
             if(viewModel.isPositionExist()){
                 viewModel.saveRealEstate()
                 Log.i("CreateFragment", "onViewCreated:  create RealEstate")
@@ -93,6 +93,7 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         //or to notify if there is internet
         observeAsEvents(viewModel.isCreatedFlow) { event ->
             when (event) {
+
                 CreationEvents.isCreated -> {
                     Toast.makeText(requireContext(), R.string.creation_succeed, Toast.LENGTH_SHORT).show()
                     dismiss()
@@ -100,13 +101,15 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
 
                 CreationEvents.isInternetAvailable -> Toast.makeText(requireContext(), R.string.no_internet,
                     Toast.LENGTH_SHORT).show()
+
+                CreationEvents.isUpdated -> {
+                    Toast.makeText(requireContext(), R.string.updated_succeed, Toast.LENGTH_SHORT).show()
+                    dismiss()
+                }
             }
         }
 
-
-
         //inputs listeners
-
         binding.tvAddress.doAfterTextChanged {
                 viewModel.updateAddress(it.toString())
 
@@ -127,8 +130,7 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
                     uris.forEach { uri ->
                         context.contentResolver.takePersistableUriPermission(uri, flag)
                     }
-
-                    viewModel.updatePhotos(uris)
+                    viewModel.addPhotoPicker(uris)
 
                 }
             }
@@ -141,7 +143,7 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         val takePictureCallback =
             registerForActivityResult(ActivityResultContracts.TakePicture()) { successful ->
                 if (successful) {
-                    viewModel.addPictureTaken(currentPhotoUri.toString())
+                    viewModel.addPhotoTaken(currentPhotoUri.toString())
                 }
             }
 
@@ -159,6 +161,32 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
             takePictureCallback.launch(currentPhotoUri)
         }
 
+        //Select date of sale
+        binding.datePickerBtn.setOnClickListener {
+            showDatePicker(binding)
+        }
+
+    }
+
+    private fun showDatePicker(binding: FragmentCreateBinding) {
+        val calendar = Calendar.getInstance()
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
+            {datePicker, year: Int, month: Int, day: Int ->
+                val selectedDate = Calendar.getInstance()
+                selectedDate.set(year, month,day)
+                //format the selected date into a string
+                val formattedDate = dateFormat.format(selectedDate.time)
+                //display the selected date
+                binding.datePickedTv.text = "$formattedDate"
+                //save the selected date in the state
+                viewModel.updateDateOfSale(selectedDate.toInstant())
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        )
+        datePickerDialog.show()
     }
 
 
@@ -166,8 +194,17 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
      * Display recyclerView of photos or not depending on the size of the photo's list
      */
     private fun render(it: RealEstateToSaveState, binding: FragmentCreateBinding, context: Context) {
-        if(!viewModel.isCreation) binding.titleTv.text = getString(R.string.update_title)
-        binding.createBtn.isEnabled = it.isInputsCompleted()
+        if(!viewModel.isCreation) {
+            binding.titleTv.text = getString(R.string.update_title)
+            binding.lytStatus.visibility = View.VISIBLE
+            binding.datePickerLyt.visibility = View.VISIBLE
+        }else{
+            binding.lytStatus.visibility = View.GONE
+            binding.datePickerLyt.visibility = View.GONE
+        }
+
+        binding.saveBtn.isEnabled = it.isInputsCompleted()
+
         //render type
         if(it.type != null && binding.tvType.text.toString() != ContextCompat.getString(context, it.type.displayName)){
             binding.tvType.setText(ContextCompat.getString(context, it.type.displayName), false)
@@ -179,7 +216,7 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
             binding.rvPhotosSelected.visibility = View.VISIBLE
             adapter.submitList(it.photos)
         }
-        //render address, city, price, surface, rooms, bedrooms, bathrooms, description
+        //render address, city
         if( binding.tvAddress.text.toString() != it.address){
             binding.tvAddress.setText(it.address)
         }
@@ -216,8 +253,19 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         //render agent's name
         if(it.agent != null && binding.tvAgent.text.toString() != it.agent.name){
             binding.tvAgent.setText(it.agent.name, false )
-
         }
+        //render status
+        if(it.status == Status.FOR_SALE ) binding.datePickerLyt.visibility = View.GONE else View.VISIBLE
+        renderStatusChips(binding, it.status)
+
+        //render dateOfSale
+        if(it.dateOfSale == null){
+            binding.datePickedTv.text = ""
+        }else{
+            val formatter = dateFormat.format(it.dateOfSale.toEpochMilli())
+            binding.datePickedTv.text = formatter
+        }
+
     }
 
 
@@ -268,6 +316,38 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
             }
         }
 
+    }
+
+
+    private fun renderStatusChips(binding: FragmentCreateBinding, statusSelected: Status ){
+
+        val chipGroup =binding.chipGroupStatus
+        val chipSold = binding.chipSold
+        val chipForSale = binding.chipForSale
+
+        chipGroup.removeAllViews()
+
+        chipGroup.addView(chipForSale)
+        chipGroup.addView(chipSold)
+
+        chipForSale.isChecked = statusSelected == Status.FOR_SALE
+        chipSold.isChecked = statusSelected == Status.SOLD
+
+        //listeners
+        chipForSale.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked) {
+                viewModel.updateStatus(Status.FOR_SALE)
+                binding.datePickerLyt.visibility = View.GONE
+                viewModel.updateDateOfSale(null)
+            }
+        }
+       chipSold.setOnCheckedChangeListener { _, isChecked ->
+           if (isChecked){
+               viewModel.updateStatus(Status.SOLD)
+               binding.datePickerLyt.visibility = View.VISIBLE
+           }
+           Log.i("chipSold", "chip sold : $isChecked")
+        }
     }
 
     /**

@@ -49,19 +49,6 @@ class LocationRepository(
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-//    private fun getLocation() {
-//        if (isLocationEnabled() && isPermissionEnabled()) {
-//            fusedLocationProviderClient.lastLocation.addOnCompleteListener(this) { task ->
-//                val location: Location? = task.result
-//                if (location != null) {
-//                    //use the location latitude and logitude as per your use.
-//                    val latitude = location.latitude
-//                    val longitude = location.longitude
-//                }
-//            }
-//        }
-
-
     @RequiresPermission(allOf = [android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION])
     fun locationFlow(): Flow<Location> = callbackFlow {
         val callback = object : LocationCallback() {

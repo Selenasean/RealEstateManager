@@ -79,6 +79,9 @@
     <string name="surface_min_tv">Surface minimum</string>
     <string name="price_max_tv">Price maximum</string>
     <string name="price_min_tv">Price minimum</string>
+    <string name="status_tv">Sales status</string>
+    <string name="date_of_sale">Select the date of sale</string>
+    <string name="updated_succeed">The real estate has been updated</string>
 
 
 </resources>

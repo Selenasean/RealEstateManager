@@ -98,9 +98,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     private fun zoomOnMap(
         map: GoogleMap,
     ) {
-        //TODO: centrer map sur current location
-
-
         observeAsEvents(viewModel.eventMapFlow) { event ->
             when(event) {
                 is MapEvent.CenterUserLocation ->  {
@@ -115,7 +112,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         }
         // get location
         viewModel.onLocationPermission()
-
     }
 
     private fun createMarkers(

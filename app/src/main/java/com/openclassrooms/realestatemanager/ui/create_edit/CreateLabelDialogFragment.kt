@@ -36,7 +36,10 @@ class CreateLabelDialogFragment() : DialogFragment() {
     @SuppressLint("PrivateResource")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val binding = FragmentCreateLabelDialogBinding.inflate(layoutInflater)
-        val state = BundleCompat.getParcelable(requireArguments(), ARG_PARAM1,PhotoSelectedViewState::class.java)!!
+        val state = BundleCompat.getParcelable(
+            requireArguments(),
+            ARG_PARAM1,
+            PhotoSelectedViewState::class.java)!!
         binding.photo.load(state.uri)
 
         return AlertDialog.Builder(requireContext())

@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.data
 
+import android.util.Log
 import com.openclassrooms.realestatemanager.data.model.PhotoDb
 import com.openclassrooms.realestatemanager.data.model.RealEstateAgentDb
 import com.openclassrooms.realestatemanager.data.model.RealEstateDb
@@ -8,6 +9,7 @@ import com.openclassrooms.realestatemanager.domain.Photo
 import com.openclassrooms.realestatemanager.domain.RealEstate
 import com.openclassrooms.realestatemanager.domain.RealEstateAgent
 import com.openclassrooms.realestatemanager.domain.RealEstateToCreate
+import com.openclassrooms.realestatemanager.domain.RealEstateToUpdate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.Instant
@@ -73,7 +75,7 @@ class Repository(
      * To get one particular real estate
      * type RealEstate
      */
-    suspend fun fetchOneRealEstate(realEstateId: String): RealEstate{
+    suspend fun fetchOneRealEstate(realEstateId: String): RealEstate {
         return appdatabase.realEstateDao().fetchOneRealEstate(realEstateId.toLong()).toRealEstate()
     }
 
@@ -91,7 +93,7 @@ class Repository(
     /**
      * To get all agents
      */
-    suspend fun fetchAllAgents(): List<RealEstateAgent>{
+    suspend fun fetchAllAgents(): List<RealEstateAgent> {
         return appdatabase.realEstateAgentDao().fetchAllAgents().map { agent ->
             agent.toRealEstateAgent()
         }
@@ -100,52 +102,96 @@ class Repository(
     /**
      * To get one specific agent
      */
-    suspend fun fetchOneAgent(agentId: Long): RealEstateAgent{
+    suspend fun fetchOneAgent(agentId: Long): RealEstateAgent {
         return appdatabase.realEstateAgentDao().fetchOneAgent(agentId).toRealEstateAgent()
     }
 
     /**
      * Create RealEstate in database + photos associated
      */
-    suspend fun createRealEstate(realEstate: RealEstateToCreate) {
+    suspend fun createRealEstate(realEstate: RealEstateToCreate): SaveResult {
         val position = geocoderRepository.getLongLat(realEstate.address)
-        if (position != null) {
-            val realEstateCreatedId = appdatabase.realEstateDao().createRealEstate(
-                RealEstateDb(
-                    type = realEstate.type,
-                    price = realEstate.price,
-                    name = "",
-                    surface = realEstate.surface,
-                    rooms = realEstate.rooms,
-                    bedrooms = realEstate.bedrooms,
-                    bathrooms = realEstate.bathrooms,
-                    description = realEstate.description,
-                    address = realEstate.address,
-                    city = realEstate.city,
-                    status = Status.FOR_SALE,
-                    amenities = realEstate.amenities,
-                    dateCreated = Instant.now(),
-                    dateOfSale = null,
-                    realEstateAgentId = realEstate.agentId,
-                    latitude = position.latitude,
-                    longitude = position.longitude
+        if (position == null) return SaveResult.ERROR
+
+        val realEstateCreatedId = appdatabase.realEstateDao().createRealEstate(
+            RealEstateDb(
+                type = realEstate.type,
+                price = realEstate.price,
+                name = "",
+                surface = realEstate.surface,
+                rooms = realEstate.rooms,
+                bedrooms = realEstate.bedrooms,
+                bathrooms = realEstate.bathrooms,
+                description = realEstate.description,
+                address = realEstate.address,
+                city = realEstate.city,
+                status = Status.FOR_SALE,
+                amenities = realEstate.amenities,
+                dateCreated = Instant.now(),
+                dateOfSale = null,
+                realEstateAgentId = realEstate.agentId,
+                latitude = position.latitude,
+                longitude = position.longitude
+            )
+        )
+
+        realEstate.photos.forEach { photo ->
+            appdatabase.photoDao().createPhoto(
+                PhotoDb(
+                    id = photo.id,
+                    realEstateId = realEstateCreatedId.toString(),
+                    urlPhoto = photo.urlPhoto,
+                    label = photo.label
                 )
             )
 
-            realEstate.photos.forEach { photo ->
-                appdatabase.photoDao().createPhoto(
-                    PhotoDb(
-                        id = photo.id,
-                        realEstateId = realEstateCreatedId.toString(),
-                        urlPhoto = photo.urlPhoto,
-                        label = photo.label
-                    )
-                )
-
-            }
-            return
-
         }
+        return SaveResult.SUCCESS
+
+    }
+
+    /**
+     * To update a realEstate
+     */
+    suspend fun updateRealEstate(realEstate: RealEstateToUpdate, oldRealEstateId: Long): SaveResult {
+        val position = geocoderRepository.getLongLat(realEstate.address)
+        if(position == null) return SaveResult.ERROR
+        appdatabase.realEstateDao().updateRealEstate(
+            RealEstateDb(
+                id = oldRealEstateId,
+                type = realEstate.type,
+                price = realEstate.price,
+                name = "",
+                surface = realEstate.surface,
+                rooms = realEstate.rooms,
+                bedrooms = realEstate.bedrooms,
+                bathrooms = realEstate.bathrooms,
+                description = realEstate.description,
+                address = realEstate.address,
+                city = realEstate.city,
+                status = realEstate.status,
+                amenities = realEstate.amenities,
+                dateCreated = Instant.now(),
+                dateOfSale = realEstate.dateOfSale,
+                realEstateAgentId = realEstate.agentId,
+                latitude = position.latitude,
+                longitude = position.longitude
+            )
+        )
+
+        realEstate.photoChanges.deleted.forEach { photoId ->
+            appdatabase.photoDao().deleteFromId(photoId)
+        }
+        realEstate.photoChanges.updated.forEach { photo ->
+            appdatabase.photoDao().updatePhoto(photo.toPhotoDb(oldRealEstateId))
+            Log.i("repo update photo", "updateRealEstate: photo updated ")
+        }
+        realEstate.photoChanges.created.forEach { photo ->
+            appdatabase.photoDao().createPhoto(photo.toPhotoDb(oldRealEstateId))
+            Log.i("repo create photo", "create photo")
+        }
+
+        return SaveResult.SUCCESS
     }
 
     /**
@@ -156,8 +202,8 @@ class Repository(
         return position != null
     }
 
-    //TODO : function mapping here ?
-    fun Map<RealEstateDb, List<PhotoDb>>.toRealEstate() : RealEstate{
+    // MAPPING FUNCTION HERE
+    fun Map<RealEstateDb, List<PhotoDb>>.toRealEstate(): RealEstate {
         val entry = this.entries.first()
         val photos: List<PhotoDb> = entry.value
         return RealEstate(
@@ -190,10 +236,24 @@ class Repository(
 
     }
 
-    fun RealEstateAgentDb.toRealEstateAgent() : RealEstateAgent{
+    fun RealEstateAgentDb.toRealEstateAgent(): RealEstateAgent {
         return RealEstateAgent(
             id = this.id,
             name = this.name
         )
     }
+
+    fun Photo.toPhotoDb(realEstateId: Long): PhotoDb {
+        return  PhotoDb(
+            id = this.id,
+            realEstateId = realEstateId.toString(),
+            urlPhoto = this.urlPhoto,
+            label = this.label
+        )
+    }
+}
+
+enum class SaveResult() {
+    SUCCESS,
+    ERROR
 }

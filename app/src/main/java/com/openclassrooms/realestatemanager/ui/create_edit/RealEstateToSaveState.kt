@@ -3,9 +3,11 @@ package com.openclassrooms.realestatemanager.ui.create_edit
 import android.os.Parcelable
 import com.openclassrooms.realestatemanager.data.model.Amenity
 import com.openclassrooms.realestatemanager.data.model.BuildingType
+import com.openclassrooms.realestatemanager.data.model.Status
 import com.openclassrooms.realestatemanager.domain.RealEstateAgent
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
 import kotlinx.parcelize.Parcelize
+import java.time.Instant
 
 /**
  * State to store data & enabled creation button
@@ -23,6 +25,9 @@ data class RealEstateToSaveState(
     val description: String? = null,
     val amenities: List<Amenity> = emptyList(),
     val agent: RealEstateAgent? = null,
+    val status: Status = Status.FOR_SALE,
+    val dateOfSale: Instant? = null,
+    val dateOfCreation: Instant? = null,
     val photos: List<PhotoSelectedViewState> = emptyList(),
 ) : Parcelable {
 

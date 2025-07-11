@@ -8,16 +8,13 @@
     android:orientation="vertical">
 
     <!-- Drag handle for accessibility -->
-    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
-        android:id="@+id/drag_handle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/title_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="@dimen/small_double"
         android:text="@string/create_title"
         android:textSize="@dimen/text_size_big"
         android:textStyle="bold" />
@@ -29,6 +26,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginEnd="@dimen/small_plus"
         android:layout_marginStart="@dimen/small_plus"
+        android:layout_marginBottom="@dimen/small_double"
         android:text="@string/internet_info"
         android:textSize="@dimen/text_size_small"
 
@@ -53,6 +51,7 @@
                 android:hint="@string/type_tv"
                 android:padding="@dimen/small"
                 app:startIconDrawable="@drawable/house_icon">
+
 
                 <AutoCompleteTextView
                     android:id="@+id/tv_type"
@@ -336,6 +335,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/realEstateAgent_tv"
                 android:padding="@dimen/small"
+                android:labelFor="@+id/tv_agent"
                 app:startIconDrawable="@drawable/person_icon">
 
                 <AutoCompleteTextView
@@ -348,9 +348,92 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- CREATE BTN -->
+            <!-- STATUS TODO : chips-->
+            <LinearLayout
+                android:id="@+id/lyt_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/amenities_tv"
+                android:orientation="horizontal"
+                android:padding="@dimen/small">
+
+                <ImageView
+                    android:id="@+id/icon_status"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                   android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/small"
+                    android:contentDescription="@null"
+                    android:src="@drawable/status_icon"
+                    app:tint="@color/md_theme_onPrimaryContainer" />
+
+                <TextView
+                    android:id="@+id/status_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/status_tv"
+                    android:textSize="@dimen/text_size_medium"
+                    android:layout_gravity="center"/>
+
+                <com.google.android.material.chip.ChipGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/chipGroupStatus"
+                    app:singleSelection="true"
+                    app:selectionRequired="true"
+                    android:layout_marginStart="@dimen/small">
+                    
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_sold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sold"
+                        android:checkable="true"
+                        />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_for_sale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/for_sale"
+                        android:checkable="true"/>
+
+                </com.google.android.material.chip.ChipGroup>
+            </LinearLayout>
+
+            <!-- Date of sale -->
+            <LinearLayout
+                android:id="@+id/date_picker_lyt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="@dimen/small"
+                >
+
+                <Button
+                    android:id="@+id/date_picker_btn"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/date_of_sale"
+                    app:icon="@drawable/calendar_icon"/>
+
+                <TextView
+                    android:id="@+id/date_picked_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/text_size_medium"
+                    android:layout_marginStart="@dimen/medium"
+                    tools:text="23/09/2025"/>
+
+            </LinearLayout>
+
+
+            <!-- SAVE BTN -->
             <Button
-                android:id="@+id/create_btn"
+                android:id="@+id/save_btn"
                 style="@style/Widget.Material3.Button"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
@@ -358,6 +441,11 @@
                 android:layout_margin="10dp"
                 android:text="@string/save_btn"
                 android:textAllCaps="true" />
+
+            <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+                android:id="@+id/drag_handle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 

@@ -24,7 +24,6 @@ interface RealEstateDao {
     @Query("SELECT * FROM realEstates LEFT JOIN photos ON realEstates.id = photos.realEstateId")
     fun getAllRealEstates(): Flow<Map<RealEstateDb, List<PhotoDb>>>
 
-
     @Query("SELECT * FROM realEstates LEFT JOIN photos ON realEstates.id = photos.realEstateId WHERE realEstates.id = :realEstateId ")
     fun getOneRealEstate(realEstateId: Long): Flow<Map<RealEstateDb, List<PhotoDb>>>
 

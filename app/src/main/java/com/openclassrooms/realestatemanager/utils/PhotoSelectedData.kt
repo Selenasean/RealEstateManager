@@ -14,7 +14,7 @@ data class PhotoSelectedViewState(
     val label: String,
 ) : Parcelable
 
-//function extension to map
+//extension function to map
 fun Photo.toPhotoSelectedViewState(): PhotoSelectedViewState {
     return PhotoSelectedViewState(
         id = this.id,

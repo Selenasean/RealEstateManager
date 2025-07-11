@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.data.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.openclassrooms.realestatemanager.data.model.RealEstateAgentDb
 import kotlinx.coroutines.flow.Flow
 
@@ -22,4 +23,5 @@ interface RealEstateAgentDao {
 
     @Query("SELECT * FROM realEstateAgents")
     suspend fun fetchAllAgents(): List<RealEstateAgentDb>
+
 }
