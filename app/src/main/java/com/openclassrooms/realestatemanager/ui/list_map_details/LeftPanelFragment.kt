@@ -16,6 +16,7 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentLeftPanelBinding
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
 import com.openclassrooms.realestatemanager.ui.create_edit.CreateEditFragment
+import com.openclassrooms.realestatemanager.ui.filter.FilterFragment
 
 import com.openclassrooms.realestatemanager.utils.events.ListMapDetailEvent
 import com.openclassrooms.realestatemanager.utils.events.MapEvent
@@ -84,9 +85,12 @@ class LeftPanelFragment : Fragment() {
                 }
 
                 R.id.app_bar_filter -> {
-                    val filterSideSheet = FilterFragment()
+                    val filterBottomSheet = FilterFragment()
                     val fragmentManager = (activity as FragmentActivity).supportFragmentManager
-
+                    fragmentManager.let{
+                        filterBottomSheet.show(it, FilterFragment.TAG
+                        )
+                    }
                     Log.i("listEstateFragment", "filter")
                     true
                 }

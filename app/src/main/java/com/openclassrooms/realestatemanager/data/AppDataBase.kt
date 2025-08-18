@@ -92,7 +92,7 @@ abstract class AppDataBase : RoomDatabase() {
                    appDataBase.photoDao().createPhoto(
                        PhotoDb(
                            id = UUID.randomUUID().toString(),
-                           realEstateId = estateId1.toString(),
+                           realEstateId = estateId1,
                            urlPhoto = "https://images.unsp" +
                                    "lash.com/photo-1504615755583-2916b52192a3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8aG91c2V8ZW58MHx8MHx8fDA%3D",
                            label = "Label 1"
@@ -101,7 +101,7 @@ abstract class AppDataBase : RoomDatabase() {
                    appDataBase.photoDao().createPhoto(
                        PhotoDb(
                            id = UUID.randomUUID().toString(),
-                           realEstateId = estateId1.toString(),
+                           realEstateId = estateId1,
                            urlPhoto = "https://plus.unsplash.com/premium_photo-1661778773089-8718bcedb39e?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                            label = "Label 2"
                        )
@@ -109,7 +109,7 @@ abstract class AppDataBase : RoomDatabase() {
                    appDataBase.photoDao().createPhoto(
                        PhotoDb(
                            id = UUID.randomUUID().toString(),
-                           realEstateId = estateId1.toString(),
+                           realEstateId = estateId1,
                            urlPhoto = "https://images.unsplash.com/photo-1514053026555-49ce8886ae41?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                            label = "Label 3"
                            )
@@ -117,7 +117,7 @@ abstract class AppDataBase : RoomDatabase() {
                    appDataBase.photoDao().createPhoto(
                        PhotoDb(
                            id = UUID.randomUUID().toString(),
-                           realEstateId = estateId1.toString(),
+                           realEstateId = estateId1,
                            urlPhoto = "https://plus.unsplash.com/premium_photo-1683888725059-b912dda58ba0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                                    label = "Label 4"
                        )
@@ -147,7 +147,7 @@ abstract class AppDataBase : RoomDatabase() {
                    appDataBase.photoDao().createPhoto(
                        PhotoDb(
                            id = UUID.randomUUID().toString(),
-                           realEstateId = estateId2.toString(),
+                           realEstateId = estateId2,
                            urlPhoto = "https://images.unsplash.com/photo-1593714604578-d9e41b00c6c6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                            label = "Label 1"
                        )
@@ -177,7 +177,7 @@ abstract class AppDataBase : RoomDatabase() {
                    appDataBase.photoDao().createPhoto(
                        PhotoDb(
                            id = UUID.randomUUID().toString(),
-                           realEstateId = estateId3.toString(),
+                           realEstateId = estateId3,
                            urlPhoto = "https://images.unsplash.com/photo-1460317442991-0ec209397118?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                            label = "Label 1"
                        )
@@ -207,7 +207,7 @@ abstract class AppDataBase : RoomDatabase() {
                    appDataBase.photoDao().createPhoto(
                        PhotoDb(
                            id = UUID.randomUUID().toString(),
-                           realEstateId = estateId4.toString(),
+                           realEstateId = estateId4,
                            urlPhoto = "https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                            label = "Label 1"
                        )
@@ -242,7 +242,7 @@ abstract class AppDataBase : RoomDatabase() {
                    appDataBase.photoDao().createPhoto(
                        PhotoDb(
                            id = UUID.randomUUID().toString(),
-                           realEstateId = estateId5.toString(),
+                           realEstateId = estateId5,
                            urlPhoto = "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                            label = "Label 1"
                        )
@@ -272,7 +272,7 @@ abstract class AppDataBase : RoomDatabase() {
                    appDataBase.photoDao().createPhoto(
                        PhotoDb(
                            id = UUID.randomUUID().toString(),
-                           realEstateId = estateId6.toString(),
+                           realEstateId = estateId6,
                            urlPhoto ="https://images.unsplash.com/photo-1574362848149-11496d93a7c7?q=80&w=1984&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                            label = "Label 1"
                        )

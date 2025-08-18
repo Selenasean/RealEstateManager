@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Bottom sheet contents. -->
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -29,7 +29,6 @@
         android:layout_marginBottom="@dimen/small_double"
         android:text="@string/internet_info"
         android:textSize="@dimen/text_size_small"
-
         android:textColor="@color/md_theme_tertiary"
          />
 
@@ -348,7 +347,7 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- STATUS TODO : chips-->
+            <!-- STATUS -->
             <LinearLayout
                 android:id="@+id/lyt_status"
                 android:layout_width="match_parent"

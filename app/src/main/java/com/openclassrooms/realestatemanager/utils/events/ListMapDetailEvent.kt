@@ -2,6 +2,11 @@ package com.openclassrooms.realestatemanager.utils.events
 
 import android.location.Location
 
+/**
+ * Interfaces for catching Events
+ *
+ */
+
 sealed interface ListMapDetailEvent {
     data object OpenDetails : ListMapDetailEvent
 

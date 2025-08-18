@@ -1,0 +1,14 @@
+package com.openclassrooms.realestatemanager.domain
+
+import com.openclassrooms.realestatemanager.data.model.BuildingType
+import com.openclassrooms.realestatemanager.data.model.Status
+
+data class Filters(
+    val city: String?,
+    val type : List<BuildingType>,
+    val priceMin : Int?,
+    val priceMax: Int?,
+    val surfaceMin : Int?,
+    val surfaceMax: Int?,
+    val status: Status?,
+)

@@ -22,6 +22,7 @@ private const val ARG_PARAM1 = "param1"
  * A simple [Fragment] subclass.
  * Use the [CreateLabelDialogFragment.newInstance] factory method to
  * create an instance of this fragment.
+ * Fragment to add a label to a photo
  */
 class CreateLabelDialogFragment() : DialogFragment() {
 

@@ -1,6 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.list_map_details
 
-import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,25 +11,31 @@ import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import coil.load
 import com.openclassrooms.realestatemanager.databinding.ImageItemBinding
 import com.openclassrooms.realestatemanager.ui.create_edit.CreateEditFragment
-
-
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
 
-
+/**
+ * Adapter to deal with photos in RecyclerView
+ */
 class PhotosAdapter(
     var className: String,
     private val labelClickedListener: (state: PhotoSelectedViewState) -> Unit,
-    private val onDeleteClickedListener: (state : PhotoSelectedViewState) -> Unit
+    private val onDeleteClickedListener: (state: PhotoSelectedViewState) -> Unit
 ) :
     ListAdapter<PhotoSelectedViewState, PhotosAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<PhotoSelectedViewState>() {
-            override fun areItemsTheSame(oldItem: PhotoSelectedViewState, newItem: PhotoSelectedViewState): Boolean {
+            override fun areItemsTheSame(
+                oldItem: PhotoSelectedViewState,
+                newItem: PhotoSelectedViewState
+            ): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: PhotoSelectedViewState, newItem: PhotoSelectedViewState): Boolean {
+            override fun areContentsTheSame(
+                oldItem: PhotoSelectedViewState,
+                newItem: PhotoSelectedViewState
+            ): Boolean {
                 return oldItem == newItem
             }
         }
@@ -54,13 +60,12 @@ class PhotosAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(photo: PhotoSelectedViewState) {
             //set photo
-            Log.i("photoAdapter", "bind() ${photo.uri}")
             binding.imageItem.load(photo.uri) {
                 crossfade(true)
             }
-            if(photo.label.isEmpty()){
+            if (photo.label.isEmpty()) {
                 binding.labelItem.visibility = View.GONE
-            }else{
+            } else {
                 binding.labelItem.text = photo.label
 
             }
@@ -76,7 +81,7 @@ class PhotosAdapter(
                 deleteBtn.visibility = View.VISIBLE
                 labelBtn.visibility = View.VISIBLE
 
-               //button to edit a label
+                //button to edit a label
                 labelBtn.setOnClickListener {
                     val position = bindingAdapterPosition
                     //check if bindingAdapterPosition is valid

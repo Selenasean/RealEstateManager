@@ -23,7 +23,6 @@ interface PhotoDao {
     @Query("SELECT * FROM photos")
     fun getAllPhotos(): Flow<List<PhotoDb>>
 
-    //TODO :update photo
     @Update
     suspend fun updatePhoto(photo: PhotoDb)
 }

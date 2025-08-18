@@ -48,6 +48,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentMapBinding.bind(view)
+
         //get the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment =
             childFragmentManager.findFragmentById(binding.fragmentContainerMap.id) as? SupportMapFragment
@@ -57,6 +58,11 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     }
 
 
+    /**
+     * When map displayed ready,
+     * Zoom map on user's location
+     * Create marker for each realEstate in the list
+     */
     override fun onMapReady(map: GoogleMap) {
 
         //zoom user's location
@@ -94,6 +100,9 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         })
     }
 
+    /**
+     * Zoom on user's location
+     */
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     private fun zoomOnMap(
         map: GoogleMap,
@@ -114,6 +123,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         viewModel.onLocationPermission()
     }
 
+    /**
+     * To create markers on the map
+     * And to custom them
+     */
     private fun createMarkers(
         map: GoogleMap,
         item: MapState
@@ -138,11 +151,12 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             id = item.id,
             clickCount = 0
         )
-
-
-
     }
 
+    /**
+     * Count the clicks on marker to determine which action to do
+     *
+     */
     override fun onMarkerClick(marker: Marker): Boolean {
         val markerData = marker.tag as? MarkerData
         markerData?.clickCount?.let { clickCount ->
@@ -163,6 +177,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
 }
 
+
+//DATA CLASS
 data class MarkerData(
     val id: String,
     var clickCount: Int

@@ -5,12 +5,14 @@ import com.openclassrooms.realestatemanager.data.model.PhotoDb
 import com.openclassrooms.realestatemanager.data.model.RealEstateAgentDb
 import com.openclassrooms.realestatemanager.data.model.RealEstateDb
 import com.openclassrooms.realestatemanager.data.model.Status
+import com.openclassrooms.realestatemanager.domain.Filters
 import com.openclassrooms.realestatemanager.domain.Photo
 import com.openclassrooms.realestatemanager.domain.RealEstate
 import com.openclassrooms.realestatemanager.domain.RealEstateAgent
 import com.openclassrooms.realestatemanager.domain.RealEstateToCreate
 import com.openclassrooms.realestatemanager.domain.RealEstateToUpdate
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import java.time.Instant
 
@@ -24,7 +26,6 @@ class Repository(
      * Get all RealEstates
      */
     fun getAllRealEstates(): Flow<List<RealEstate>> {
-
         return appdatabase.realEstateDao().getAllRealEstates().map { realEstateDbs ->
             realEstateDbs.map {
                 RealEstate(
@@ -65,7 +66,7 @@ class Repository(
     fun getOneRealEstates(realEstateId: String): Flow<RealEstate> {
         return appdatabase.realEstateDao().getOneRealEstate(realEstateId.toLong())
             .map { realEstateDb ->
-                realEstateDb.toRealEstate()
+                realEstateDb.toRealEstate().first()
             }
 
     }
@@ -76,7 +77,7 @@ class Repository(
      * type RealEstate
      */
     suspend fun fetchOneRealEstate(realEstateId: String): RealEstate {
-        return appdatabase.realEstateDao().fetchOneRealEstate(realEstateId.toLong()).toRealEstate()
+        return appdatabase.realEstateDao().fetchOneRealEstate(realEstateId.toLong()).toRealEstate().first()
     }
 
     /**
@@ -139,7 +140,7 @@ class Repository(
             appdatabase.photoDao().createPhoto(
                 PhotoDb(
                     id = photo.id,
-                    realEstateId = realEstateCreatedId.toString(),
+                    realEstateId = realEstateCreatedId,
                     urlPhoto = photo.urlPhoto,
                     label = photo.label
                 )
@@ -202,38 +203,64 @@ class Repository(
         return position != null
     }
 
-    // MAPPING FUNCTION HERE
-    fun Map<RealEstateDb, List<PhotoDb>>.toRealEstate(): RealEstate {
-        val entry = this.entries.first()
-        val photos: List<PhotoDb> = entry.value
-        return RealEstate(
-            id = entry.key.id.toString(),
-            title = entry.key.name,
-            city = entry.key.city,
-            priceTag = entry.key.price,
-            type = entry.key.type,
-            photos = photos.map { photoDb ->
-                Photo(
-                    id = photoDb.id,
-                    urlPhoto = photoDb.urlPhoto,
-                    label = photoDb.label
-                )
-            },
-            surface = entry.key.surface,
-            rooms = entry.key.rooms,
-            bathrooms = entry.key.bathrooms,
-            bedrooms = entry.key.bedrooms,
-            description = entry.key.description,
-            address = entry.key.address,
-            status = entry.key.status,
-            amenities = entry.key.amenities,
-            latitude = entry.key.latitude,
-            longitude = entry.key.longitude,
-            agentId = entry.key.realEstateAgentId,
-            dateCreated = entry.key.dateCreated,
-            dateOfSale = entry.key.dateOfSale
-        )
+    /**
+     * To apply filters
+     */
+   fun getFilteredRealEstates(filter: Filters): Flow<List<RealEstate>>{
+        if(filter.city !=null ||
+            !filter.type.isEmpty() ||
+            filter.priceMin != null ||
+            filter.priceMax != null ||
+            filter.surfaceMax != null||
+            filter.surfaceMin != null ||
+            filter.status != null){
+           return appdatabase.realEstateDao().getRealEstatesFiltered(
+                city = filter.city,
+//               type = filter.type,
+               minPrice = filter.priceMin,
+               maxPrice = filter.priceMax,
+               minSurface = filter.surfaceMin,
+               maxSurface = filter.surfaceMax,
+               status = filter.status
+            ).map { realEstates ->
+                realEstates.toRealEstate()
+            }
+        }
+        return getAllRealEstates()
+    }
 
+    // MAPPING FUNCTION HERE
+    fun Map<RealEstateDb, List<PhotoDb>>.toRealEstate(): List<RealEstate> {
+        return this.entries.map { entry ->
+            val photos: List<PhotoDb> = entry.value
+              RealEstate(
+                id = entry.key.id.toString(),
+                title = entry.key.name,
+                city = entry.key.city,
+                priceTag = entry.key.price,
+                type = entry.key.type,
+                photos = photos.map { photoDb ->
+                    Photo(
+                        id = photoDb.id,
+                        urlPhoto = photoDb.urlPhoto,
+                        label = photoDb.label
+                    )
+                },
+                surface = entry.key.surface,
+                rooms = entry.key.rooms,
+                bathrooms = entry.key.bathrooms,
+                bedrooms = entry.key.bedrooms,
+                description = entry.key.description,
+                address = entry.key.address,
+                status = entry.key.status,
+                amenities = entry.key.amenities,
+                latitude = entry.key.latitude,
+                longitude = entry.key.longitude,
+                agentId = entry.key.realEstateAgentId,
+                dateCreated = entry.key.dateCreated,
+                dateOfSale = entry.key.dateOfSale
+            )
+        }
     }
 
     fun RealEstateAgentDb.toRealEstateAgent(): RealEstateAgent {
@@ -246,7 +273,7 @@ class Repository(
     fun Photo.toPhotoDb(realEstateId: Long): PhotoDb {
         return  PhotoDb(
             id = this.id,
-            realEstateId = realEstateId.toString(),
+            realEstateId = realEstateId,
             urlPhoto = this.urlPhoto,
             label = this.label
         )

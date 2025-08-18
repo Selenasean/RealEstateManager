@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.Instant
-import java.util.Date
 import java.util.UUID
 
 class CreateEditViewModel(
@@ -41,21 +40,13 @@ class CreateEditViewModel(
         val KEY_PHOTO_CHANGES = "KEY_PHOTO_CHANGES"
     }
 
-
+    //Boolean to know if it's a creation or an update
     private val _isCreation: Boolean = realEstateId == null
-    val isCreation= _isCreation
-    //to stock id's photo deleted
-    private val photosDeleted: MutableList<String> = mutableListOf()
-    //to stock photos created
-    private val photosCreated: MutableList<Photo> = mutableListOf()
-    //to stock photos whose label has been changed
-    private val photosLabelUpdated: MutableList<Photo> = mutableListOf()
+    val isCreation = _isCreation
 
     init {
         if (realEstateId != null) {
-            //on update fragment : state deja existant
-            Log.i("init createVM", realEstateId)
-            //if there is nothing in savedStateHandle means it the first time that the VM is created
+            //if there is nothing in savedStateHandle means it's the first time that the VM is created
             if (!savedStateHandle.contains(KEY_STATE)) {
                 viewModelScope.launch {
                     val realEstate = repository.fetchOneRealEstate(realEstateId)
@@ -90,7 +81,6 @@ class CreateEditViewModel(
     //to get a list of agent's name
     suspend fun fetchAgents(): List<RealEstateAgent> {
         return repository.fetchAllAgents()
-
     }
 
     //state of data stored in Bundle
@@ -115,32 +105,34 @@ class CreateEditViewModel(
     fun saveRealEstate() {
         val currentState = _savedRealEstateMutableStateFlow.value
         val currentPhotosChanges = _photosChangedFlow.value
-        if(_isCreation){
-            if (isPositionExist()) {
-                val realEstateToCreate = RealEstateToCreate(
-                    type = currentState.type!!,
-                    photos = currentPhotosChanges.created,
-                    address = currentState.address!!.trim(),
-                    city = currentState.city!!.trim(),
-                    price = currentState.price!!.toFloat(),
-                    surface = currentState.surface!!.toInt(),
-                    rooms = currentState.rooms!!.toInt(),
-                    bedrooms = currentState.bedrooms!!.toInt(),
-                    bathrooms = currentState.bathrooms!!.toInt(),
-                    description = currentState.description!!,
-                    amenities = currentState.amenities,
-                    agentId = currentState.agent!!.id
-                )
+        if (_isCreation) {
 
-                viewModelScope.launch {
-                    repository.createRealEstate(realEstateToCreate)
+            val realEstateToCreate = RealEstateToCreate(
+                type = currentState.type!!,
+                photos = currentPhotosChanges.created,
+                address = currentState.address!!.trim(),
+                city = currentState.city!!.trim(),
+                price = currentState.price!!.toFloat(),
+                surface = currentState.surface!!.toInt(),
+                rooms = currentState.rooms!!.toInt(),
+                bedrooms = currentState.bedrooms!!.toInt(),
+                bathrooms = currentState.bathrooms!!.toInt(),
+                description = currentState.description!!,
+                amenities = currentState.amenities,
+                agentId = currentState.agent!!.id
+            )
+
+            viewModelScope.launch {
+                val result = repository.createRealEstate(realEstateToCreate)
+                when (result) {
+                    SaveResult.SUCCESS -> _isCreatedFlow.trySend(CreationEvents.isCreated)
+                    SaveResult.ERROR -> _isCreatedFlow.trySend(CreationEvents.failure)
                 }
-
-                _isCreatedFlow.trySend(CreationEvents.isCreated)
             }
-        }else{
 
-            if(isPositionExist() && realEstateId != null){
+        } else {
+
+            if (realEstateId != null) {
                 val realEstateToUpdate = RealEstateToUpdate(
                     id = this.realEstateId.toLong(),
                     type = currentState.type!!,
@@ -168,10 +160,13 @@ class CreateEditViewModel(
                 )
 
                 viewModelScope.launch {
-                    val result = repository.updateRealEstate(realEstateToUpdate, realEstateId.toLong())
-                    if(result == SaveResult.SUCCESS){
-                        _isCreatedFlow.trySend(CreationEvents.isUpdated)
+                    val result =
+                        repository.updateRealEstate(realEstateToUpdate, realEstateId.toLong())
+                    when (result) {
+                        SaveResult.SUCCESS -> _isCreatedFlow.trySend(CreationEvents.isUpdated)
+                        SaveResult.ERROR -> _isCreatedFlow.trySend(CreationEvents.failure)
                     }
+
                 }
             }
 
@@ -184,12 +179,12 @@ class CreateEditViewModel(
     /**
      * Boolean to know if address enter by user exist, if so means also there is an internet connectivity
      */
-    fun isPositionExist(): Boolean {
-        if (connectivityChecker.isInternetAvailable()) {
-            return repository.isPositionExist(_savedRealEstateMutableStateFlow.value.address.toString())
-        }
-        return false
-    }
+//    fun isPositionExist(): Boolean {
+//        if (connectivityChecker.isInternetAvailable()) {
+//            return repository.isPositionExist(_savedRealEstateMutableStateFlow.value.address.toString())
+//        }
+//        return false
+//    }
 
     /**
      * To update the type of real estate
@@ -290,7 +285,7 @@ class CreateEditViewModel(
         Log.i("createVM", "amenities :${_savedRealEstateMutableStateFlow.value}")
     }
 
-    fun updateStatus(status: Status){
+    fun updateStatus(status: Status) {
         val currentState = _savedRealEstateMutableStateFlow.value
         _savedRealEstateMutableStateFlow.value = currentState.copy(status = status)
         Log.i("createVM", "status :${_savedRealEstateMutableStateFlow.value}")
@@ -329,11 +324,11 @@ class CreateEditViewModel(
 
             }
         //add photo created to the photoCreated list
-        val photos = selectedPhotos.map{ photoSelectedViewState ->
+        val photos = selectedPhotos.map { photoSelectedViewState ->
             photoSelectedViewState.toPhoto()
         }
-        _photosChangedFlow.update{ state ->
-          state.copy(created = state.created + photos)
+        _photosChangedFlow.update { state ->
+            state.copy(created = state.created + photos)
         }
 
         _savedRealEstateMutableStateFlow.value =
@@ -379,7 +374,7 @@ class CreateEditViewModel(
             }
 
         }
-        val photoUpdated = photosState.first{ photo ->
+        val photoUpdated = photosState.first { photo ->
             photo.id == id
         }
         _photosChangedFlow.update { state ->
@@ -405,10 +400,10 @@ class CreateEditViewModel(
         photos.add(0, photoTaken)
 
         //add photo created by using camera in photoCreated list
-        _photosChangedFlow.update{ state ->
+        _photosChangedFlow.update { state ->
             state.copy(created = state.created + photoTaken.toPhoto())
         }
-        Log.i("VM",  "$photoTaken")
+        Log.i("VM", "$photoTaken")
 
         _savedRealEstateMutableStateFlow.value = currentState.copy(photos = photos)
         Log.i("createVM", "photo taken :${_savedRealEstateMutableStateFlow.value}")
@@ -417,15 +412,13 @@ class CreateEditViewModel(
     /**
      * Update date of sale
      */
-    fun updateDateOfSale(date: Instant?){
-        //TODO: instant depuis ui
-        val currentState= _savedRealEstateMutableStateFlow.value
-
+    fun updateDateOfSale(date: Instant?) {
+        val currentState = _savedRealEstateMutableStateFlow.value
         _savedRealEstateMutableStateFlow.value = currentState.copy(dateOfSale = date)
     }
 
-    //EXTENSION FUNCTION TO MAP HERE
-    fun PhotoSelectedViewState.toPhoto(): Photo{
+    // MAPPING FUNCTION HERE
+    fun PhotoSelectedViewState.toPhoto(): Photo {
         return Photo(
             id = this.id,
             urlPhoto = this.uri,

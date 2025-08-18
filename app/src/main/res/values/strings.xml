@@ -82,6 +82,9 @@
     <string name="status_tv">Sales status</string>
     <string name="date_of_sale">Select the date of sale</string>
     <string name="updated_succeed">The real estate has been updated</string>
+    <string name="apply_filter">Apply filter</string>
+    <string name="failure">Address does not exist, please enter a correct address</string>
+    <string name="clear_filter">Clear filter</string>
 
 
 </resources>

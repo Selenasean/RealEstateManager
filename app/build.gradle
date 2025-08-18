@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'com.google.devtools.ksp'
     id 'kotlin-parcelize'
+    id("com.google.protobuf")
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
@@ -81,4 +82,10 @@ dependencies {
     //GOOGLE MAPS
     implementation 'com.google.android.gms:play-services-maps:19.2.0'
     implementation 'com.google.android.gms:play-services-location:21.3.0'
+
+    //DATASTORE
+    implementation "androidx.datastore:datastore-preferences:1.1.7"
+//    implementation "androidx.datastore:datastore-preferences-core:1.1.7"
+
 }
+

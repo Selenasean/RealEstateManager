@@ -13,12 +13,10 @@ class ConnectivityChecker(
     /**
      * Vérification de la connexion réseau
      * NOTE : NE PAS SUPPRIMER, A MONTRER DURANT LA SOUTENANCE
-     *
      * @param context
      * @return
      */
     fun isInternetAvailable(): Boolean {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val activeNetwork = connectivityManager.activeNetwork
             val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false

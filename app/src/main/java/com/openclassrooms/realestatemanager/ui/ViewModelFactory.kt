@@ -8,13 +8,20 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.openclassrooms.realestatemanager.AppApplication
+import com.openclassrooms.realestatemanager.data.FilterRepository
 import com.openclassrooms.realestatemanager.ui.create_edit.CreateEditViewModel
+import com.openclassrooms.realestatemanager.ui.filter.FilterViewModel
 import com.openclassrooms.realestatemanager.ui.list_map_details.ListMapDetailViewModel
 import com.openclassrooms.realestatemanager.utils.internetConnectivity.ConnectivityChecker
 
+/**
+ * ViewModelFactory
+ * To create and initialize ViewModels with custom parameters
+ * To enhance code organisation and testability
+ * To promoting separation of concerns and improve dependence injection
+ */
 
 class ViewModelFactory : ViewModelProvider.Factory {
-
 
     companion object {
         private var factory: ViewModelFactory? = null
@@ -44,9 +51,9 @@ class ViewModelFactory : ViewModelProvider.Factory {
             return ListMapDetailViewModel(
                 application.repository,
                 savedStateHandle,
-                application.locationRepository
+                application.locationRepository,
+                application.filterRepository
             ) as T
-            
         }
         if (modelClass.isAssignableFrom(CreateEditViewModel::class.java)) {
             val realEstateId: String? = savedStateHandle["REAL_ESTATE_ID"]
@@ -55,7 +62,15 @@ class ViewModelFactory : ViewModelProvider.Factory {
                 realEstateId,
                 application.repository,
                 savedStateHandle,
-                connectivityChecker) as T
+                connectivityChecker
+            ) as T
+        }
+        if (modelClass.isAssignableFrom(FilterViewModel::class.java)) {
+            return FilterViewModel(
+                application.repository,
+                savedStateHandle,
+                application.filterRepository
+            ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

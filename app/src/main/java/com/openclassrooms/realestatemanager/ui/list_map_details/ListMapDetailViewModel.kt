@@ -8,6 +8,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.openclassrooms.realestatemanager.data.FilterRepository
 import com.openclassrooms.realestatemanager.data.Position
 import com.openclassrooms.realestatemanager.data.Repository
 import com.openclassrooms.realestatemanager.data.location.LocationRepository
@@ -34,20 +35,21 @@ import kotlinx.coroutines.launch
 class ListMapDetailViewModel(
     private val repository: Repository,
     private val saveStateHandle: SavedStateHandle,
-    private val locationRepository: LocationRepository
+    private val locationRepository: LocationRepository,
+    private val filtersRepository: FilterRepository
 ) : ViewModel() {
 
 
     //state of Pane : open or close, depending if there is id or not, to display the right fragment
     private var _detailPaneIdStateFlow: MutableStateFlow<String?> =
+
         saveStateHandle.getMutableStateFlow("ID_KEY", String())
 
     //state of realEstate position open in detail
     private var _positionStateFlow = MutableStateFlow<Position?>(null)
     val positionStateFlow = _positionStateFlow.asLiveData()
 
-
-    //Flow to be observe in UI, notifying an event
+    //Flows to be observe in UI, notifying an event
     private val _eventsFlow = Channel<ListMapDetailEvent>()
     val eventsFlow = _eventsFlow.receiveAsFlow()
 
@@ -109,10 +111,15 @@ class ListMapDetailViewModel(
     }
 
     /**
-     * get list of ItemState to observe in UI
+     * To get list of ItemState to observe in UI
      */
+    //TODO : make list filtered displayed
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val filters = filtersRepository.getFilters().flatMapLatest { filter ->
+        repository.getFilteredRealEstates(filter)
+    }
     val listState: LiveData<List<ItemState>> =
-        repository.getAllRealEstates()
+        filters
             .combine(_detailPaneIdStateFlow) { listRealEstate, idSelected ->
                 listRealEstate.map { realEstate ->
                     ItemState(
@@ -172,7 +179,9 @@ class ListMapDetailViewModel(
         _positionStateFlow.value = position
     }
 
-
+    /**
+     * To check if location exist and send an Event to get the location in UI
+     */
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     fun onLocationPermission() {
         viewModelScope.launch {
@@ -186,7 +195,7 @@ class ListMapDetailViewModel(
 
 }
 
-
+// DATA CLASSES
 /**
  * State for items on the recyclerView used on the list view
  */

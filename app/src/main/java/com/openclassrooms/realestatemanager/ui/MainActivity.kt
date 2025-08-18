@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //if its the first time MainActivity is launched, display Sliding Pane Layout
         if(savedInstanceState == null){
             replaceFragment()
         }

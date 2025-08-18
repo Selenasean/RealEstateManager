@@ -2,214 +2,274 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/standard_side_sheet"
-    style="@style/Widget.Material3.SideSheet.Modal"
+    android:id="@+id/bottom_sheet_filter"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="end"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
 
-    <!-- Side sheet content. -->
+    <!-- Bottom sheet content. -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/medium"
+        android:layout_marginTop="@dimen/medium"
         android:text="@string/filter_title"
         android:textSize="@dimen/text_size_big"
         android:textStyle="bold" />
 
-    <!--LOCATION -->
-    <LinearLayout
-        android:id="@+id/city_lyt"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_lyt_city"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/city_tv"
-            android:padding="@dimen/small"
-            app:endIconMode="clear_text"
-            app:helperTextTextColor="@color/design_default_color_error"
-            app:startIconDrawable="@drawable/map_icon">
+            android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tv_address"
+            <!--LOCATION -->
+            <LinearLayout
+                android:id="@+id/city_lyt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="@dimen/medium_plus"
-                tools:ignore="RtlSymmetry" />
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
+                android:orientation="horizontal">
 
-    <!-- TYPE -->
-    <LinearLayout
-        android:id="@+id/lyt_type"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/small"
-        android:hint="@string/type_tv"
-        android:orientation="horizontal"
-        android:padding="@dimen/small">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_input_lyt_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/city_tv"
+                    android:padding="@dimen/small"
+                    app:endIconMode="clear_text"
+                    app:helperTextTextColor="@color/design_default_color_error"
+                    app:startIconDrawable="@drawable/map_icon">
 
-        <ImageView
-            android:id="@+id/icon_type"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="@dimen/small"
-            android:contentDescription="@null"
-            android:src="@drawable/house_icon"
-            app:tint="@color/md_theme_onPrimaryContainer" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tv_city"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/medium_plus"
+                        tools:ignore="RtlSymmetry" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/type_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/type_tv"
-            android:textSize="@dimen/text_size_medium" />
-
-    </LinearLayout>
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroup_type"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/small" />
-
-    <!-- PRICE -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_lyt_pricemax"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/price_max_tv"
-            android:padding="@dimen/small"
-            app:endIconMode="clear_text"
-            app:startIconDrawable="@drawable/price_icon">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tv_pricemax"
+            <!-- TYPE -->
+            <LinearLayout
+                android:id="@+id/lyt_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:paddingStart="@dimen/medium_plus"
-                tools:ignore="RtlSymmetry" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_margin="@dimen/small"
+                android:hint="@string/type_tv"
+                android:orientation="horizontal"
+                android:padding="@dimen/small"
+                tools:ignore="UseCompoundDrawables">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_lyt_pricemin"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/price_min_tv"
-            android:padding="@dimen/small"
-            app:endIconMode="clear_text"
-            app:startIconDrawable="@drawable/price_icon">
+                <ImageView
+                    android:id="@+id/icon_type"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="@dimen/small"
+                    android:contentDescription="@null"
+                    android:src="@drawable/house_icon"
+                    app:tint="@color/md_theme_onPrimaryContainer" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tv_pricemin"
+                <TextView
+                    android:id="@+id/type_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/type_tv"
+                    android:textSize="@dimen/text_size_medium" />
+
+            </LinearLayout>
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:paddingStart="@dimen/medium_plus"
-                tools:ignore="RtlSymmetry" />
+                android:layout_margin="@dimen/small">
 
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
 
-    <!-- SURFACE -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            </com.google.android.material.chip.ChipGroup>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_lyt_surfacemax"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/surface_max_tv"
-            android:padding="@dimen/small"
-            app:endIconMode="clear_text"
-            app:startIconDrawable="@drawable/surface_icon">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tv_surfacemax"
+            <!-- PRICE -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:paddingStart="@dimen/medium_plus"
-                tools:ignore="RtlSymmetry" />
+                android:orientation="horizontal">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_input_lyt_pricemax"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/price_max_tv"
+                    android:padding="@dimen/small"
+                    app:endIconMode="clear_text"
+                    app:startIconDrawable="@drawable/price_icon">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_lyt_surfacemin"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/surface_min_tv"
-            android:padding="@dimen/small"
-            app:endIconMode="clear_text"
-            app:startIconDrawable="@drawable/surface_icon">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tv_pricemax"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:paddingStart="@dimen/medium_plus"
+                        tools:ignore="RtlSymmetry" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tv_surfacemin"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_input_lyt_pricemin"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/price_min_tv"
+                    android:padding="@dimen/small"
+                    app:endIconMode="clear_text"
+                    app:startIconDrawable="@drawable/price_icon">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tv_pricemin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:paddingStart="@dimen/medium_plus"
+                        tools:ignore="RtlSymmetry" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <!-- SURFACE -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:paddingStart="@dimen/medium_plus"
-                tools:ignore="RtlSymmetry" />
+                android:orientation="horizontal">
 
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_input_lyt_surfacemax"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/surface_max_tv"
+                    android:padding="@dimen/small"
+                    app:endIconMode="clear_text"
+                    app:startIconDrawable="@drawable/surface_icon">
 
-    <!-- AMENITIES -->
-    <LinearLayout
-        android:id="@+id/lyt_amenities"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/small"
-        android:hint="@string/amenities_tv"
-        android:orientation="horizontal"
-        android:padding="@dimen/small"
-        tools:ignore="UseCompoundDrawables">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tv_surfacemax"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:paddingStart="@dimen/medium_plus"
+                        tools:ignore="RtlSymmetry" />
 
-        <ImageView
-            android:id="@+id/icon_amenities"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="@dimen/small"
-            android:contentDescription="@null"
-            android:src="@drawable/amenities_icon"
-            app:tint="@color/md_theme_onPrimaryContainer" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/amenities_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/amenities_tv"
-            android:textSize="@dimen/text_size_medium" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_input_lyt_surfacemin"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/surface_min_tv"
+                    android:padding="@dimen/small"
+                    app:endIconMode="clear_text"
+                    app:startIconDrawable="@drawable/surface_icon">
 
-    </LinearLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tv_surfacemin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:paddingStart="@dimen/medium_plus"
+                        tools:ignore="RtlSymmetry" />
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroup_amenities"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/small" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
 
+            <!-- STATUS -->
+            <LinearLayout
+                android:id="@+id/lyt_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/small"
+                android:hint="@string/amenities_tv"
+                android:orientation="horizontal"
+                android:padding="@dimen/small"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:id="@+id/icon_status"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/small"
+                    android:contentDescription="@null"
+                    android:src="@drawable/status_icon"
+                    app:tint="@color/md_theme_onPrimaryContainer" />
+
+                <TextView
+                    android:id="@+id/amenities_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/status_tv"
+                    android:textSize="@dimen/text_size_medium" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/small"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_sold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checkable="true"
+                        android:text="@string/sold" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_for_sale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checkable="true"
+                        android:text="@string/for_sale" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+            <Button
+                android:id="@+id/apply_filter_btn"
+                style="@style/Widget.Material3.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/apply_filter"
+                android:textAllCaps="true"
+                android:layout_marginEnd="@dimen/medium"/>
+
+                <Button
+                    android:id="@+id/clear_filter_btn"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/clear_filter"
+                    android:textAllCaps="true" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>
+
 
 
 

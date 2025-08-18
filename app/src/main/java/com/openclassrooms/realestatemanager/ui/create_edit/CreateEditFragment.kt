@@ -21,6 +21,8 @@ import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.openclassrooms.realestatemanager.BuildConfig
@@ -39,7 +41,6 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import kotlin.random.Random
 
 class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
 
@@ -48,9 +49,9 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         const val CLASS_NAME = "CREATE_FRAGMENT"
         const val REAL_ESTATE_ID = "REAL_ESTATE_ID"
 
-        fun newInstance(id: String?) = CreateEditFragment().apply{
+        fun newInstance(id: String?) = CreateEditFragment().apply {
             //put id in argument within bundle
-            arguments = bundleOf( REAL_ESTATE_ID to id)
+            arguments = bundleOf(REAL_ESTATE_ID to id)
         }
 
     }
@@ -58,7 +59,7 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
     private val viewModel by viewModels<CreateEditViewModel> { ViewModelFactory.Companion.getInstance() }
     private lateinit var adapter: PhotosAdapter
     private var currentPhotoUri: Uri? = null
-    private lateinit var typeAdapter : ArrayAdapter<String>
+    private lateinit var typeAdapter: ArrayAdapter<String>
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,11 +67,14 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         val binding = FragmentCreateBinding.bind(view)
         val context = binding.root.context
 
+        (dialog as BottomSheetDialog).behavior.state = BottomSheetBehavior.STATE_EXPANDED
+
         typeAdapter = ArrayAdapter(
             requireContext(),
-            R.layout.dropdown_menu_create,
+            R.layout.dropdown_menu,
             BuildingType.entries.map { ContextCompat.getString(context, it.displayName) }
         )
+
 
         //settings for dropDown menus, viewModel & recyclerView
         dropDownMenusSettings(binding, context)
@@ -79,48 +83,17 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
 
         //create a realEstate
         binding.saveBtn.setOnClickListener {
-            if(viewModel.isPositionExist()){
-                viewModel.saveRealEstate()
-                Log.i("CreateFragment", "onViewCreated:  create RealEstate")
-                binding.textInputLytAddress.helperText = null
-            }else{
-                binding.textInputLytAddress.helperText =
-                    ContextCompat.getString(context, R.string.address_invalid)
-            }
-
+            viewModel.saveRealEstate()
+            Log.i("CreateFragment", "onViewCreated:  create RealEstate")
+            binding.textInputLytAddress.helperText = null
         }
+
         //observe events to close creation dialog after real estate's creation succeed
         //or to notify if there is internet
-        observeAsEvents(viewModel.isCreatedFlow) { event ->
-            when (event) {
-
-                CreationEvents.isCreated -> {
-                    Toast.makeText(requireContext(), R.string.creation_succeed, Toast.LENGTH_SHORT).show()
-                    dismiss()
-                }
-
-                CreationEvents.isInternetAvailable -> Toast.makeText(requireContext(), R.string.no_internet,
-                    Toast.LENGTH_SHORT).show()
-
-                CreationEvents.isUpdated -> {
-                    Toast.makeText(requireContext(), R.string.updated_succeed, Toast.LENGTH_SHORT).show()
-                    dismiss()
-                }
-            }
-        }
+        creationEventsResult(binding)
 
         //inputs listeners
-        binding.tvAddress.doAfterTextChanged {
-                viewModel.updateAddress(it.toString())
-
-        }
-        binding.tvCity.doAfterTextChanged { viewModel.updateCity(it.toString()) }
-        binding.tvPrice.doAfterTextChanged { viewModel.updatePrice(it.toString()) }
-        binding.tvSurface.doAfterTextChanged { viewModel.updateSurface(it.toString()) }
-        binding.tvRooms.doAfterTextChanged { viewModel.updateRooms(it.toString()) }
-        binding.tvBedrooms.doAfterTextChanged { viewModel.updateBedrooms(it.toString()) }
-        binding.tvBathrooms.doAfterTextChanged { viewModel.updateBathrooms(it.toString()) }
-        binding.tvDescription.doAfterTextChanged { viewModel.updateDescription(it.toString()) }
+        inputsListeners(binding)
 
         //photo picker media & listener
         val pickMedia =
@@ -131,7 +104,7 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
                         context.contentResolver.takePersistableUriPermission(uri, flag)
                     }
                     viewModel.addPhotoPicker(uris)
-
+                    
                 }
             }
 
@@ -168,13 +141,74 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
 
     }
 
+    private fun inputsListeners(binding: FragmentCreateBinding) {
+        binding.tvAddress.doAfterTextChanged {
+            viewModel.updateAddress(it.toString())
+
+        }
+        binding.tvCity.doAfterTextChanged { viewModel.updateCity(it.toString()) }
+        binding.tvPrice.doAfterTextChanged { viewModel.updatePrice(it.toString()) }
+        binding.tvSurface.doAfterTextChanged { viewModel.updateSurface(it.toString()) }
+        binding.tvRooms.doAfterTextChanged { viewModel.updateRooms(it.toString()) }
+        binding.tvBedrooms.doAfterTextChanged { viewModel.updateBedrooms(it.toString()) }
+        binding.tvBathrooms.doAfterTextChanged { viewModel.updateBathrooms(it.toString()) }
+        binding.tvDescription.doAfterTextChanged { viewModel.updateDescription(it.toString()) }
+        binding.chipForSale.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                viewModel.updateStatus(Status.FOR_SALE)
+                binding.datePickerLyt.visibility = View.GONE
+                viewModel.updateDateOfSale(null)
+            }
+        }
+        binding.chipSold.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                viewModel.updateStatus(Status.SOLD)
+                binding.datePickerLyt.visibility = View.VISIBLE
+            }
+            Log.i("chipSold", "chip sold : $isChecked")
+        }
+    }
+
+    private fun creationEventsResult(binding: FragmentCreateBinding) {
+        observeAsEvents(viewModel.isCreatedFlow) { event ->
+            when (event) {
+
+                CreationEvents.isCreated -> {
+                    Toast.makeText(requireContext(), R.string.creation_succeed, Toast.LENGTH_SHORT)
+                        .show()
+                    dismiss()
+                }
+
+                CreationEvents.isInternetAvailable -> Toast.makeText(
+                    requireContext(), R.string.no_internet,
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                CreationEvents.isUpdated -> {
+                    Toast.makeText(requireContext(), R.string.updated_succeed, Toast.LENGTH_SHORT)
+                        .show()
+                    dismiss()
+                }
+
+                CreationEvents.failure -> {
+                    binding.textInputLytAddress.helperText =
+                        ContextCompat.getString(requireContext(), R.string.address_invalid)
+
+                    Toast.makeText(requireContext(), R.string.failure, Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+            }
+        }
+    }
+
     private fun showDatePicker(binding: FragmentCreateBinding) {
         val calendar = Calendar.getInstance()
         val datePickerDialog = DatePickerDialog(
             requireContext(),
-            {datePicker, year: Int, month: Int, day: Int ->
+            { datePicker, year: Int, month: Int, day: Int ->
                 val selectedDate = Calendar.getInstance()
-                selectedDate.set(year, month,day)
+                selectedDate.set(year, month, day)
                 //format the selected date into a string
                 val formattedDate = dateFormat.format(selectedDate.time)
                 //display the selected date
@@ -193,12 +227,16 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
     /**
      * Display recyclerView of photos or not depending on the size of the photo's list
      */
-    private fun render(it: RealEstateToSaveState, binding: FragmentCreateBinding, context: Context) {
-        if(!viewModel.isCreation) {
+    private fun render(
+        it: RealEstateToSaveState,
+        binding: FragmentCreateBinding,
+        context: Context
+    ) {
+        if (!viewModel.isCreation) {
             binding.titleTv.text = getString(R.string.update_title)
             binding.lytStatus.visibility = View.VISIBLE
             binding.datePickerLyt.visibility = View.VISIBLE
-        }else{
+        } else {
             binding.lytStatus.visibility = View.GONE
             binding.datePickerLyt.visibility = View.GONE
         }
@@ -206,7 +244,7 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         binding.saveBtn.isEnabled = it.isInputsCompleted()
 
         //render type
-        if(it.type != null && binding.tvType.text.toString() != ContextCompat.getString(context, it.type.displayName)){
+        if (it.type != null && binding.tvType.text.toString() != it.type.name) {
             binding.tvType.setText(ContextCompat.getString(context, it.type.displayName), false)
         }
         //render photo
@@ -217,51 +255,52 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
             adapter.submitList(it.photos)
         }
         //render address, city
-        if( binding.tvAddress.text.toString() != it.address){
+        if (binding.tvAddress.text.toString() != it.address) {
             binding.tvAddress.setText(it.address)
         }
-        if(binding.tvCity.text.toString() != it.city){
+        if (binding.tvCity.text.toString() != it.city) {
             binding.tvCity.setText(it.city)
         }
         //render price
-        if(binding.tvPrice.text.toString() != it.price){
+        if (binding.tvPrice.text.toString() != it.price) {
             binding.tvPrice.setText(it.price)
         }
         //render surface
-        if(binding.tvSurface.text.toString() != it.surface){
+        if (binding.tvSurface.text.toString() != it.surface) {
             binding.tvSurface.setText(it.surface)
         }
         //render rooms
-        if(binding.tvRooms.text.toString() != it.rooms){
+        if (binding.tvRooms.text.toString() != it.rooms) {
             binding.tvRooms.setText(it.rooms)
         }
         //render bedrooms
-        if(binding.tvBedrooms.text.toString() != it.bedrooms){
+        if (binding.tvBedrooms.text.toString() != it.bedrooms) {
             binding.tvBedrooms.setText(it.bedrooms)
         }
         //render bathrooms
-        if (binding.tvBathrooms.text.toString() != it.bathrooms){
+        if (binding.tvBathrooms.text.toString() != it.bathrooms) {
             binding.tvBathrooms.setText(it.bathrooms)
         }
         //render description
-        if(binding.tvDescription.text.toString() != it.description){
+        if (binding.tvDescription.text.toString() != it.description) {
             binding.tvDescription.setText(it.description)
         }
         //render amenities
         renderAmenitiesChips(binding, context, it.amenities)
 
         //render agent's name
-        if(it.agent != null && binding.tvAgent.text.toString() != it.agent.name){
-            binding.tvAgent.setText(it.agent.name, false )
+        if (it.agent != null && binding.tvAgent.text.toString() != it.agent.name) {
+            binding.tvAgent.setText(it.agent.name, false)
         }
         //render status
-        if(it.status == Status.FOR_SALE ) binding.datePickerLyt.visibility = View.GONE else View.VISIBLE
+        if (it.status == Status.FOR_SALE) binding.datePickerLyt.visibility =
+            View.GONE else View.VISIBLE
         renderStatusChips(binding, it.status)
 
         //render dateOfSale
-        if(it.dateOfSale == null){
+        if (it.dateOfSale == null) {
             binding.datePickedTv.text = ""
-        }else{
+        } else {
             val formatter = dateFormat.format(it.dateOfSale.toEpochMilli())
             binding.datePickedTv.text = formatter
         }
@@ -295,7 +334,11 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
     /**
      * To display amenities chips and listener
      */
-    private fun renderAmenitiesChips(binding: FragmentCreateBinding, context: Context, amenitiesSelected: List<Amenity>) {
+    private fun renderAmenitiesChips(
+        binding: FragmentCreateBinding,
+        context: Context,
+        amenitiesSelected: List<Amenity>
+    ) {
         val chipsGroup = binding.chipGroup
         chipsGroup.removeAllViews()
 
@@ -304,8 +347,6 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
                 .inflate(R.layout.chip_layout, chipsGroup, false) as Chip
             chip.text = ContextCompat.getString(context, amenity.displayName)
 
-            //attributes id to each chip
-            chip.id = Random.Default.nextInt()
             chipsGroup.addView(chip)
 
             chip.isChecked = amenitiesSelected.contains(amenity)
@@ -319,35 +360,9 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
     }
 
 
-    private fun renderStatusChips(binding: FragmentCreateBinding, statusSelected: Status ){
-
-        val chipGroup =binding.chipGroupStatus
-        val chipSold = binding.chipSold
-        val chipForSale = binding.chipForSale
-
-        chipGroup.removeAllViews()
-
-        chipGroup.addView(chipForSale)
-        chipGroup.addView(chipSold)
-
-        chipForSale.isChecked = statusSelected == Status.FOR_SALE
-        chipSold.isChecked = statusSelected == Status.SOLD
-
-        //listeners
-        chipForSale.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked) {
-                viewModel.updateStatus(Status.FOR_SALE)
-                binding.datePickerLyt.visibility = View.GONE
-                viewModel.updateDateOfSale(null)
-            }
-        }
-       chipSold.setOnCheckedChangeListener { _, isChecked ->
-           if (isChecked){
-               viewModel.updateStatus(Status.SOLD)
-               binding.datePickerLyt.visibility = View.VISIBLE
-           }
-           Log.i("chipSold", "chip sold : $isChecked")
-        }
+    private fun renderStatusChips(binding: FragmentCreateBinding, statusSelected: Status) {
+        binding.chipForSale.isChecked = statusSelected == Status.FOR_SALE
+        binding.chipSold.isChecked = statusSelected == Status.SOLD
     }
 
     /**
@@ -371,7 +386,7 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
             val agents = viewModel.fetchAgents()
             val agentAdapter = ArrayAdapter(
                 requireContext(),
-                R.layout.dropdown_menu_create,
+                R.layout.dropdown_menu,
                 agents.map { agent -> agent.name }
             )
             tvAgent.setAdapter(agentAdapter)
@@ -382,13 +397,12 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         }
     }
 
-    private fun typeAdapterBuilder(typeTv : AutoCompleteTextView, context: Context){
+    private fun typeAdapterBuilder(typeTv: AutoCompleteTextView, context: Context) {
         typeAdapter = ArrayAdapter(
-            requireContext(),
-            R.layout.dropdown_menu_create,
-            BuildingType.entries.map { ContextCompat.getString(context, it.displayName) }
+            context,
+            R.layout.dropdown_menu,
+            BuildingType.entries.map { it.name }
         )
         typeTv.setAdapter(typeAdapter)
     }
-
 }

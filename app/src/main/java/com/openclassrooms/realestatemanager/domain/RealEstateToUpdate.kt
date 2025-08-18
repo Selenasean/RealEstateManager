@@ -7,7 +7,7 @@ import com.openclassrooms.realestatemanager.data.model.Status
 import kotlinx.parcelize.Parcelize
 import java.time.Instant
 
-class RealEstateToUpdate (
+data class RealEstateToUpdate (
     val id: Long,
     val type: BuildingType,
     val photos: List<Photo>,

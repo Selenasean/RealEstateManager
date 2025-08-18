@@ -14,7 +14,7 @@ import androidx.room.PrimaryKey
 data class PhotoDb(
     @PrimaryKey val id: String,
 
-    val realEstateId: String,//TODO: to long
+    val realEstateId: Long,
     val urlPhoto : String,
     val label: String
 )
