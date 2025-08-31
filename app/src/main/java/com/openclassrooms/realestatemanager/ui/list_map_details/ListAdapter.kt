@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import coil.load
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.RealestateItemBinding
+import com.openclassrooms.realestatemanager.utils.CurrencyCode
+import com.openclassrooms.realestatemanager.utils.Utils
 
 
 class ListAdapter(private val clickedListener: (id: String) -> Unit) :
@@ -68,7 +70,8 @@ class ListAdapter(private val clickedListener: (id: String) -> Unit) :
             }
             binding.cityTv.text = realestate.city
             binding.buildingTypeTv.text = ContextCompat.getString(context, realestate.type.displayName)
-            binding.priceTv.text = realestate.priceTag.toString().plus("€")
+            binding.priceTv.text = Utils.priceFormatter(realestate.priceTag, CurrencyCode.EURO)
+//                realestate.priceTag.toString().plus("€")
             if (realestate.photos.isNotEmpty()) {
                 binding.imageRealestate.load(realestate.photos[0].urlPhoto) {
                     crossfade(true)

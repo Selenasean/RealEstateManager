@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.filter
 
+import android.os.Build
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
@@ -31,12 +32,13 @@ class FilterViewModel(
 
     init {
         Log.i("init", "state: ${savedStateHandle.get<FilterState>(STATE_FILTER)} ")
-        if (!savedStateHandle.contains(STATE_FILTER)) {
+        if (!(savedStateHandle.contains(STATE_FILTER))) {
             //first creation of the VM
             viewModelScope.launch {
                 savedStateHandle[STATE_FILTER] = filterRepository.getFilters().first().toFilterState()
-                Log.i("init", "ça passe ")
+                Log.i("init", "state2: ${savedStateHandle.get<FilterState>(STATE_FILTER)} ")
             }
+
         }
     }
 
@@ -50,8 +52,10 @@ class FilterViewModel(
      * To apply filters selected by user
      */
    fun applyFilters(){
+        Log.i("applyfilter", "applyFilters: ${state.value?.toFilters()} ")
         viewModelScope.launch {
             filterRepository.setFilters(_state.value.toFilters())
+
         }
     }
 

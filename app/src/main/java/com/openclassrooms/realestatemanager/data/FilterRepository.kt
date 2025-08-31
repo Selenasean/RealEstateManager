@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.data
 
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -16,12 +17,13 @@ import kotlinx.coroutines.flow.update
 class FilterRepository(private val dataStore: DataStore<Preferences>) {
 
 
-    fun getFilters(): Flow<Filters> {
+    fun getFilters(): Flow<Filters>{
         return dataStore.data.map { preferences ->
+            Log.i("getFilters", "getFilters status: ${preferences[Keys.STATUS]} ")
             Filters(
                 city = preferences[Keys.CITY],
                 type = preferences[Keys.BUILDING_TYPE]?.split(",")?.mapNotNull { stringType ->
-                    BuildingType.entries.firstOrNull { type -> type.name == stringType }
+                    BuildingType.entries.firstOrNull { type -> type.name == stringType}
                 } ?: emptyList(),
                 priceMax = preferences[Keys.PRICE_MAX],
                 priceMin = preferences[Keys.PRICE_MIN],
@@ -34,6 +36,7 @@ class FilterRepository(private val dataStore: DataStore<Preferences>) {
 
         }
     }
+
 
     suspend fun setFilters(filters: Filters) {
         dataStore.edit { preferences ->

@@ -12,3 +12,5 @@ data class Filters(
     val surfaceMax: Int?,
     val status: Status?,
 )
+
+

@@ -62,10 +62,10 @@ object Utils {
         }
 
     @JvmStatic
-    fun instantToDate(instant: Instant): String {
+    fun instantToDate(instant: Instant, zoneId: ZoneId = ZoneId.systemDefault()): String {
         val FORMAT_DATE = "dd/MM/yyyy"
         val formatter = DateTimeFormatter.ofPattern(FORMAT_DATE)
-        val date = LocalDate.ofInstant(instant, ZoneId.systemDefault())
+        val date = LocalDate.ofInstant(instant, zoneId)
         return date.format(formatter)
     }
 }
