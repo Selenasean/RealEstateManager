@@ -11,4 +11,15 @@ data class Filters(
     val surfaceMin : Int?,
     val surfaceMax: Int?,
     val status: Status?,
-)
+){
+    fun isNoFilters(): Boolean{
+        return city == null &&
+                type.isEmpty() &&
+                priceMin == null &&
+                priceMax == null &&
+                surfaceMin == null &&
+                surfaceMax== null &&
+                status == null
+    }
+}
+

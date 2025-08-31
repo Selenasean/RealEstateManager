@@ -34,7 +34,7 @@ interface RealEstateDao {
 
     @Query("SELECT * FROM realEstates LEFT JOIN photos ON realEstates.id = photos.realEstateId WHERE " +
             "(:city IS NULL OR city LIKE '%' || :city || '%' ) AND " +
-//            "(:type IS NULL OR type IN (:type)) AND " +
+            "(type IN (:type)) AND " +
             "(:minPrice IS NULL OR price >= :minPrice) AND " +
             "(:maxPrice IS NULL OR price <= :maxPrice) AND " +
             "(:minSurface IS NULL OR surface >= :minSurface) AND " +
@@ -42,7 +42,7 @@ interface RealEstateDao {
             "(:status IS NULL OR status = :status)")
     fun getRealEstatesFiltered(
         city: String?,
-//        type: List<BuildingType>,
+        type: List<BuildingType>,
         minPrice: Int?,
         maxPrice: Int?,
         minSurface: Int?,

@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.ui.list_map_details
 
 
 import android.Manifest
+import android.util.Log
 import androidx.annotation.RequiresPermission
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
@@ -115,11 +116,17 @@ class ListMapDetailViewModel(
      */
     //TODO : make list filtered displayed
     @OptIn(ExperimentalCoroutinesApi::class)
-    val filters = filtersRepository.getFilters().flatMapLatest { filter ->
-        repository.getFilteredRealEstates(filter)
+    val listRealEstates = filtersRepository.getFilters().flatMapLatest { filter ->
+        if(filter.isNoFilters()){
+            repository.getAllRealEstates(null)
+        }else{
+            repository.getAllRealEstates(filter)
+        }
+
     }
+
     val listState: LiveData<List<ItemState>> =
-        filters
+        listRealEstates
             .combine(_detailPaneIdStateFlow) { listRealEstate, idSelected ->
                 listRealEstate.map { realEstate ->
                     ItemState(
@@ -150,7 +157,7 @@ class ListMapDetailViewModel(
      * To get list of realEstate with Positions
      */
     val mapList: LiveData<List<MapState>> =
-        repository.getAllRealEstates()
+       listRealEstates
             .combine(_detailPaneIdStateFlow) { realEstateList, idSelected ->
                 realEstateList.mapNotNull { realEstate ->
 

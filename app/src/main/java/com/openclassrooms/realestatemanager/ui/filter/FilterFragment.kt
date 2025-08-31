@@ -69,22 +69,31 @@ class FilterFragment: BottomSheetDialogFragment(R.layout.fragment_filter) {
         it: FilterState,
         binding: FragmentFilterBinding
     ) {
+        //city
+        if(binding.tvCity.text.toString() != it.city && it.city != null){
+            viewModel.updateCity(it.city)
+            binding.tvCity.setText(it.city)
+        }
         //type
          renderTypeChips(binding, it.type)
 
         //price
         if(binding.tvPricemin.text.toString() != it.priceMin.toString() && it.priceMin != null){
             viewModel.updatePriceMin(it.priceMin.toString())
+            binding.tvPricemin.setText(it.priceMin)
         }
         if(binding.tvPricemax.text.toString() != it.priceMax.toString() && it.priceMax != null){
             viewModel.updatePriceMax(it.priceMax.toString())
+            binding.tvPricemax.setText(it.priceMax)
         }
         //surface
         if(binding.tvSurfacemin.text.toString() != it.surfaceMin.toString() && it.surfaceMin != null){
             viewModel.updateSurfaceMin(it.surfaceMin.toString())
+            binding.tvSurfacemin.setText(it.surfaceMin)
         }
         if(binding.tvSurfacemax.text.toString() != it.surfaceMax.toString() && it.surfaceMax != null){
             viewModel.updateSurfaceMax(it.surfaceMax.toString())
+            binding.tvSurfacemax.setText(it.surfaceMax)
         }
         //status
             renderStatusChips(binding, it.status)
@@ -107,7 +116,7 @@ class FilterFragment: BottomSheetDialogFragment(R.layout.fragment_filter) {
         BuildingType.entries.forEach { type ->
             val chip = LayoutInflater.from(context)
                 .inflate(R.layout.chip_layout, chipGroup, false) as Chip
-            chip.text = ContextCompat.getString(binding.root.context, type.displayName)
+            chip.text = type.name
 
             chipGroup.addView(chip)
             chip.isChecked = typeList.contains(type)

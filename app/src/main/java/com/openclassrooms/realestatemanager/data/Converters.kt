@@ -1,8 +1,11 @@
 package com.openclassrooms.realestatemanager.data
 
 import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import com.google.gson.Gson
 import com.openclassrooms.realestatemanager.data.model.Amenity
+import com.openclassrooms.realestatemanager.data.model.BuildingType
+import com.openclassrooms.realestatemanager.data.model.Status
 import java.time.Instant
 
 class Converters {
@@ -17,10 +20,10 @@ class Converters {
     }
     
     @TypeConverter
-    fun listToJson(list : List<Amenity>?) = Gson().toJson(list)
+    fun listAmenitiesToJson(list : List<Amenity>?) = Gson().toJson(list)
 
     @TypeConverter
-    fun JsonToList(json : String) = Gson().fromJson(json, Array<Amenity>::class.java).toList()
+    fun JsonToListAmenities(json : String?) = Gson().fromJson(json, Array<Amenity>::class.java).toList()
 
 
 }
