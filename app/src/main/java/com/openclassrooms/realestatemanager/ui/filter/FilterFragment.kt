@@ -80,20 +80,20 @@ class FilterFragment: BottomSheetDialogFragment(R.layout.fragment_filter) {
         //price
         if(binding.tvPricemin.text.toString() != it.priceMin.toString() && it.priceMin != null){
             viewModel.updatePriceMin(it.priceMin.toString())
-            binding.tvPricemin.setText(it.priceMin)
+            binding.tvPricemin.setText(it.priceMin.toString())
         }
         if(binding.tvPricemax.text.toString() != it.priceMax.toString() && it.priceMax != null){
             viewModel.updatePriceMax(it.priceMax.toString())
-            binding.tvPricemax.setText(it.priceMax)
+            binding.tvPricemax.setText(it.priceMax.toString())
         }
         //surface
         if(binding.tvSurfacemin.text.toString() != it.surfaceMin.toString() && it.surfaceMin != null){
             viewModel.updateSurfaceMin(it.surfaceMin.toString())
-            binding.tvSurfacemin.setText(it.surfaceMin)
+            binding.tvSurfacemin.setText(it.surfaceMin.toString())
         }
         if(binding.tvSurfacemax.text.toString() != it.surfaceMax.toString() && it.surfaceMax != null){
             viewModel.updateSurfaceMax(it.surfaceMax.toString())
-            binding.tvSurfacemax.setText(it.surfaceMax)
+            binding.tvSurfacemax.setText(it.surfaceMax.toString())
         }
         //status
             renderStatusChips(binding, it.status)

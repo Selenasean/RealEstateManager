@@ -4,6 +4,10 @@ import android.util.Log
 import com.openclassrooms.realestatemanager.data.dao.PhotoDao
 import com.openclassrooms.realestatemanager.data.dao.RealEstateAgentDao
 import com.openclassrooms.realestatemanager.data.dao.RealEstateDao
+<<<<<<< HEAD
+import com.openclassrooms.realestatemanager.data.model.BuildingType
+=======
+>>>>>>> 8bf0f29354f3eef7575b8ca55e26e60015b301c0
 import com.openclassrooms.realestatemanager.data.model.PhotoDb
 import com.openclassrooms.realestatemanager.data.model.RealEstateAgentDb
 import com.openclassrooms.realestatemanager.data.model.RealEstateDb
@@ -44,6 +48,186 @@ class Repository(
     /**
      * Get all RealEstates
      */
+<<<<<<< HEAD
+    fun getAllRealEstates(filter: Filters): Flow<List<RealEstate>> {
+        return this.realEstateDao.getAllRealEstates(
+            city = filter.city,
+            type = filter.type.ifEmpty { BuildingType.entries },
+            minPrice = filter.priceMin,
+            maxPrice = filter.priceMax,
+            minSurface = filter.surfaceMin,
+            maxSurface = filter.surfaceMax,
+            status = filter.status
+        ).map { realEstate ->
+            realEstate.toRealEstate()
+        }
+
+    }
+
+    /**
+     * Get One RealEstate
+     * type Flow<RealEstate>
+     */
+    fun getOneRealEstates(realEstateId: String): Flow<RealEstate> {
+        return this.realEstateDao.getOneRealEstate(realEstateId.toLong())
+            .map { realEstateDb ->
+                realEstateDb.toRealEstate().first()
+            }
+
+    }
+
+
+    /**
+     * To get one particular real estate
+     * type RealEstate
+     */
+    suspend fun fetchOneRealEstate(realEstateId: String): RealEstate {
+        return this.realEstateDao.fetchOneRealEstate(realEstateId.toLong()).toRealEstate()
+            .first()
+    }
+
+
+    /**
+     * To get all agents
+     * type List<RealEstateAgent>
+     */
+    suspend fun fetchAllAgents(): List<RealEstateAgent> {
+        return this.realEstateAgentDao.fetchAllAgents().map { agent ->
+            agent.toRealEstateAgent()
+        }
+    }
+
+    /**
+     * To get one specific agent
+     * type RealEstateAgent
+     */
+    suspend fun fetchOneAgent(agentId: Long): RealEstateAgent {
+        return this.realEstateAgentDao.fetchOneAgent(agentId).toRealEstateAgent()
+    }
+
+    /**
+     * Create RealEstate in database + photos associated
+     */
+    suspend fun createRealEstate(realEstate: RealEstateToCreate): SaveResult {
+        val position = geocoderRepository.getLongLat(realEstate.address)
+        if (position == null) return SaveResult.ERROR
+
+        val realEstateCreatedId = this.realEstateDao.createRealEstate(
+            RealEstateDb(
+                type = realEstate.type,
+                price = realEstate.price,
+                name = "",
+                surface = realEstate.surface,
+                rooms = realEstate.rooms,
+                bedrooms = realEstate.bedrooms,
+                bathrooms = realEstate.bathrooms,
+                description = realEstate.description,
+                address = realEstate.address,
+                city = realEstate.city,
+                status = Status.FOR_SALE,
+                amenities = realEstate.amenities,
+                dateCreated = Instant.now(),
+                dateOfSale = null,
+                realEstateAgentId = realEstate.agentId,
+                latitude = position.latitude,
+                longitude = position.longitude
+            )
+        )
+
+        realEstate.photos.forEach { photo ->
+            this.photoDao.createPhoto(
+                PhotoDb(
+                    id = photo.id,
+                    realEstateId = realEstateCreatedId,
+                    urlPhoto = photo.urlPhoto,
+                    label = photo.label
+                )
+            )
+
+        }
+        return SaveResult.SUCCESS
+
+    }
+
+    /**
+     * To update a realEstate
+     */
+    suspend fun updateRealEstate(
+        realEstate: RealEstateToUpdate,
+        oldRealEstateId: Long
+    ): SaveResult {
+        val position = geocoderRepository.getLongLat(realEstate.address)
+        if (position == null) return SaveResult.ERROR
+        this.realEstateDao.updateRealEstate(
+            RealEstateDb(
+                id = oldRealEstateId,
+                type = realEstate.type,
+                price = realEstate.price,
+                name = "",
+                surface = realEstate.surface,
+                rooms = realEstate.rooms,
+                bedrooms = realEstate.bedrooms,
+                bathrooms = realEstate.bathrooms,
+                description = realEstate.description,
+                address = realEstate.address,
+                city = realEstate.city,
+                status = realEstate.status,
+                amenities = realEstate.amenities,
+                dateCreated = Instant.now(),
+                dateOfSale = realEstate.dateOfSale,
+                realEstateAgentId = realEstate.agentId,
+                latitude = position.latitude,
+                longitude = position.longitude
+            )
+        )
+
+        realEstate.photoChanges.deleted.forEach { photoId ->
+            this.photoDao.deleteFromId(photoId)
+        }
+        realEstate.photoChanges.updated.forEach { photo ->
+            this.photoDao.updatePhoto(photo.toPhotoDb(oldRealEstateId))
+            Log.i("repo update photo", "updateRealEstate: photo updated ")
+        }
+        realEstate.photoChanges.created.forEach { photo ->
+            this.photoDao.createPhoto(photo.toPhotoDb(oldRealEstateId))
+            Log.i("repo create photo", "create photo")
+        }
+
+        return SaveResult.SUCCESS
+    }
+
+    /**
+     * To know if localisation actually exist
+     */
+    fun isPositionExist(address: String): Boolean {
+        val position = geocoderRepository.getLongLat(address)
+        return position != null
+    }
+
+
+    // MAPPING FUNCTION HERE
+    fun RealEstateAgentDb.toRealEstateAgent(): RealEstateAgent {
+        return RealEstateAgent(
+            id = this.id,
+            name = this.name
+        )
+    }
+
+    fun Photo.toPhotoDb(realEstateId: Long): PhotoDb {
+        return PhotoDb(
+            id = this.id,
+            realEstateId = realEstateId,
+            urlPhoto = this.urlPhoto,
+            label = this.label
+        )
+    }
+}
+
+enum class SaveResult() {
+    SUCCESS,
+    ERROR
+}
+=======
     fun getAllRealEstates(filter: Filters?): Flow<List<RealEstate>> {
         if (filter == null) {
             return this.realEstateDao.getAllRealEstates().map { realEstateDbs ->
@@ -259,3 +443,4 @@ class Repository(
         SUCCESS,
         ERROR
     }
+>>>>>>> 8bf0f29354f3eef7575b8ca55e26e60015b301c0

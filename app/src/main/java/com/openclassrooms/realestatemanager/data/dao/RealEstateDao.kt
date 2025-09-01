@@ -23,8 +23,8 @@ interface RealEstateDao {
     @Update
      suspend fun updateRealEstate(realEstate: RealEstateDb)
 
-    @Query("SELECT * FROM realEstates LEFT JOIN photos ON realEstates.id = photos.realEstateId")
-    fun getAllRealEstates(): Flow<Map<RealEstateDb, List<PhotoDb>>>
+//    @Query("SELECT * FROM realEstates LEFT JOIN photos ON realEstates.id = photos.realEstateId")
+//    fun getAllRealEstates(): Flow<Map<RealEstateDb, List<PhotoDb>>>
 
     @Query("SELECT * FROM realEstates LEFT JOIN photos ON realEstates.id = photos.realEstateId WHERE realEstates.id = :realEstateId ")
     fun getOneRealEstate(realEstateId: Long): Flow<Map<RealEstateDb, List<PhotoDb>>>
@@ -40,7 +40,7 @@ interface RealEstateDao {
             "(:minSurface IS NULL OR surface >= :minSurface) AND " +
             "(:maxSurface IS NULL OR surface <= :maxSurface) AND " +
             "(:status IS NULL OR status = :status)")
-    fun getRealEstatesFiltered(
+    fun getAllRealEstates(
         city: String?,
         type: List<BuildingType>,
         minPrice: Int?,
