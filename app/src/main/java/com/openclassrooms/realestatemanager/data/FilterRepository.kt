@@ -27,13 +27,14 @@ class FilterRepository(private val dataStore: DataStore<Preferences>) {
                 } ?: emptyList(),
                 priceMax = preferences[Keys.PRICE_MAX],
                 priceMin = preferences[Keys.PRICE_MIN],
-                surfaceMin = preferences[Keys.SURFACE_MAX],
-                surfaceMax = preferences[Keys.SURFACE_MIN],
+                surfaceMin = preferences[Keys.SURFACE_MIN],
+                surfaceMax = preferences[Keys.SURFACE_MAX],
                 status = Status.entries.firstOrNull { status ->
                     status.name == preferences[Keys.STATUS]
                 }
             )
 
+            
         }
     }
 

@@ -21,7 +21,7 @@ import com.openclassrooms.realestatemanager.ui.ViewModelFactory
 class FilterFragment: BottomSheetDialogFragment(R.layout.fragment_filter) {
 
     companion object{
-        val TAG = "FILTER_BOTTOM_SHEET"
+        const val TAG = "FILTER_BOTTOM_SHEET"
     }
 
     //TODO : create filter state to render
@@ -55,11 +55,15 @@ class FilterFragment: BottomSheetDialogFragment(R.layout.fragment_filter) {
         binding.chipSold.setOnCheckedChangeListener { _ , isChecked ->
             if(isChecked){
                 viewModel.updateStatus(Status.SOLD)
+            }else{
+                viewModel.updateStatus(null)
             }
         }
         binding.chipForSale.setOnCheckedChangeListener { _ , isChecked ->
             if(isChecked){
                 viewModel.updateStatus(Status.FOR_SALE)
+            }else{
+                viewModel.updateStatus(null)
             }
         }
 

@@ -3,12 +3,12 @@ plugins {
     id 'kotlin-android'
     id 'com.google.devtools.ksp'
     id 'kotlin-parcelize'
-    id("com.google.protobuf")
+    id "com.google.protobuf"
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
-    namespace 'com.openclassrooms.realestatemanager'
+    namespace  = 'com.openclassrooms.realestatemanager'
 
     compileSdk 35
 
@@ -28,14 +28,14 @@ android {
 
     buildFeatures {
         buildConfig = true
-        viewBinding true
+        viewBinding = true
     }
 
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
-        coreLibraryDesugaringEnabled true
+        coreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -52,10 +52,10 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation 'androidx.activity:activity-ktx:1.10.1'
     implementation "androidx.slidingpanelayout:slidingpanelayout:1.2.0"
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.8.9'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.9.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
-    implementation 'androidx.fragment:fragment-ktx:1.8.6'
+    implementation 'androidx.fragment:fragment-ktx:1.8.9'
     implementation 'io.coil-kt:coil:2.7.0'
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
@@ -68,16 +68,23 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC'
 
     //ROOM
-    def room_version = "2.6.1"
+    def room_version = "2.7.2"
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     ksp "androidx.room:room-compiler:$room_version"
-    implementation 'com.google.code.gson:gson:2.11.0'
+    implementation 'com.google.code.gson:gson:2.13.1'
 
     //UNIT TEST
     testImplementation 'junit:junit:4.13.2'
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2"
+    testImplementation "app.cash.turbine:turbine:1.2.1"
     testImplementation "androidx.room:room-testing:$room_version"
+    testImplementation "org.mockito:mockito-core:5.19.0"
+    testImplementation "org.mockito.kotlin:mockito-kotlin:6.0.0"
+    testImplementation "com.willowtreeapps.assertk:assertk:0.28.1"
+
+
 
     //GOOGLE MAPS
     implementation 'com.google.android.gms:play-services-maps:19.2.0'
@@ -85,6 +92,7 @@ dependencies {
 
     //DATASTORE
     implementation "androidx.datastore:datastore-preferences:1.1.7"
+    implementation "org.jetbrains.kotlin:kotlin-test:2.0.0"
 //    implementation "androidx.datastore:datastore-preferences-core:1.1.7"
 
 }

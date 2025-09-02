@@ -104,7 +104,7 @@ class FilterViewModel(
         if (surfaceMax.isEmpty()) _state.value =
             currentState.copy(surfaceMax = null)
         else _state.value =
-            currentState.copy(surfaceMax =surfaceMax.toInt())
+            currentState.copy(surfaceMax = surfaceMax.toInt())
         Log.i("filter VM", "updateSurfaceMax: ${_state.value}")
     }
 
@@ -120,7 +120,7 @@ class FilterViewModel(
         Log.i("filter VM", "updateTypeSelected: ${_state.value}")
     }
 
-    fun updateStatus(status: Status) {
+    fun updateStatus(status: Status?) {
         val currentState = _state.value
         _state.value = currentState.copy(status = status)
         Log.i("filter VM", "status: ${_state.value}")

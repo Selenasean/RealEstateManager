@@ -117,21 +117,9 @@ class ListMapDetailViewModel(
     //TODO : make list filtered displayed
     @OptIn(ExperimentalCoroutinesApi::class)
     val listRealEstates = filtersRepository.getFilters().flatMapLatest { filter ->
-<<<<<<< HEAD
         repository.getAllRealEstates(filter)
     }
 
-
-=======
-        if(filter.isNoFilters()){
-            repository.getAllRealEstates(null)
-        }else{
-            repository.getAllRealEstates(filter)
-        }
-
-    }
-
->>>>>>> 8bf0f29354f3eef7575b8ca55e26e60015b301c0
     val listState: LiveData<List<ItemState>> =
         listRealEstates
             .combine(_detailPaneIdStateFlow) { listRealEstate, idSelected ->
