@@ -9,11 +9,6 @@ class GeocoderRepository(context: Context) {
     val geocoder: Geocoder = Geocoder(context)
 
     fun getLongLat(address: String): Position? {
-//        geocoder.getFromLocationName( address, 1, object : GeocodeListener {
-//            override fun onGeocode(addresses: MutableList<Address>) {
-//
-//            }
-//        })
         // return null si geocoder return qlqch de null sinon assignation de la valeur à la variable locations
        try{
            val location: Address = geocoder.getFromLocationName(address, 1)?.firstOrNull() ?: return null

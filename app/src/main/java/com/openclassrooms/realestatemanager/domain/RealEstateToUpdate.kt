@@ -10,7 +10,6 @@ import java.time.Instant
 data class RealEstateToUpdate (
     val id: Long,
     val type: BuildingType,
-    val photos: List<Photo>,
     val address: String,
     val city: String,
     val price: Float,

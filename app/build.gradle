@@ -74,18 +74,28 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$room_version"
     ksp "androidx.room:room-compiler:$room_version"
     implementation 'com.google.code.gson:gson:2.13.1'
+    androidTestImplementation("androidx.room:room-testing:$room_version")
 
     //UNIT TEST
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'androidx.arch.core:core-testing:2.2.0'
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2"
     testImplementation "app.cash.turbine:turbine:1.2.1"
     testImplementation "androidx.room:room-testing:$room_version"
     testImplementation "org.mockito:mockito-core:5.19.0"
     testImplementation "org.mockito.kotlin:mockito-kotlin:6.0.0"
     testImplementation "com.willowtreeapps.assertk:assertk:0.28.1"
+    testImplementation "io.mockk:mockk-android:1.14.5"
+    testImplementation "io.mockk:mockk-agent:1.14.5"
 
-
-
+    //INSTRUMENTED TEST
+    androidTestImplementation("androidx.test:core-ktx:1.5.0")
+    androidTestImplementation("androidx.test.ext:junit-ktx:1.1.5")
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
+    androidTestImplementation("app.cash.turbine:turbine:1.0.0")
+    androidTestImplementation("com.willowtreeapps.assertk:assertk:0.28.1")
     //GOOGLE MAPS
     implementation 'com.google.android.gms:play-services-maps:19.2.0'
     implementation 'com.google.android.gms:play-services-location:21.3.0'
@@ -93,7 +103,6 @@ dependencies {
     //DATASTORE
     implementation "androidx.datastore:datastore-preferences:1.1.7"
     implementation "org.jetbrains.kotlin:kotlin-test:2.0.0"
-//    implementation "androidx.datastore:datastore-preferences-core:1.1.7"
 
 }
 

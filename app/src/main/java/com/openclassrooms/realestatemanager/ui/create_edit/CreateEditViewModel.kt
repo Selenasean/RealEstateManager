@@ -136,13 +136,6 @@ class CreateEditViewModel(
                 val realEstateToUpdate = RealEstateToUpdate(
                     id = this.realEstateId.toLong(),
                     type = currentState.type!!,
-                    photos = currentState.photos.map { photo ->
-                        Photo(
-                            id = photo.id,
-                            urlPhoto = photo.uri,
-                            label = photo.label
-                        )
-                    },
                     address = currentState.address!!.trim(),
                     city = currentState.city!!.trim(),
                     price = currentState.price!!.toFloat(),
@@ -161,7 +154,7 @@ class CreateEditViewModel(
 
                 viewModelScope.launch {
                     val result =
-                        repository.updateRealEstate(realEstateToUpdate, realEstateId.toLong())
+                        repository.updateRealEstate(realEstateToUpdate)
                     when (result) {
                         SaveResult.SUCCESS -> _isCreatedFlow.trySend(CreationEvents.isUpdated)
                         SaveResult.ERROR -> _isCreatedFlow.trySend(CreationEvents.failure)
@@ -176,15 +169,6 @@ class CreateEditViewModel(
 
     }
 
-    /**
-     * Boolean to know if address enter by user exist, if so means also there is an internet connectivity
-     */
-//    fun isPositionExist(): Boolean {
-//        if (connectivityChecker.isInternetAvailable()) {
-//            return repository.isPositionExist(_savedRealEstateMutableStateFlow.value.address.toString())
-//        }
-//        return false
-//    }
 
     /**
      * To update the type of real estate

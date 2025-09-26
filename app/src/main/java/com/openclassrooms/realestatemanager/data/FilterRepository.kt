@@ -19,7 +19,6 @@ class FilterRepository(private val dataStore: DataStore<Preferences>) {
 
     fun getFilters(): Flow<Filters>{
         return dataStore.data.map { preferences ->
-            Log.i("getFilters", "getFilters status: ${preferences[Keys.STATUS]} ")
             Filters(
                 city = preferences[Keys.CITY],
                 type = preferences[Keys.BUILDING_TYPE]?.split(",")?.mapNotNull { stringType ->

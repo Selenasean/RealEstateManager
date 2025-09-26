@@ -1,24 +1,28 @@
 package com.openclassrooms.realestatemanager.data
 
-import android.util.Log
+
 import com.openclassrooms.realestatemanager.data.dao.PhotoDao
 import com.openclassrooms.realestatemanager.data.dao.RealEstateAgentDao
 import com.openclassrooms.realestatemanager.data.dao.RealEstateDao
 import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.data.model.PhotoDb
-import com.openclassrooms.realestatemanager.data.model.RealEstateAgentDb
+
 import com.openclassrooms.realestatemanager.data.model.RealEstateDb
 import com.openclassrooms.realestatemanager.data.model.Status
 import com.openclassrooms.realestatemanager.domain.Filters
-import com.openclassrooms.realestatemanager.domain.Photo
+
 import com.openclassrooms.realestatemanager.domain.RealEstate
 import com.openclassrooms.realestatemanager.domain.RealEstateAgent
 import com.openclassrooms.realestatemanager.domain.RealEstateToCreate
 import com.openclassrooms.realestatemanager.domain.RealEstateToUpdate
+import com.openclassrooms.realestatemanager.domain.toPhotoDb
 import com.openclassrooms.realestatemanager.domain.toRealEstate
+import com.openclassrooms.realestatemanager.domain.toRealEstateAgent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.Clock
 import java.time.Instant
+
 
 class Repository(
     private val photoDao: PhotoDao,
@@ -41,11 +45,11 @@ class Repository(
         geocoderRepository
     )
 
+    private val clock: Clock = Clock.systemUTC()
 
     /**
      * Get all RealEstates
      */
-
     fun getAllRealEstates(filter: Filters): Flow<List<RealEstate>> {
         return this.realEstateDao.getAllRealEstates(
             city = filter.city,
@@ -65,7 +69,7 @@ class Repository(
      * Get One RealEstate
      * type Flow<RealEstate>
      */
-    fun getOneRealEstates(realEstateId: String): Flow<RealEstate> {
+    fun getOneRealEstate(realEstateId: String): Flow<RealEstate> {
         return this.realEstateDao.getOneRealEstate(realEstateId.toLong())
             .map { realEstateDb ->
                 realEstateDb.toRealEstate().first()
@@ -123,7 +127,7 @@ class Repository(
                 city = realEstate.city,
                 status = Status.FOR_SALE,
                 amenities = realEstate.amenities,
-                dateCreated = Instant.now(),
+                dateCreated = clock.instant(), //to get the current instant
                 dateOfSale = null,
                 realEstateAgentId = realEstate.agentId,
                 latitude = position.latitude,
@@ -151,13 +155,12 @@ class Repository(
      */
     suspend fun updateRealEstate(
         realEstate: RealEstateToUpdate,
-        oldRealEstateId: Long
     ): SaveResult {
         val position = geocoderRepository.getLongLat(realEstate.address)
         if (position == null) return SaveResult.ERROR
         this.realEstateDao.updateRealEstate(
             RealEstateDb(
-                id = oldRealEstateId,
+                id = realEstate.id,
                 type = realEstate.type,
                 price = realEstate.price,
                 name = "",
@@ -170,7 +173,7 @@ class Repository(
                 city = realEstate.city,
                 status = realEstate.status,
                 amenities = realEstate.amenities,
-                dateCreated = Instant.now(),
+                dateCreated = realEstate.dateOfCreation,
                 dateOfSale = realEstate.dateOfSale,
                 realEstateAgentId = realEstate.agentId,
                 latitude = position.latitude,
@@ -182,42 +185,16 @@ class Repository(
             this.photoDao.deleteFromId(photoId)
         }
         realEstate.photoChanges.updated.forEach { photo ->
-            this.photoDao.updatePhoto(photo.toPhotoDb(oldRealEstateId))
-            Log.i("repo update photo", "updateRealEstate: photo updated ")
+            this.photoDao.updatePhoto(photo.toPhotoDb(realEstate.id))
         }
         realEstate.photoChanges.created.forEach { photo ->
-            this.photoDao.createPhoto(photo.toPhotoDb(oldRealEstateId))
-            Log.i("repo create photo", "create photo")
+            this.photoDao.createPhoto(photo.toPhotoDb(realEstate.id))
+
         }
 
         return SaveResult.SUCCESS
     }
 
-    /**
-     * To know if localisation actually exist
-     */
-    fun isPositionExist(address: String): Boolean {
-        val position = geocoderRepository.getLongLat(address)
-        return position != null
-    }
-
-
-    // MAPPING FUNCTION HERE
-    fun RealEstateAgentDb.toRealEstateAgent(): RealEstateAgent {
-        return RealEstateAgent(
-            id = this.id,
-            name = this.name
-        )
-    }
-
-    fun Photo.toPhotoDb(realEstateId: Long): PhotoDb {
-        return PhotoDb(
-            id = this.id,
-            realEstateId = realEstateId,
-            urlPhoto = this.urlPhoto,
-            label = this.label
-        )
-    }
 }
 
 enum class SaveResult() {
