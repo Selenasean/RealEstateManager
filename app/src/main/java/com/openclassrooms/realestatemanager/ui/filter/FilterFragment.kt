@@ -28,7 +28,6 @@ class FilterFragment: BottomSheetDialogFragment(R.layout.fragment_filter) {
         const val TAG = "FILTER_BOTTOM_SHEET"
     }
 
-    //TODO : create filter state to render
 
     private val viewModel by viewModels<FilterViewModel>{ ViewModelFactory.Companion.getInstance() }
 

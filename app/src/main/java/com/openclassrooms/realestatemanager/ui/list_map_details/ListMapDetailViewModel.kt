@@ -126,7 +126,6 @@ class ListMapDetailViewModel(
     /**
      * To get list of ItemState to observe in UI
      */
-    //TODO : make list filtered displayed
     @OptIn(ExperimentalCoroutinesApi::class)
     private val listRealEstates = filtersRepository.getFilters().flatMapLatest { filter ->
         repository.getAllRealEstates(filter)

@@ -166,7 +166,7 @@ class ListMapDetailViewModelTest {
 
     }
 
-    //TODO :test
+
     @Test
     @Suppress("UnusedFlow")
     fun mapList_should_called_repository_with_right_filter()= runTest {
