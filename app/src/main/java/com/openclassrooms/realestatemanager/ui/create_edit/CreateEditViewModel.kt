@@ -2,10 +2,10 @@ package com.openclassrooms.realestatemanager.ui.create_edit
 
 import android.net.Uri
 import android.util.Log
-import androidx.lifecycle.LiveData
+
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
+
 import androidx.lifecycle.viewModelScope
 import com.openclassrooms.realestatemanager.data.Repository
 import com.openclassrooms.realestatemanager.data.SaveResult
@@ -22,6 +22,7 @@ import com.openclassrooms.realestatemanager.utils.events.CreationEvents
 import com.openclassrooms.realestatemanager.utils.internetConnectivity.ConnectivityChecker
 import com.openclassrooms.realestatemanager.utils.toPhotoSelectedViewState
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -92,8 +93,8 @@ class CreateEditViewModel(
         savedStateHandle.getMutableStateFlow(KEY_PHOTO_CHANGES, PhotoChanges())
 
     //state of data for UI
-    val state: LiveData<RealEstateToSaveState> =
-        _savedRealEstateMutableStateFlow.asLiveData()
+    val state: StateFlow<RealEstateToSaveState> =
+        _savedRealEstateMutableStateFlow
 
     //Flow to be observe in UI, notifying creation success of real estate
     private val _isCreatedFlow = Channel<CreationEvents>()

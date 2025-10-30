@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.utils
+package com.openclassrooms.realestatemanager.utils.events
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle

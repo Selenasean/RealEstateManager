@@ -67,7 +67,6 @@ class ViewModelFactory : ViewModelProvider.Factory {
         }
         if (modelClass.isAssignableFrom(FilterViewModel::class.java)) {
             return FilterViewModel(
-                application.repository,
                 savedStateHandle,
                 application.filterRepository
             ) as T

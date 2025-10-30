@@ -8,6 +8,9 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -17,6 +20,7 @@ import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.data.model.Status
 import com.openclassrooms.realestatemanager.databinding.FragmentFilterBinding
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
+import kotlinx.coroutines.launch
 
 class FilterFragment: BottomSheetDialogFragment(R.layout.fragment_filter) {
 
@@ -33,7 +37,13 @@ class FilterFragment: BottomSheetDialogFragment(R.layout.fragment_filter) {
         val binding = FragmentFilterBinding.bind(view)
         (dialog as BottomSheetDialog).behavior.state = BottomSheetBehavior.STATE_EXPANDED
 
-        viewModel.state.observe(viewLifecycleOwner){ render(it, binding) }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.state.collect {
+                    render(it, binding)
+                }
+            }
+        }
 
         //btn apply filter listener
         binding.applyFilterBtn.setOnClickListener {

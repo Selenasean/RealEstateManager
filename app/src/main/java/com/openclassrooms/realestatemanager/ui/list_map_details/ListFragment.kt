@@ -10,11 +10,15 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
+import kotlinx.coroutines.launch
 
 // the fragment initialization parameters
 private const val ARG_PARAM1 = "param1"
@@ -41,9 +45,13 @@ class ListFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentListBinding.bind(view)
 
-        viewModel.listState.observe(viewLifecycleOwner, Observer { listItemState ->
-            render(listItemState)
-        })
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.listState.collect { listItemState ->
+                    render(listItemState)
+                }
+            }
+        }
         
         //settings for RV
         setRecyclerView(binding)

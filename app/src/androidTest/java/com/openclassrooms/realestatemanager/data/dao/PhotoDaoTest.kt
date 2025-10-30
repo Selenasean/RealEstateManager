@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager
+package com.openclassrooms.realestatemanager.data.dao
 
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -10,19 +10,11 @@ import assertk.assertions.containsOnly
 import assertk.assertions.doesNotContain
 import assertk.assertions.extracting
 import assertk.assertions.hasSize
-import assertk.assertions.index
-import assertk.assertions.isEqualTo
-import assertk.assertions.prop
+import com.openclassrooms.realestatemanager.AppApplication
+import com.openclassrooms.realestatemanager.UtilsForInstrumentalTests
 import com.openclassrooms.realestatemanager.data.AppDataBase
-import com.openclassrooms.realestatemanager.data.dao.PhotoDao
-import com.openclassrooms.realestatemanager.data.dao.RealEstateAgentDao
-import com.openclassrooms.realestatemanager.data.dao.RealEstateDao
-import com.openclassrooms.realestatemanager.data.model.Amenity
-import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.data.model.PhotoDb
 import com.openclassrooms.realestatemanager.data.model.RealEstateAgentDb
-import com.openclassrooms.realestatemanager.data.model.RealEstateDb
-import com.openclassrooms.realestatemanager.data.model.Status
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -30,8 +22,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
-import java.time.Clock
-
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
@@ -49,7 +39,7 @@ class PhotoDaoTest {
     @Before
     fun createDatabase() {
         database = Room
-            .inMemoryDatabaseBuilder(AppApplication.appContext, AppDataBase::class.java)
+            .inMemoryDatabaseBuilder(AppApplication.Companion.appContext, AppDataBase::class.java)
             .build()
 
         photoDao = database.photoDao()
@@ -65,26 +55,7 @@ class PhotoDaoTest {
         )
         runTest {
             realEstateId1 = realEstateDao.createRealEstate(
-                RealEstateDb(
-                    id = 0,
-                    type = BuildingType.APARTMENT,
-                    price = 123445f,
-                    name = "",
-                    surface = 123,
-                    rooms = 12,
-                    bathrooms = 2,
-                    bedrooms = 2,
-                    description = "lalbablalbalbalablalab",
-                    address = "12 allée ronde",
-                    city = "paris",
-                    status = Status.FOR_SALE,
-                    amenities = listOf(Amenity.SHOPPING_MALL),
-                    dateCreated = Clock.systemUTC().instant(),
-                    dateOfSale = null,
-                    realEstateAgentId = agentId1,
-                    longitude = 34.000,
-                    latitude = 52.6666
-                )
+                UtilsForInstrumentalTests.fakeRealEstateDb(0)
             )
         }
         photoToCreate = PhotoDb(
@@ -162,7 +133,7 @@ class PhotoDaoTest {
 
 
     @Test
-    fun update_photo_should_update_photo_label() = runTest{
+    fun update_photo_should_update_photo_label() = runTest {
         //GIVEN
         photoDao.createPhoto(photoCreated2)
         //update one  : photoCreated2

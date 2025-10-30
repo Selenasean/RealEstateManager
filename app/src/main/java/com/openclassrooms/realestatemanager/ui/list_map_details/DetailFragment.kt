@@ -8,6 +8,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -21,6 +24,7 @@ import com.openclassrooms.realestatemanager.ui.create_edit.CreateEditFragment
 
 import com.openclassrooms.realestatemanager.utils.CurrencyCode
 import com.openclassrooms.realestatemanager.utils.Utils
+import kotlinx.coroutines.launch
 
 class DetailFragment : Fragment(), OnMapReadyCallback {
 
@@ -47,11 +51,16 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
         val binding = FragmentDetailBinding.bind(view)
         setRecyclerView(binding)
         binding.noItemLytContainer.visibility = View.GONE
-        viewModel.detailState.observe(viewLifecycleOwner) {
-            render(
-                it,
-                binding,
-            )
+//
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.detailState.collect { realEstateDetailed ->
+                    render(
+                        realEstateDetailed,
+                        binding
+                    )
+                }
+            }
         }
 
         binding.fabUpdate.setOnClickListener {
@@ -159,9 +168,13 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
      * onMapReady callback
      */
     override fun onMapReady(map: GoogleMap) {
-        viewModel.positionStateFlow.observe(viewLifecycleOwner) {
-            if (it != null) {
-                renderMap(map, it)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.positionStateFlow.collect { position ->
+                    if(position != null){
+                        renderMap(map, position)
+                    }
+                }
             }
         }
     }

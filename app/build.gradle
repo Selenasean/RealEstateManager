@@ -3,7 +3,6 @@ plugins {
     id 'kotlin-android'
     id 'com.google.devtools.ksp'
     id 'kotlin-parcelize'
-    id "com.google.protobuf"
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
@@ -57,6 +56,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
     implementation 'androidx.fragment:fragment-ktx:1.8.9'
     implementation 'io.coil-kt:coil:2.7.0'
+    implementation 'androidx.test:core-ktx:1.7.0'
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
 
@@ -82,11 +82,11 @@ dependencies {
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2"
     testImplementation "app.cash.turbine:turbine:1.2.1"
     testImplementation "androidx.room:room-testing:$room_version"
-    testImplementation "org.mockito:mockito-core:5.19.0"
-    testImplementation "org.mockito.kotlin:mockito-kotlin:6.0.0"
     testImplementation "com.willowtreeapps.assertk:assertk:0.28.1"
     testImplementation "io.mockk:mockk-android:1.14.5"
     testImplementation "io.mockk:mockk-agent:1.14.5"
+    testImplementation "org.robolectric:robolectric:4.15.1"
+
 
     //INSTRUMENTED TEST
     androidTestImplementation("androidx.test:core-ktx:1.5.0")
@@ -96,6 +96,7 @@ dependencies {
     androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
     androidTestImplementation("app.cash.turbine:turbine:1.0.0")
     androidTestImplementation("com.willowtreeapps.assertk:assertk:0.28.1")
+
     //GOOGLE MAPS
     implementation 'com.google.android.gms:play-services-maps:19.2.0'
     implementation 'com.google.android.gms:play-services-location:21.3.0'

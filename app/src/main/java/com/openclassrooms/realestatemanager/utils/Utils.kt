@@ -14,6 +14,7 @@ import java.util.Locale
 
 /**
  * Created by Philippe on 21/02/2018.
+ * Updated by Selena in 2025.
  */
 object Utils {
     /**
@@ -25,12 +26,12 @@ object Utils {
      */
     @JvmStatic
     fun convertDollarToEuro(dollars: Float): Float {
-        return Math.round(dollars * 0.95).toFloat()
+        return dollars * 0.95f
     }
 
     @JvmStatic
     fun convertEuroToDollar(euros: Float): Float {
-        return Math.round(euros * 1.05).toFloat()
+        return euros * 1.05f
 
     }
 

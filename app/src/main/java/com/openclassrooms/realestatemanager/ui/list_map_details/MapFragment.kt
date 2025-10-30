@@ -11,7 +11,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.Lifecycle
+
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -26,7 +29,8 @@ import com.openclassrooms.realestatemanager.ui.ViewModelFactory
 import com.openclassrooms.realestatemanager.utils.CurrencyCode
 import com.openclassrooms.realestatemanager.utils.Utils
 import com.openclassrooms.realestatemanager.utils.events.MapEvent
-import com.openclassrooms.realestatemanager.utils.observeAsEvents
+import com.openclassrooms.realestatemanager.utils.events.observeAsEvents
+import kotlinx.coroutines.launch
 
 class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -84,20 +88,19 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             zoomOnMap(map) //zoom on Paris, France
         }
 
-        viewModel.mapList.observe(viewLifecycleOwner, Observer { list ->
-            map.clear()
-            list.forEach { item ->
-
-                //create marker for each realEstate
-                createMarkers(map, item)
-
-                //listener
-                map.setOnMarkerClickListener(this)
-
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.mapList.collect { list ->
+                    map.clear()
+                    list.forEach { item ->
+                        //create a marker
+                        createMarkers(map, item)
+                        //listener
+                        map.setOnMarkerClickListener(this@MapFragment)
+                    }
+                }
             }
-
-
-        })
+        }
     }
 
     /**

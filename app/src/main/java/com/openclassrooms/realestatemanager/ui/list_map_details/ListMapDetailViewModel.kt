@@ -2,12 +2,9 @@ package com.openclassrooms.realestatemanager.ui.list_map_details
 
 
 import android.Manifest
-import android.util.Log
 import androidx.annotation.RequiresPermission
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.openclassrooms.realestatemanager.data.FilterRepository
 import com.openclassrooms.realestatemanager.data.Position
@@ -25,30 +22,39 @@ import com.openclassrooms.realestatemanager.utils.toPhotoSelectedViewState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 
 class ListMapDetailViewModel(
     private val repository: Repository,
-    private val saveStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle,
     private val locationRepository: LocationRepository,
     private val filtersRepository: FilterRepository
 ) : ViewModel() {
 
+    companion object{
+        val ID_KEY = "ID_KEY"
+    }
 
     //state of Pane : open or close, depending if there is id or not, to display the right fragment
     private var _detailPaneIdStateFlow: MutableStateFlow<String?> =
-
-        saveStateHandle.getMutableStateFlow("ID_KEY", String())
+        savedStateHandle.getMutableStateFlow(ID_KEY, null)
 
     //state of realEstate position open in detail
     private var _positionStateFlow = MutableStateFlow<Position?>(null)
-    val positionStateFlow = _positionStateFlow.asLiveData()
+    val positionStateFlow = _positionStateFlow.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        null
+    )
 
     //Flows to be observe in UI, notifying an event
     private val _eventsFlow = Channel<ListMapDetailEvent>()
@@ -61,11 +67,11 @@ class ListMapDetailViewModel(
      * To get data from one realEstate to be observed in UI
      */
     @OptIn(ExperimentalCoroutinesApi::class)
-    val detailState: LiveData<RealEstateDetailViewState?> = _detailPaneIdStateFlow
+    val detailState: StateFlow<RealEstateDetailViewState?> = _detailPaneIdStateFlow
         .flatMapLatest { id ->
             if (id != null && id.isNotEmpty()) {
 
-                repository.getOneRealEstates(id).map { realEstate ->
+                repository.getOneRealEstate(id).map { realEstate ->
 
                     RealEstateDetailViewState(
                         id = realEstate.id,
@@ -86,7 +92,7 @@ class ListMapDetailViewModel(
                         amenities = realEstate.amenities,
                         latitude = realEstate.latitude,
                         longitude = realEstate.longitude,
-                        dateOfSale = realEstate.dateOfSale?.let{Utils.instantToDate(it)}
+                        dateOfSale = realEstate.dateOfSale?.let { Utils.instantToDate(it) }
                     )
 
                 }
@@ -94,12 +100,18 @@ class ListMapDetailViewModel(
             } else {
                 flowOf(null)
             }
-        }.asLiveData()
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            null
+        )
+
 
     /**
      * Stock id value for opening the right DetailFragment
      */
     fun onRealEstateClick(id: String) {
+        println("click realestate =$id")
         _detailPaneIdStateFlow.value = id
         _eventsFlow.trySend(ListMapDetailEvent.OpenDetails)
     }
@@ -116,11 +128,11 @@ class ListMapDetailViewModel(
      */
     //TODO : make list filtered displayed
     @OptIn(ExperimentalCoroutinesApi::class)
-    val listRealEstates = filtersRepository.getFilters().flatMapLatest { filter ->
+    private val listRealEstates = filtersRepository.getFilters().flatMapLatest { filter ->
         repository.getAllRealEstates(filter)
     }
 
-    val listState: LiveData<List<ItemState>> =
+    val listState: StateFlow<List<ItemState>> =
         listRealEstates
             .combine(_detailPaneIdStateFlow) { listRealEstate, idSelected ->
                 listRealEstate.map { realEstate ->
@@ -145,14 +157,18 @@ class ListMapDetailViewModel(
                         )
                     )
                 }
-            }.asLiveData()
+            }.stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5000),
+                emptyList()
+            )
 
 
     /**
      * To get list of realEstate with Positions
      */
-    val mapList: LiveData<List<MapState>> =
-       listRealEstates
+    val mapList: StateFlow<List<MapState>> =
+        listRealEstates
             .combine(_detailPaneIdStateFlow) { realEstateList, idSelected ->
                 realEstateList.mapNotNull { realEstate ->
 
@@ -172,7 +188,11 @@ class ListMapDetailViewModel(
                     }
 
                 }
-            }.asLiveData()
+            }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            emptyList()
+        )
 
     /**
      * To get the position of a RealEstate and store it in stateFlow
@@ -188,7 +208,7 @@ class ListMapDetailViewModel(
     fun onLocationPermission() {
         viewModelScope.launch {
             val location = locationRepository.getLastLocation()
-            if(location != null){
+            if (location != null) {
                 _eventMapFlow.trySend(MapEvent.CenterUserLocation(location))
             }
         }
@@ -197,7 +217,7 @@ class ListMapDetailViewModel(
 
 }
 
-// DATA CLASSES
+// DATA CLASSES FOR STATE
 /**
  * State for items on the recyclerView used on the list view
  */
@@ -224,7 +244,7 @@ data class RealEstateViewState(
     val address: String,
     val status: Status,
     val amenities: List<Amenity>,
-    val dateOfSale : String?
+    val dateOfSale: String?
 )
 
 /**

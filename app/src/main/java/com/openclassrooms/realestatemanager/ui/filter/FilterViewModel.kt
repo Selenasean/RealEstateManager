@@ -1,11 +1,11 @@
 package com.openclassrooms.realestatemanager.ui.filter
 
-import android.os.Build
+
 import android.util.Log
-import androidx.lifecycle.LiveData
+
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
+
 import androidx.lifecycle.viewModelScope
 import com.openclassrooms.realestatemanager.data.FilterRepository
 import com.openclassrooms.realestatemanager.data.Repository
@@ -13,17 +13,17 @@ import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.data.model.Status
 import com.openclassrooms.realestatemanager.domain.Filters
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class FilterViewModel(
-    private val repository: Repository,
     savedStateHandle: SavedStateHandle,
     private val filterRepository: FilterRepository
 ) : ViewModel() {
 
-    //TODO : communicate datastore content to other ListMapDetailVM
 
     companion object {
         val STATE_FILTER = "STATE_FILTER"
@@ -31,12 +31,10 @@ class FilterViewModel(
 
 
     init {
-        Log.i("init", "state: ${savedStateHandle.get<FilterState>(STATE_FILTER)} ")
         if (!(savedStateHandle.contains(STATE_FILTER))) {
             //first creation of the VM
             viewModelScope.launch {
                 savedStateHandle[STATE_FILTER] = filterRepository.getFilters().first().toFilterState()
-                Log.i("init", "state2: ${savedStateHandle.get<FilterState>(STATE_FILTER)} ")
             }
 
         }
@@ -46,20 +44,26 @@ class FilterViewModel(
     //state of data in bundle
     private val _state: MutableStateFlow<FilterState> = savedStateHandle.getMutableStateFlow(STATE_FILTER,
         FilterState())
-    val state: LiveData<FilterState> = _state.asLiveData()
+    val state: StateFlow<FilterState> = _state.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        FilterState()
+    )
 
     /**
      * To apply filters selected by user
      */
    fun applyFilters(){
-        Log.i("applyfilter", "applyFilters: ${state.value?.toFilters()} ")
+
         viewModelScope.launch {
             filterRepository.setFilters(_state.value.toFilters())
 
         }
     }
 
-
+    /**
+     * To clear all filters
+     */
     fun clearFilters(){
         viewModelScope.launch {
             filterRepository.setFilters(FilterState().toFilters())
@@ -117,7 +121,7 @@ class FilterViewModel(
             listType.remove(type)
         }
         _state.value = currentState.copy(type = listType)
-        Log.i("filter VM", "updateTypeSelected: ${_state.value}")
+
     }
 
     fun updateStatus(status: Status?) {

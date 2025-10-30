@@ -20,7 +20,9 @@ import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -35,7 +37,7 @@ import com.openclassrooms.realestatemanager.ui.ViewModelFactory
 import com.openclassrooms.realestatemanager.ui.list_map_details.PhotosAdapter
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
 import com.openclassrooms.realestatemanager.utils.events.CreationEvents
-import com.openclassrooms.realestatemanager.utils.observeAsEvents
+import com.openclassrooms.realestatemanager.utils.events.observeAsEvents
 import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
@@ -78,7 +80,13 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
 
         //settings for dropDown menus, viewModel & recyclerView
         dropDownMenusSettings(binding, context)
-        viewModel.state.observe(viewLifecycleOwner) { render(it, binding, context) }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.state.collect {
+                    render(it, binding, context)
+                }
+            }
+        }
         setRecyclerView(binding)
 
         //create a realEstate

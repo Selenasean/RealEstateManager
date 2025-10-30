@@ -32,8 +32,6 @@ class FilterRepository(private val dataStore: DataStore<Preferences>) {
                     status.name == preferences[Keys.STATUS]
                 }
             )
-
-            
         }
     }
 

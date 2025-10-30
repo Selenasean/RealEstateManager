@@ -1,24 +1,21 @@
-package com.openclassrooms.realestatemanager.repositoriesTest
+package com.openclassrooms.realestatemanager.data
 
 
 import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.openclassrooms.realestatemanager.data.GeocoderRepository
-import com.openclassrooms.realestatemanager.data.Position
-import com.openclassrooms.realestatemanager.data.Repository
-import com.openclassrooms.realestatemanager.data.SaveResult
+import com.openclassrooms.realestatemanager.TestUtils.UtilsForUnitTests.fakeAgentDb
+import com.openclassrooms.realestatemanager.TestUtils.UtilsForUnitTests.fakeFilters
+import com.openclassrooms.realestatemanager.TestUtils.UtilsForUnitTests.fakePhoto
+import com.openclassrooms.realestatemanager.TestUtils.UtilsForUnitTests.fakeRealEstateDb
 import com.openclassrooms.realestatemanager.data.dao.PhotoDao
 import com.openclassrooms.realestatemanager.data.dao.RealEstateAgentDao
 import com.openclassrooms.realestatemanager.data.dao.RealEstateDao
 import com.openclassrooms.realestatemanager.data.model.Amenity
 import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.data.model.PhotoDb
-import com.openclassrooms.realestatemanager.data.model.RealEstateAgentDb
 import com.openclassrooms.realestatemanager.data.model.RealEstateDb
 import com.openclassrooms.realestatemanager.data.model.Status
-import com.openclassrooms.realestatemanager.domain.Filters
-import com.openclassrooms.realestatemanager.domain.Photo
 import com.openclassrooms.realestatemanager.domain.PhotoChanges
 import com.openclassrooms.realestatemanager.domain.RealEstateToCreate
 import com.openclassrooms.realestatemanager.domain.RealEstateToUpdate
@@ -31,9 +28,12 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.just
 import io.mockk.slot
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -41,15 +41,12 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.time.Clock
 import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.ZoneOffset
 
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(JUnit4::class)
-public class RepositoryTest {
+class RepositoryTest {
 
     @get:Rule
     val mockkRule = MockKRule(this)
@@ -192,6 +189,11 @@ public class RepositoryTest {
             realEstateAgentDao = mockAgentDao,
             geocoderRepository = mockGeocoderRepository
         )
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain() //reset main dispatcher
     }
 
     @Test
@@ -445,72 +447,4 @@ public class RepositoryTest {
         assertThat(result).isEqualTo(SaveResult.ERROR)
     }
 
-}
-
-//UTILS FUNCTIONS
-fun fakeRealEstateDb(
-    id: Long,
-    name: String = "realEstate",
-    city: String = "Paris",
-    price: Float = 500000F,
-    type: BuildingType = BuildingType.APARTMENT,
-    surface: Int = 90
-): RealEstateDb {
-    return RealEstateDb(
-        id = id,
-        name = name,
-        city = city,
-        price = price,
-        type = type,
-        surface = surface,
-        rooms = 2,
-        bathrooms = 1,
-        bedrooms = 2,
-        description = "Appartment near Eiffel Tower",
-        address = "219 rue de l'Université",
-        status = Status.FOR_SALE,
-        amenities = listOf(Amenity.BAKERY, Amenity.SCHOOL, Amenity.STATION),
-        latitude = 48.862725,
-        longitude = 2.287592,
-        realEstateAgentId = 1,
-        dateCreated = LocalDateTime.of(LocalDate.of(2025, 8, 28), LocalTime.of(15, 0))
-            .toInstant(ZoneOffset.UTC),
-        dateOfSale = null
-    )
-}
-
-fun fakeFilters(
-    type: List<BuildingType>
-): Filters {
-    return Filters(
-        city = null,
-        type = type,
-        priceMin = null,
-        priceMax = null,
-        surfaceMin = null,
-        surfaceMax = null,
-        status = null
-    )
-}
-
-fun fakeAgentDb(
-    id: Long,
-    name: String
-): RealEstateAgentDb {
-    return RealEstateAgentDb(
-        id = id,
-        name = name
-    )
-}
-
-fun fakePhoto(
-    id: String,
-    urlPhoto: String,
-    label: String
-): Photo {
-    return Photo(
-        id = id,
-        urlPhoto = urlPhoto,
-        label = label
-    )
 }

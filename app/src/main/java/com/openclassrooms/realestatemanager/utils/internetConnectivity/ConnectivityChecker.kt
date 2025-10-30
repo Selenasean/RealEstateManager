@@ -14,6 +14,7 @@ class ConnectivityChecker(
      * Vérification de la connexion réseau
      * NOTE : NE PAS SUPPRIMER, A MONTRER DURANT LA SOUTENANCE
      * @param context
+     *
      * @return
      */
     fun isInternetAvailable(): Boolean {

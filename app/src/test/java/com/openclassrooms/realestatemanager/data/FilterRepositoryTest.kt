@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.repositoriesTest
+package com.openclassrooms.realestatemanager.data
 
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import app.cash.turbine.test
@@ -6,7 +6,6 @@ import assertk.assertThat
 import assertk.assertions.isEmpty
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNull
-import com.openclassrooms.realestatemanager.data.FilterRepository
 import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.data.model.Status
 import com.openclassrooms.realestatemanager.domain.Filters
@@ -33,7 +32,7 @@ class FilterRepositoryTest {
 
     private val testScope =
         TestScope(UnconfinedTestDispatcher()) //use Unconfined to immediate execution
-    private lateinit var filterRepository: FilterRepository
+    private lateinit var filterRepository:  FilterRepository
 
     @Before
     fun setup() {

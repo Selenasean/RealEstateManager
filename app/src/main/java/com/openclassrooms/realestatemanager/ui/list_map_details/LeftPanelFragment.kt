@@ -19,8 +19,7 @@ import com.openclassrooms.realestatemanager.ui.create_edit.CreateEditFragment
 import com.openclassrooms.realestatemanager.ui.filter.FilterFragment
 
 import com.openclassrooms.realestatemanager.utils.events.ListMapDetailEvent
-import com.openclassrooms.realestatemanager.utils.events.MapEvent
-import com.openclassrooms.realestatemanager.utils.observeAsEvents
+import com.openclassrooms.realestatemanager.utils.events.observeAsEvents
 
 class LeftPanelFragment : Fragment() {
 
