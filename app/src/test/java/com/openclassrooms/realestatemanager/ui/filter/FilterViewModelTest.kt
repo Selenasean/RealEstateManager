@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.filter
 
 import androidx.lifecycle.SavedStateHandle
+import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
@@ -43,7 +44,6 @@ class FilterViewModelTest {
     private lateinit var savedStateHandle: SavedStateHandle
     private lateinit var filterViewModel: FilterViewModel
 
-    val filterState = FilterState()
 
     val emptyFilter = fakeFilters(emptyList())
 
@@ -57,7 +57,7 @@ class FilterViewModelTest {
             mockFilterRepository.getFilters()
         } returns MutableStateFlow(emptyFilter)
         coJustRun{
-            mockFilterRepository.setFilters(emptyFilter)
+            mockFilterRepository.setFilters(any())
         }
 
         filterViewModel = FilterViewModel(
@@ -68,22 +68,28 @@ class FilterViewModelTest {
     }
 
     @Test
-    fun updateType_should_update_state() {
-        //GIVEN
+    fun initial_state() = runTest {
         //there is no filters selected
-        assertThat(savedStateHandle.get<Filters>(FilterViewModel.STATE_FILTER)).isEqualTo(
-            //mapping Filters into FilterState
-            fakeFilterState(types = emptyList(), emptyFilter)
-        )
+        filterViewModel.state.test{
+            val valueEmitted = awaitItem()
+            assertThat(valueEmitted).isEqualTo(fakeFilterState(emptyList()))
+        }
+
+    }
+
+    @Test
+    fun updateType_should_update_state() = runTest {
+        //GIVEN
 
         //WHEN user selected only one type
         filterViewModel.updateTypeSelected(BuildingType.APARTMENT, true)
 
         //THEN state should have his type updated
-        assertThat(savedStateHandle.get<Filters>(FilterViewModel.STATE_FILTER)).isEqualTo(
-           fakeFilterState(listOf(BuildingType.APARTMENT), emptyFilter)
-        )
-
+        filterViewModel.state.test {
+            val valueEmitted = awaitItem()
+            assertThat(valueEmitted)
+                .isEqualTo(fakeFilterState(listOf(BuildingType.APARTMENT)))
+        }
     }
 
     @Test
@@ -96,27 +102,21 @@ class FilterViewModelTest {
         coVerify {
             //check if right filters are passed
             //mapping FilterState into Filters
-            mockFilterRepository.setFilters(Filters(
-                city = filterState.city,
-                type = filterState.type,
-                priceMin = filterState.priceMin,
-                priceMax = filterState.priceMax,
-                surfaceMin = filterState.surfaceMin,
-                surfaceMax = filterState.surfaceMax,
-                status = filterState.status
-            ))
+            mockFilterRepository.setFilters(emptyFilter)
         }
     }
 
     @Test
-    @Suppress("UnusedFlow")
     fun applyFilters_should_called_filterRepository() = runTest {
         //GIVEN
         //WHEN
+        filterViewModel.updateTypeSelected(BuildingType.APARTMENT, true)
         filterViewModel.applyFilters()
         //THEN
         coVerify {
-            mockFilterRepository.getFilters()
+            mockFilterRepository.setFilters(
+                fakeFilters(listOf(BuildingType.APARTMENT))
+            )
         }
     }
 

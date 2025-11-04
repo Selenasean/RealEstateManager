@@ -9,6 +9,7 @@ import assertk.assertions.containsExactly
 import assertk.assertions.extracting
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
+import assertk.assertions.isTrue
 import com.openclassrooms.realestatemanager.TestUtils.UtilsForUnitTests
 import com.openclassrooms.realestatemanager.TestUtils.UtilsForUnitTests.fakeFilters
 import com.openclassrooms.realestatemanager.TestUtils.UtilsForUnitTests.fakeItemState
@@ -27,10 +28,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -93,7 +92,6 @@ class ListMapDetailViewModelTest {
     }
 
 
-
     @Test
     fun detailState_emit_null_if_no_id_in_savedStateHandle() = runTest {
         //WHEN
@@ -108,8 +106,22 @@ class ListMapDetailViewModelTest {
 
     @Test
     fun click_on_realestate_store_id_in_savedStateHandle() = runTest {
+        //WHEN
         listMapDetailViewModel.onRealEstateClick("2")
-        assertThat(savedStateHandle.get<String>(ListMapDetailViewModel.ID_KEY)).isEqualTo("2")
+        //THEN store id in savedStateHandle
+        assertThat(savedStateHandle.get<String>(ListMapDetailViewModel.ID_KEY))
+            .isEqualTo("2")
+
+        //WHEN listState is called, realEstate with id = "2" is selected
+        listMapDetailViewModel.listState.test{
+            val valueEmitted = awaitItem()
+            assertThat(valueEmitted).extracting { itemState ->
+                if(itemState.realEstate.id == "2"){
+                    //THEN
+                    assertThat(itemState.isSelected).isTrue()
+                }
+            }
+        }
     }
 
     @Test
@@ -122,7 +134,6 @@ class ListMapDetailViewModelTest {
             //THEN
             assertThat(valueEmitted).isEqualTo(UtilsForUnitTests.fakeRealEstateDetailState(id = "2"))
         }
-
     }
 
 
@@ -156,26 +167,25 @@ class ListMapDetailViewModelTest {
         listMapDetailViewModel.listState.test {
             val valueEmitted = awaitItem()
             //THEN
-            assertThat(valueEmitted).all{
+            assertThat(valueEmitted).all {
                 hasSize(2)
                 isEqualTo(listExpected)
             }
-            assertThat(valueEmitted).extracting{ it.realEstate.id }.containsExactly("3","4")
+
+
         }
-
-
     }
 
 
     @Test
     @Suppress("UnusedFlow")
-    fun mapList_should_called_repository_with_right_filter()= runTest {
+    fun mapList_should_called_repository_with_right_filter() = runTest {
         //GIVEN
         //specify a filter
         filtersFlow.value = fakeFilters(listOf(BuildingType.APARTMENT))
         //WHEN
         listMapDetailViewModel.mapList.test {
-             awaitItem()
+            awaitItem()
         }
         //THEN
         coVerify { mockRepository.getAllRealEstates(fakeFilters(listOf(BuildingType.APARTMENT))) }
@@ -197,7 +207,7 @@ class ListMapDetailViewModelTest {
                 hasSize(2)
                 isEqualTo(listExpected)
             }
-            assertThat(valueEmitted).extracting { it.id }.containsExactly("3","4")
+            assertThat(valueEmitted).extracting { it.id }.containsExactly("3", "4")
         }
 
     }

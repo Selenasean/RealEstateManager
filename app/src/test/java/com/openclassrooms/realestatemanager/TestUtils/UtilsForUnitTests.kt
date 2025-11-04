@@ -174,15 +174,15 @@ object UtilsForUnitTests {
         )
     }
 
-    fun fakeFilterState(types: List<BuildingType>, filters: Filters): FilterState {
+    fun fakeFilterState(types: List<BuildingType>): FilterState {
         return FilterState(
-            city = filters.city,
+            city = null,
             type = types,
-            priceMin = filters.priceMin,
-            priceMax = filters.priceMax,
-            surfaceMin = filters.surfaceMin,
-            surfaceMax = filters.surfaceMax,
-            status = filters.status
+            priceMin = null,
+            priceMax = null,
+            surfaceMin = null,
+            surfaceMax = null,
+            status = null
         )
     }
 
