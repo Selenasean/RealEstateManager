@@ -18,7 +18,7 @@ import com.openclassrooms.realestatemanager.utils.Utils
 
 
 class ListAdapter(private val clickedListener: (id: String) -> Unit) :
-    ListAdapter<ItemState, com.openclassrooms.realestatemanager.ui.list_map_details.ListAdapter.ViewHolder>(
+    ListAdapter<ItemState, ListAdapter.ViewHolder>(
         DIFF_CALLBACK
     ) {
 

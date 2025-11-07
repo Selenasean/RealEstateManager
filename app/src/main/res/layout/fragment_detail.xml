@@ -4,23 +4,22 @@
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="wrap_content">
 
     <!--FAB-->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/medium_plus"
         android:layout_marginEnd="@dimen/medium"
-        android:contentDescription="@string/button_update"
-        android:src="@drawable/create_icon"
-        app:tint="@color/md_theme_onPrimary"
+        android:layout_marginBottom="@dimen/medium_plus"
         android:alpha="0.8"
         android:backgroundTint="@color/md_theme_primary"
+        android:contentDescription="@string/button_update"
+        android:src="@drawable/create_icon"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:tint="@color/md_theme_onPrimary" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -72,7 +71,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/small_double"
                     android:layout_marginTop="@dimen/small"
-                    android:text="@string/media"
+                    android:text="@string/photo"
                     android:textColor="?attr/colorPrimary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -94,6 +93,54 @@
                     app:layout_constraintTop_toBottomOf="@id/textview_detail_media"
                     tools:listitem="@layout/image_item" />
 
+                <!-- VIDEO PART -->
+                <TextView
+                    android:id="@+id/textview_detail_video"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/small_double"
+                    android:layout_marginTop="@dimen/small"
+                    android:text="@string/video"
+                    android:textColor="?attr/colorPrimary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/images_rv" />
+
+                <FrameLayout
+                    android:id="@+id/video_container"
+                    android:layout_width="250dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="@dimen/small"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textview_detail_video">
+
+                    <VideoView
+                        android:id="@+id/video_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center" />
+
+                    <ImageView
+                        android:id="@+id/video_thumbnail"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/video_thumbnail"
+                        android:scaleType="centerCrop"
+                        android:visibility="visible" />
+
+                    <ImageButton
+                        android:id="@+id/play_btn"
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
+                        android:layout_gravity="center"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/play_button"
+                        android:src="@drawable/play_circle_icon"
+                        android:visibility="visible" />
+
+                </FrameLayout>
                 <!-- DESCRIPTION PART -->
                 <TextView
                     android:id="@+id/description_tv"
@@ -105,7 +152,7 @@
                     android:text="@string/description_detail"
                     android:textColor="?attr/colorPrimary"
                     app:layout_constraintBottom_toTopOf="@id/description_content"
-                    app:layout_constraintTop_toBottomOf="@id/images_rv" />
+                    app:layout_constraintTop_toBottomOf="@id/video_container" />
 
                 <TextView
                     android:id="@+id/description_content"

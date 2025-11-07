@@ -1,7 +1,9 @@
 package com.openclassrooms.realestatemanager.domain
 
+
 import com.openclassrooms.realestatemanager.data.model.Amenity
 import com.openclassrooms.realestatemanager.data.model.BuildingType
+
 import com.openclassrooms.realestatemanager.data.model.PhotoDb
 import com.openclassrooms.realestatemanager.data.model.RealEstateDb
 import com.openclassrooms.realestatemanager.data.model.Status

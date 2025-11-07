@@ -13,8 +13,8 @@ import com.openclassrooms.realestatemanager.data.dao.RealEstateDao
 import com.openclassrooms.realestatemanager.data.model.Amenity
 import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.data.model.PhotoDb
-import com.openclassrooms.realestatemanager.data.model.RealEstateDb
 import com.openclassrooms.realestatemanager.data.model.RealEstateAgentDb
+import com.openclassrooms.realestatemanager.data.model.RealEstateDb
 import com.openclassrooms.realestatemanager.data.model.Status
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -27,7 +27,6 @@ import java.util.UUID
 @Database(
     entities = [PhotoDb::class, RealEstateDb::class, RealEstateAgentDb::class],
     version = 1,
-
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -40,7 +39,11 @@ abstract class AppDataBase : RoomDatabase() {
 
 
     companion object {
-        fun createAppDatabase(context: Context, applicationScope: CoroutineScope, databaseProvider:() -> AppDataBase): AppDataBase {
+        fun createAppDatabase(
+            context: Context,
+            applicationScope: CoroutineScope,
+            databaseProvider: () -> AppDataBase
+        ): AppDataBase {
             val database: AppDataBase = Room.databaseBuilder(
                 context,
                 AppDataBase::class.java,
@@ -54,7 +57,7 @@ abstract class AppDataBase : RoomDatabase() {
 
     private class PrepopulateDatabase(
         private val applicationScope: CoroutineScope,
-        private val databaseProvider:() -> AppDataBase
+        private val databaseProvider: () -> AppDataBase
     ) : Callback() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)

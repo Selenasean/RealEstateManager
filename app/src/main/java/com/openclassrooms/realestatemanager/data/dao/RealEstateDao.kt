@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.openclassrooms.realestatemanager.data.model.BuildingType
+
 import com.openclassrooms.realestatemanager.data.model.PhotoDb
 import com.openclassrooms.realestatemanager.data.model.RealEstateDb
 import com.openclassrooms.realestatemanager.data.model.Status

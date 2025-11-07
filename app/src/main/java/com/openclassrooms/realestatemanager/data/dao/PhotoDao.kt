@@ -26,3 +26,4 @@ interface PhotoDao {
     @Update
     suspend fun updatePhoto(photo: PhotoDb)
 }
+

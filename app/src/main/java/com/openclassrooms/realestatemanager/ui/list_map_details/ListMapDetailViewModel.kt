@@ -16,14 +16,17 @@ import com.openclassrooms.realestatemanager.data.model.Status
 import com.openclassrooms.realestatemanager.domain.Photo
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
 import com.openclassrooms.realestatemanager.utils.Utils
+
 import com.openclassrooms.realestatemanager.utils.events.ListMapDetailEvent
 import com.openclassrooms.realestatemanager.utils.events.MapEvent
 import com.openclassrooms.realestatemanager.utils.toPhotoSelectedViewState
+
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -55,6 +58,12 @@ class ListMapDetailViewModel(
         SharingStarted.WhileSubscribed(5000),
         null
     )
+
+    //state of video playing
+    var isVideoPlaying: Boolean = false
+    //state of the current position of the video playback
+    private val _playbackPosition = MutableStateFlow(0)
+    val playbackPosition = _playbackPosition.asStateFlow()
 
     //Flows to be observe in UI, notifying an event
     private val _eventsFlow = Channel<ListMapDetailEvent>()
@@ -106,7 +115,6 @@ class ListMapDetailViewModel(
             null
         )
 
-
     /**
      * Stock id value for opening the right DetailFragment
      */
@@ -121,6 +129,27 @@ class ListMapDetailViewModel(
      */
     fun onDetailClosed() {
         _detailPaneIdStateFlow.value = null
+    }
+
+//    /**
+//     * Video is played
+//     */
+//    fun videoIsPlayed(){
+//        _isVideoPlaying = true
+//    }
+//
+//    /**
+//     * Video is stopped
+//     */
+//    fun videoIsStopped(){
+//        _isVideoPlaying = false
+//    }
+
+    /**
+     * to update video playback position
+     */
+    fun updatePlaybackPosition(position: Int){
+        _playbackPosition.value = position
     }
 
     /**

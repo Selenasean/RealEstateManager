@@ -142,6 +142,8 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
             takePictureCallback.launch(currentPhotoUri)
         }
 
+        //videoPicker
+
         //Select date of sale
         binding.datePickerBtn.setOnClickListener {
             showDatePicker(binding)

@@ -270,6 +270,10 @@ class CreateEditViewModel(
         Log.i("createVM", "amenities :${_savedRealEstateMutableStateFlow.value}")
     }
 
+
+    /**
+     * To update status
+     */
     fun updateStatus(status: Status) {
         val currentState = _savedRealEstateMutableStateFlow.value
         _savedRealEstateMutableStateFlow.value = currentState.copy(status = status)

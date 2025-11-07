@@ -13,11 +13,13 @@ import com.openclassrooms.realestatemanager.domain.Filters
 
 import com.openclassrooms.realestatemanager.domain.RealEstate
 import com.openclassrooms.realestatemanager.domain.RealEstateAgent
+
 import com.openclassrooms.realestatemanager.domain.RealEstateToCreate
 import com.openclassrooms.realestatemanager.domain.RealEstateToUpdate
 import com.openclassrooms.realestatemanager.domain.toPhotoDb
 import com.openclassrooms.realestatemanager.domain.toRealEstate
 import com.openclassrooms.realestatemanager.domain.toRealEstateAgent
+
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.Clock
@@ -32,7 +34,7 @@ class Repository(
 ) {
 
     /**
-     * Need primary construtor for production use,
+     * Need primary constructor for production use,
      * the second constructor for testing
      */
     constructor(
@@ -76,7 +78,6 @@ class Repository(
             }
 
     }
-
 
     /**
      * To get one particular real estate

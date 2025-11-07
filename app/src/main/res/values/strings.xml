@@ -7,12 +7,17 @@
     <string name="apartment">Apartment</string>
     <string name="vila">Vila</string>
 
+    //FOR MEDIA TYPE
+    <string name="photoMedia">Photo</string>
+    <string name="videoMedia">Video</string>
+
     //FOR STATUS
     <string name="sold">Sold</string>
     <string name="for_sale">For sale</string>
 
     //DETAIL FRAGMENT
-    <string name="media">Photos</string>
+    <string name="photo">Photos</string>
+    <string name="video">Video</string>
     <string name="description_detail">Description</string>
     <string name="surface">Surface</string>
     <string name="number_room">Number of rooms</string>
@@ -29,6 +34,7 @@
     //CREATE FRAGMENT
     <string name="create_title">Create your real estate</string>
     <string name="content_description_rv">A list of real estate\'s photos</string>
+    <string name="content_description_video_rv">A list of real estate\'s videos</string>
     <string name="address_tv">Address </string>
     <string name="city_tv">City </string>
     <string name="type_tv">Type of real estate</string>
@@ -85,6 +91,9 @@
     <string name="apply_filter">Apply filter</string>
     <string name="failure">Address does not exist, please enter a correct address</string>
     <string name="clear_filter">Clear filter</string>
+    <string name="play_btn">Button to play the video</string>
+    <string name="play_button">button to play the video</string>
+    <string name="video_thumbnail">video\'s thumbnail, before the video is playing</string>
 
 
 </resources>
