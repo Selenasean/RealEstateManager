@@ -101,9 +101,9 @@ class ListMapDetailViewModel(
                         amenities = realEstate.amenities,
                         latitude = realEstate.latitude,
                         longitude = realEstate.longitude,
-                        dateOfSale = realEstate.dateOfSale?.let { Utils.instantToDate(it) }
+                        dateOfSale = realEstate.dateOfSale?.let { Utils.instantToDate(it) },
+                        video = realEstate.video
                     )
-
                 }
 
             } else {
@@ -130,20 +130,6 @@ class ListMapDetailViewModel(
     fun onDetailClosed() {
         _detailPaneIdStateFlow.value = null
     }
-
-//    /**
-//     * Video is played
-//     */
-//    fun videoIsPlayed(){
-//        _isVideoPlaying = true
-//    }
-//
-//    /**
-//     * Video is stopped
-//     */
-//    fun videoIsStopped(){
-//        _isVideoPlaying = false
-//    }
 
     /**
      * to update video playback position
@@ -295,7 +281,8 @@ data class RealEstateDetailViewState(
     val amenities: List<Amenity>,
     val latitude: Double?,
     val longitude: Double?,
-    val dateOfSale: String?
+    val dateOfSale: String?,
+    val video: String?
 )
 
 /**

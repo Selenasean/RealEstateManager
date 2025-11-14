@@ -1,6 +1,8 @@
 package com.openclassrooms.realestatemanager.data
 
 
+import com.openclassrooms.realestatemanager.BuildConfig
+import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.data.dao.PhotoDao
 import com.openclassrooms.realestatemanager.data.dao.RealEstateAgentDao
 import com.openclassrooms.realestatemanager.data.dao.RealEstateDao
@@ -132,7 +134,8 @@ class Repository(
                 dateOfSale = null,
                 realEstateAgentId = realEstate.agentId,
                 latitude = position.latitude,
-                longitude = position.longitude
+                longitude = position.longitude,
+                video =  "android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.raw.sample_video
             )
         )
 
@@ -178,7 +181,8 @@ class Repository(
                 dateOfSale = realEstate.dateOfSale,
                 realEstateAgentId = realEstate.agentId,
                 latitude = position.latitude,
-                longitude = position.longitude
+                longitude = position.longitude,
+                video = "android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.raw.sample_video
             )
         )
 

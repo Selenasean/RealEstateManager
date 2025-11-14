@@ -51,23 +51,24 @@ class DetailFragment : Fragment(R.layout.fragment_detail), OnMapReadyCallback {
     private var mediaController: MediaController? = null
 
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setRecyclerView()
         binding.noItemLytContainer.visibility = View.GONE
-
+        var videoPath: String? = null
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.detailState.collect { realEstateDetailed ->
                     render(
                         realEstateDetailed
                     )
+                    videoPath = realEstateDetailed?.video
                 }
             }
         }
-        val pathVideo = ("android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.raw.sample_video).toUri()
         if (viewModel.isVideoPlaying) {
-            playVideo(pathVideo)
+           playVideo(videoPath!!)
         }
 
         binding.fabUpdate.setOnClickListener {
@@ -163,29 +164,34 @@ class DetailFragment : Fragment(R.layout.fragment_detail), OnMapReadyCallback {
                 )
             )
             //for video
-            val pathVideo =
-                ("android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.raw.sample_video).toUri()
             //display video thumbnail
-            binding.videoThumbnail.load(pathVideo) {
-                crossfade(true)
-                videoFrameMillis(1000)
-            }
+            if(realEstate.video != null){
+                binding.videoContainer.visibility = View.VISIBLE
+                binding.textviewDetailVideo.visibility = View.VISIBLE
+                binding.videoThumbnail.load(realEstate.video) {
+                    crossfade(true)
+                    videoFrameMillis(30000L)
+                }
 
-            //listener for play button
-            binding.playBtn.setOnClickListener { playVideo(pathVideo) }
+                //listener for play button
+                binding.playBtn.setOnClickListener { playVideo(realEstate.video) }
+            }else{
+                binding.videoContainer.visibility = View.GONE
+                binding.textviewDetailVideo.visibility = View.GONE
+            }
 
         }
 
 
     }
 
-    private fun playVideo(pathVideo: Uri) {
+    private fun playVideo(pathVideo: String) {
         //hide thumbnail
-        binding.videoThumbnail.visibility = View.GONE
+//        binding.videoThumbnail.visibility = View.GONE
         binding.playBtn.visibility = View.GONE
 
         //set the video
-        binding.videoView.setVideoURI(pathVideo)
+        binding.videoView.setVideoURI(pathVideo.toUri())
         binding.videoView.requestFocus()
 
         //settings for dealing with video running
@@ -211,7 +217,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail), OnMapReadyCallback {
     fun stopVideo() {
         binding.videoView.stopPlayback()
         viewModel.isVideoPlaying = false
-        binding.videoThumbnail.visibility = View.VISIBLE
+//        binding.videoThumbnail.visibility = View.VISIBLE
         binding.playBtn.visibility = View.VISIBLE
         mediaController?.hide()
     }

@@ -7,6 +7,8 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.withTransaction
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.openclassrooms.realestatemanager.BuildConfig
+import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.data.dao.PhotoDao
 import com.openclassrooms.realestatemanager.data.dao.RealEstateAgentDao
 import com.openclassrooms.realestatemanager.data.dao.RealEstateDao
@@ -89,7 +91,8 @@ abstract class AppDataBase : RoomDatabase() {
                            dateOfSale = null,
                            realEstateAgentId = agentId1,
                            latitude = 48.842967007702,
-                           longitude = 2.789498969349
+                           longitude = 2.789498969349,
+                           video = "android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.raw.sample_video
                        )
                    )
                    appDataBase.photoDao().createPhoto(
@@ -144,7 +147,8 @@ abstract class AppDataBase : RoomDatabase() {
                            dateOfSale = null,
                            realEstateAgentId = agentId1,
                            latitude = 48.799789980426,
-                           longitude = 2.12132499652
+                           longitude = 2.12132499652,
+                           video = "android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.raw.sample_video
                        )
                    )
                    appDataBase.photoDao().createPhoto(
@@ -174,7 +178,8 @@ abstract class AppDataBase : RoomDatabase() {
                            dateOfSale = null,
                            realEstateAgentId = agentId2,
                            latitude = 48.790022003832,
-                           longitude = 2.444626988119
+                           longitude = 2.444626988119,
+                           video = "android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.raw.sample_video
                        )
                    )
                    appDataBase.photoDao().createPhoto(
@@ -204,7 +209,8 @@ abstract class AppDataBase : RoomDatabase() {
                            dateOfSale = null,
                            realEstateAgentId = agentId2,
                            latitude = 48.742956988859,
-                           longitude = 2.39837103635
+                           longitude = 2.39837103635,
+                           video = "android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.raw.sample_video
                        )
                    )
                    appDataBase.photoDao().createPhoto(
@@ -239,7 +245,8 @@ abstract class AppDataBase : RoomDatabase() {
                                .toInstant(ZoneOffset.UTC),
                            realEstateAgentId = agentId3,
                            latitude = 48.925588014035,
-                           longitude = 2.184905001048
+                           longitude = 2.184905001048,
+                           video = "android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.raw.sample_video
                        )
                    )
                    appDataBase.photoDao().createPhoto(
@@ -269,7 +276,8 @@ abstract class AppDataBase : RoomDatabase() {
                            dateOfSale = null,
                            realEstateAgentId = agentId3,
                            latitude = 48.956983019112,
-                           longitude = 2.886898025352
+                           longitude = 2.886898025352,
+                           video = null
                        )
                    )
                    appDataBase.photoDao().createPhoto(

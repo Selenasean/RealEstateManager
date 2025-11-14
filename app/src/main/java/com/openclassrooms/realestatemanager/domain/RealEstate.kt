@@ -28,8 +28,8 @@ data class RealEstate(
     val longitude: Double,
     val agentId: Long,
     val dateCreated : Instant,
-    val dateOfSale : Instant?
-
+    val dateOfSale : Instant?,
+    val video: String?
 )
 
 //MAPPING FUNCTION
@@ -61,7 +61,8 @@ fun Map<RealEstateDb, List<PhotoDb>>.toRealEstate(): List<RealEstate> {
             longitude = entry.key.longitude,
             agentId = entry.key.realEstateAgentId,
             dateCreated = entry.key.dateCreated,
-            dateOfSale = entry.key.dateOfSale
+            dateOfSale = entry.key.dateOfSale,
+            video = entry.key.video
         )
     }
 }

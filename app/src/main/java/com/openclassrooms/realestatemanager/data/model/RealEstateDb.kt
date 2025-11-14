@@ -32,5 +32,6 @@ data class RealEstateDb(
     val dateOfSale: Instant?,
     val realEstateAgentId: Long,
     val longitude: Double,
-    val latitude : Double
+    val latitude : Double,
+    val video: String?
 )
