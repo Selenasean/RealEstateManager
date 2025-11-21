@@ -53,6 +53,13 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
+        <!-- contentProvider for realEstate -->
+        <provider
+            android:name=".provider.RealEstateContentProvider"
+            android:authorities="com.openclassrooms.realestatemanager.provider"
+            android:exported="true"
+            android:enabled="true" />
+
         <!-- for API KEY in google map -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"

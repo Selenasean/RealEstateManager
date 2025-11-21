@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.data.dao
 
+import android.database.Cursor
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -47,5 +48,13 @@ interface RealEstateDao {
         maxSurface: Int?,
         status : Status?
     ): Flow<Map<RealEstateDb, List<PhotoDb>>>
+
+    @Query("SELECT * FROM realEstates LEFT JOIN photos ON realEstates.id = photos.realEstateId")
+    fun getAllRealEstatesWithCursor() : Cursor
+
+    @Query("SELECT * FROM realEstates " +
+            "LEFT JOIN photos ON realestates.id = photos.realEstateId " +
+            "WHERE realEstateId = id")
+    fun getOneRealEstateWithCursor(id: Long): Cursor
 
 }

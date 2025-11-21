@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.data
 
 import com.openclassrooms.realestatemanager.BuildConfig
 import com.openclassrooms.realestatemanager.R
+import android.database.Cursor
 import com.openclassrooms.realestatemanager.data.dao.PhotoDao
 import com.openclassrooms.realestatemanager.data.dao.RealEstateAgentDao
 import com.openclassrooms.realestatemanager.data.dao.RealEstateDao
@@ -80,6 +81,7 @@ class Repository(
             }
 
     }
+
 
     /**
      * To get one particular real estate
@@ -198,6 +200,14 @@ class Repository(
         }
 
         return SaveResult.SUCCESS
+    }
+
+    fun getAllRealEstatesWithCursor(): Cursor{
+        return realEstateDao.getAllRealEstatesWithCursor()
+    }
+
+    fun getOneRealEstateWithCursor(id: Long): Cursor{
+        return realEstateDao.getOneRealEstateWithCursor(id)
     }
 
 }
