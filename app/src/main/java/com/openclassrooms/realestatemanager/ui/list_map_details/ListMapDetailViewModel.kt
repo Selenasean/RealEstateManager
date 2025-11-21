@@ -122,6 +122,7 @@ class ListMapDetailViewModel(
         println("click realestate =$id")
         _detailPaneIdStateFlow.value = id
         _eventsFlow.trySend(ListMapDetailEvent.OpenDetails)
+
     }
 
     /**

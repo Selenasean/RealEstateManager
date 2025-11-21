@@ -12,9 +12,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import coil.decode.VideoFrameDecoder
-import coil.load
-import coil.request.videoFrameMillis
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -85,18 +82,20 @@ class DetailFragment : Fragment(R.layout.fragment_detail), OnMapReadyCallback {
         binding.playBtn.setOnClickListener {
             val currentVideoUri = viewModel.detailState.value?.video
             if (currentVideoUri != null)  {
-//               binding.videoView.setVideoURI(null)
+
                 playVideo(currentVideoUri)
             }
         }
     }
 
+    var oldId:String? = null
     /**
      * To render elements on UI
      */
     private fun render(
         realEstate: RealEstateDetailViewState?
     ) {
+
         if (realEstate == null) {
             binding.noItemLytContainer.visibility = View.VISIBLE
             binding.constraintlayoutContainer.visibility = View.GONE
@@ -161,45 +160,30 @@ class DetailFragment : Fragment(R.layout.fragment_detail), OnMapReadyCallback {
                 )
             )
             //for video
+            if( oldId != realEstate.id ){
+                stopVideo()
+                binding.videoView.setBackgroundResource(R.drawable.ic_launcher_background)
+            }
             if (realEstate.video != null) {
                 binding.videoContainer.visibility = View.VISIBLE
                 binding.textviewDetailVideo.visibility = View.VISIBLE
-                binding.videoThumbnail.visibility = View.VISIBLE
-
-                if(viewModel.playingVideo != null && viewModel.playingVideo != realEstate.video){
-                    stopVideo()
-                }
-                //load the thumbnail
-                val imageLoader = coil.ImageLoader.Builder(requireContext())
-                    .components {
-                        add(VideoFrameDecoder.Factory())
-                    }
-                    .build()
-
-                binding.videoThumbnail.load(realEstate.video, imageLoader) {
-                    crossfade(true)
-                    // Request a frame from the beginning of the video for reliability.
-                    videoFrameMillis(1000L)
-                }
-
             } else {
                 binding.videoContainer.visibility = View.GONE
                 binding.textviewDetailVideo.visibility = View.GONE
             }
 
         }
-
+        oldId = realEstate?.id
 
     }
 
 
     private fun playVideo(pathVideo: String) {
+        binding.videoView.setBackgroundResource(0)
         binding.playBtn.visibility = View.GONE
-        binding.videoThumbnail.visibility = View.GONE
 
         //set the video
         binding.videoView.setVideoURI(pathVideo.toUri())
-//        binding.videoView.requestFocus()
 
         //settings for dealing with video running
         binding.videoView.setOnPreparedListener { mediaPlayer ->
@@ -226,7 +210,6 @@ class DetailFragment : Fragment(R.layout.fragment_detail), OnMapReadyCallback {
         binding.videoView.stopPlayback()
         viewModel.onVideoStopped()
         binding.playBtn.visibility = View.VISIBLE
-        binding.videoThumbnail.visibility = View.VISIBLE
         mediaController?.hide()
     }
 
