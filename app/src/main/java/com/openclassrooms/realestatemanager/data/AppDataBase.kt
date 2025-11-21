@@ -15,8 +15,8 @@ import com.openclassrooms.realestatemanager.data.dao.RealEstateDao
 import com.openclassrooms.realestatemanager.data.model.Amenity
 import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.data.model.PhotoDb
-import com.openclassrooms.realestatemanager.data.model.RealEstateAgentDb
 import com.openclassrooms.realestatemanager.data.model.RealEstateDb
+import com.openclassrooms.realestatemanager.data.model.RealEstateAgentDb
 import com.openclassrooms.realestatemanager.data.model.Status
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -29,6 +29,7 @@ import java.util.UUID
 @Database(
     entities = [PhotoDb::class, RealEstateDb::class, RealEstateAgentDb::class],
     version = 1,
+
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -41,11 +42,7 @@ abstract class AppDataBase : RoomDatabase() {
 
 
     companion object {
-        fun createAppDatabase(
-            context: Context,
-            applicationScope: CoroutineScope,
-            databaseProvider: () -> AppDataBase
-        ): AppDataBase {
+        fun createAppDatabase(context: Context, applicationScope: CoroutineScope, databaseProvider:() -> AppDataBase): AppDataBase {
             val database: AppDataBase = Room.databaseBuilder(
                 context,
                 AppDataBase::class.java,
@@ -59,7 +56,7 @@ abstract class AppDataBase : RoomDatabase() {
 
     private class PrepopulateDatabase(
         private val applicationScope: CoroutineScope,
-        private val databaseProvider: () -> AppDataBase
+        private val databaseProvider:() -> AppDataBase
     ) : Callback() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
@@ -179,7 +176,7 @@ abstract class AppDataBase : RoomDatabase() {
                            realEstateAgentId = agentId2,
                            latitude = 48.790022003832,
                            longitude = 2.444626988119,
-                           video = "android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.raw.sample_video
+                           video = null
                        )
                    )
                    appDataBase.photoDao().createPhoto(
@@ -210,7 +207,7 @@ abstract class AppDataBase : RoomDatabase() {
                            realEstateAgentId = agentId2,
                            latitude = 48.742956988859,
                            longitude = 2.39837103635,
-                           video = "android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.raw.sample_video
+                           video = null
                        )
                    )
                    appDataBase.photoDao().createPhoto(
@@ -246,7 +243,7 @@ abstract class AppDataBase : RoomDatabase() {
                            realEstateAgentId = agentId3,
                            latitude = 48.925588014035,
                            longitude = 2.184905001048,
-                           video = "android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.raw.sample_video
+                           video = null
                        )
                    )
                    appDataBase.photoDao().createPhoto(

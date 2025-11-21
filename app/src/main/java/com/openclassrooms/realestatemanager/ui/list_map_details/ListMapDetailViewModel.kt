@@ -60,7 +60,7 @@ class ListMapDetailViewModel(
     )
 
     //state of video playing
-    var isVideoPlaying: Boolean = false
+    var playingVideo: String? = null
     //state of the current position of the video playback
     private val _playbackPosition = MutableStateFlow(0)
     val playbackPosition = _playbackPosition.asStateFlow()
@@ -136,6 +136,21 @@ class ListMapDetailViewModel(
      */
     fun updatePlaybackPosition(position: Int){
         _playbackPosition.value = position
+    }
+
+    /**
+     * To start video
+     */
+    fun onVideoStarted(videoPath : String){
+        playingVideo = videoPath
+    }
+
+    /**
+     * To Stopped video
+     */
+    fun onVideoStopped(){
+        playingVideo = null
+        updatePlaybackPosition(0)
     }
 
     /**
@@ -218,6 +233,7 @@ class ListMapDetailViewModel(
     /**
      * To check if location exist and send an Event to get the location in UI
      */
+    //TODO: this is not working
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     fun onLocationPermission() {
         viewModelScope.launch {
@@ -258,7 +274,8 @@ data class RealEstateViewState(
     val address: String,
     val status: Status,
     val amenities: List<Amenity>,
-    val dateOfSale: String?
+    val dateOfSale: String?,
+
 )
 
 /**

@@ -71,7 +71,6 @@ class ListAdapter(private val clickedListener: (id: String) -> Unit) :
             binding.cityTv.text = realestate.city
             binding.buildingTypeTv.text = ContextCompat.getString(context, realestate.type.displayName)
             binding.priceTv.text = Utils.priceFormatter(realestate.priceTag, CurrencyCode.EURO)
-//                realestate.priceTag.toString().plus("€")
             if (realestate.photos.isNotEmpty()) {
                 binding.imageRealestate.load(realestate.photos[0].urlPhoto) {
                     crossfade(true)
