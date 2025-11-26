@@ -8,6 +8,7 @@ import android.database.Cursor
 import android.net.Uri
 import com.openclassrooms.realestatemanager.AppApplication
 import com.openclassrooms.realestatemanager.data.Repository
+import androidx.core.net.toUri
 
 class RealEstateContentProvider : ContentProvider() {
 
@@ -16,7 +17,7 @@ class RealEstateContentProvider : ContentProvider() {
         private const val AUTHORITY = "com.openclassrooms.realestatemanager.provider"
         
         //the bas URI that will be use to access the provider
-        val CONTENT_URI: Uri = Uri.parse("content//$AUTHORITY/real_estate")
+        val CONTENT_URI: Uri = "content//$AUTHORITY/real_estate".toUri()
 
         //URI Matcher codes
         private const val REAL_ESTATES = 1
@@ -37,8 +38,6 @@ class RealEstateContentProvider : ContentProvider() {
      */
     override fun onCreate(): Boolean {
         context?.let { context ->
-            //TODO: pq recup repository depuis l'application context ?
-            //si on passe par le context d'appApplication on le recup pas
             val application = context.applicationContext as AppApplication
             repository = application.repository
         } ?: false
@@ -72,15 +71,22 @@ class RealEstateContentProvider : ContentProvider() {
 
     }
 
-    override fun getType(uri: Uri): String? {
-        TODO("Not yet implemented")
+    /**
+     * Returns the MIME type for the data at the given URI
+     */
+    override fun getType(uri: Uri): String {
+        return when (uriMatcher.match(uri)) {
+            REAL_ESTATES -> "vnd.android.cursor.dir/$AUTHORITY.real_estate"
+            REAL_ESTATE_ID -> "vnd.android.cursor.item/$AUTHORITY.real_estate"
+            else -> throw IllegalArgumentException("Unknown URI : $uri")
+        }
     }
 
     override fun insert(
         uri: Uri,
         values: ContentValues?
-    ): Uri? {
-        TODO("Not yet implemented")
+    ): Uri {
+        throw IllegalArgumentException("Not implemented: Use the app to insert data.")
     }
 
     override fun delete(
@@ -88,7 +94,7 @@ class RealEstateContentProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<out String?>?
     ): Int {
-        TODO("Not yet implemented")
+        throw IllegalArgumentException("Not implemented: Use the app to delete data.")
     }
 
     override fun update(
@@ -97,6 +103,6 @@ class RealEstateContentProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<out String?>?
     ): Int {
-        TODO("Not yet implemented")
+        throw IllegalArgumentException("Not implemented: Use the app to update data.")
     }
 }

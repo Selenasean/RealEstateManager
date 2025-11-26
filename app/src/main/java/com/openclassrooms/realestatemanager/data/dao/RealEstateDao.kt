@@ -49,6 +49,9 @@ interface RealEstateDao {
         status : Status?
     ): Flow<Map<RealEstateDb, List<PhotoDb>>>
 
+
+    //CONTENT PROVIDER PART
+
     @Query("SELECT * FROM realEstates LEFT JOIN photos ON realEstates.id = photos.realEstateId")
     fun getAllRealEstatesWithCursor() : Cursor
 

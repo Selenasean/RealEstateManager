@@ -202,16 +202,29 @@ class Repository(
         return SaveResult.SUCCESS
     }
 
+    /**
+     * For content provider
+     * @return Cursor
+     */
     fun getAllRealEstatesWithCursor(): Cursor{
         return realEstateDao.getAllRealEstatesWithCursor()
     }
 
+    /**
+     * For content provider
+     * @param id of the realEstate wanted
+     * @return Cursor of the realEstate
+     */
     fun getOneRealEstateWithCursor(id: Long): Cursor{
         return realEstateDao.getOneRealEstateWithCursor(id)
     }
 
 }
 
+
+/**
+ * Enum class for results of request
+ */
 enum class SaveResult() {
     SUCCESS,
     ERROR
