@@ -1,9 +1,12 @@
 package com.openclassrooms.realestatemanager.data
 
 
+import android.database.Cursor
 import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
+import assertk.assertions.isNull
 import com.openclassrooms.realestatemanager.TestUtils.UtilsForUnitTests.fakeAgentDb
 import com.openclassrooms.realestatemanager.TestUtils.UtilsForUnitTests.fakeFilters
 import com.openclassrooms.realestatemanager.TestUtils.UtilsForUnitTests.fakePhoto
@@ -24,9 +27,11 @@ import com.openclassrooms.realestatemanager.domain.toRealEstateAgent
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.just
+import io.mockk.mockk
 import io.mockk.slot
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -63,6 +68,7 @@ class RepositoryTest {
 
     @MockK
     private lateinit var mockGeocoderRepository: GeocoderRepository
+
 
     private lateinit var repository: Repository
 
@@ -309,7 +315,7 @@ class RepositoryTest {
     }
 
     @Test
-    fun fetch_one_realEstate() = runTest {
+    fun fetch_one_agent() = runTest {
         //GIVEN
         coEvery {
             mockAgentDao.fetchOneAgent(any())
@@ -445,6 +451,28 @@ class RepositoryTest {
         val result = repository.updateRealEstate(fakeRealEstateToUpdate)
         //THEN
         assertThat(result).isEqualTo(SaveResult.ERROR)
+    }
+
+    @Test
+    fun get_all_realestates_with_cursor(){
+        //GIVEN
+        //WHEN
+        //THEN
+    }
+
+    @Test
+    fun get_one_realestate_with_cursor(){
+        //GIVEN
+        val estateId = 2L
+        val mockCursor: Cursor = mockk()
+        every {
+            repository.getOneRealEstateWithCursor(estateId)
+        } returns mockCursor
+        //WHEN
+        val cursor = repository.getOneRealEstateWithCursor(estateId)
+
+        //THEN
+        assertThat(cursor.count).isEqualTo(1)
     }
 
 }

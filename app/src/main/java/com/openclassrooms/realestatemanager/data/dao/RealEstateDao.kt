@@ -57,7 +57,7 @@ interface RealEstateDao {
 
     @Query("SELECT * FROM realEstates " +
             "LEFT JOIN photos ON realestates.id = photos.realEstateId " +
-            "WHERE realEstateId = id")
+            "WHERE realEstates.id = :id")
     fun getOneRealEstateWithCursor(id: Long): Cursor
 
 }
