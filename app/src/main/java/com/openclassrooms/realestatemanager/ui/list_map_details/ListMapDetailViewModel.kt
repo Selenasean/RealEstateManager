@@ -64,6 +64,8 @@ class ListMapDetailViewModel(
     //state of the current position of the video playback
     private val _playbackPosition = MutableStateFlow(0)
     val playbackPosition = _playbackPosition.asStateFlow()
+    //old realEstate's id to param the videoView
+    var oldId: String? = null
 
     //Flows to be observe in UI, notifying an event
     private val _eventsFlow = Channel<ListMapDetailEvent>()
@@ -71,6 +73,7 @@ class ListMapDetailViewModel(
 
     private val _eventMapFlow = Channel<MapEvent>()
     val eventMapFlow = _eventMapFlow.receiveAsFlow()
+
 
     /**
      * To get data from one realEstate to be observed in UI

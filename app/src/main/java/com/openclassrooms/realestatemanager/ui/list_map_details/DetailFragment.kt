@@ -34,7 +34,6 @@ class DetailFragment : Fragment(R.layout.fragment_detail), OnMapReadyCallback {
         const val CLASS_NAME = "DETAIL_FRAGMENT"
     }
 
-
     //only valid between onCreateView an onDestroyView
     private val binding by viewBinding(FragmentDetailBinding::bind)
 
@@ -44,8 +43,9 @@ class DetailFragment : Fragment(R.layout.fragment_detail), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //settings for recyclerView
         setRecyclerView()
-        binding.noItemLytContainer.visibility = View.GONE
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.detailState.collect { realEstateDetailed ->
@@ -56,6 +56,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail), OnMapReadyCallback {
             }
         }
 
+        //update btn listener
         binding.fabUpdate.setOnClickListener {
             //pass id to CreateEditFragment
             val id = viewModel.detailState.value?.id
@@ -81,21 +82,18 @@ class DetailFragment : Fragment(R.layout.fragment_detail), OnMapReadyCallback {
         //listener for  video play button
         binding.playBtn.setOnClickListener {
             val currentVideoUri = viewModel.detailState.value?.video
-            if (currentVideoUri != null)  {
-
+            if (currentVideoUri != null) {
                 playVideo(currentVideoUri)
             }
         }
     }
 
-    var oldId:String? = null
     /**
      * To render elements on UI
      */
     private fun render(
         realEstate: RealEstateDetailViewState?
     ) {
-
         if (realEstate == null) {
             binding.noItemLytContainer.visibility = View.VISIBLE
             binding.constraintlayoutContainer.visibility = View.GONE
@@ -105,7 +103,10 @@ class DetailFragment : Fragment(R.layout.fragment_detail), OnMapReadyCallback {
             val context = binding.root.context
             binding.constraintlayoutContainer.visibility = View.VISIBLE
             binding.noItemLytContainer.visibility = View.GONE
+
+            //linked to adapter
             photosAdapter.submitList(realEstate.photos)
+
             binding.descriptionContent.text = realEstate.description
             binding.lytAttributes.statusValueTv.text =
                 ContextCompat.getString(context, realEstate.status.state)
@@ -159,10 +160,12 @@ class DetailFragment : Fragment(R.layout.fragment_detail), OnMapReadyCallback {
                     longitude = realEstate.longitude!!
                 )
             )
+
             //for video
-            if( oldId != realEstate.id ){
+            if (viewModel.oldId != realEstate.id) {
                 stopVideo()
-                binding.videoView.setBackgroundResource(R.drawable.ic_launcher_background)
+                //hide videoView frame with a drawable
+                binding.videoView.setBackgroundResource(R.color.design_default_color_on_secondary)
             }
             if (realEstate.video != null) {
                 binding.videoContainer.visibility = View.VISIBLE
@@ -173,12 +176,15 @@ class DetailFragment : Fragment(R.layout.fragment_detail), OnMapReadyCallback {
             }
 
         }
-        oldId = realEstate?.id
-
+        viewModel.oldId = realEstate?.id
     }
 
-
+    /**
+     * To play video in VideoView
+     * @param pathVideo video's path
+     */
     private fun playVideo(pathVideo: String) {
+        //display videoView frame
         binding.videoView.setBackgroundResource(0)
         binding.playBtn.visibility = View.GONE
 
@@ -194,8 +200,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail), OnMapReadyCallback {
                 mediaPlayer.seekTo(lastPosition)
             }
             binding.videoView.start()
-            viewModel.onVideoStarted(
-                pathVideo)
+            viewModel.onVideoStarted(pathVideo)
         }
 
         binding.videoView.setOnCompletionListener {
@@ -215,6 +220,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail), OnMapReadyCallback {
 
     /**
      * To setup the mediaController
+     * @param videoView
      */
     private fun setupMediaController(videoView: VideoView) {
         mediaController = MediaController(context)
@@ -234,6 +240,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail), OnMapReadyCallback {
 
     /**
      * onMapReady callback
+     * @param map
      */
     override fun onMapReady(map: GoogleMap) {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -249,6 +256,8 @@ class DetailFragment : Fragment(R.layout.fragment_detail), OnMapReadyCallback {
 
     /**
      * Displaying markers on map according real estate's position
+     * @param map
+     * @param position
      */
     private fun renderMap(map: GoogleMap, position: Position) {
         map.clear()
@@ -271,7 +280,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail), OnMapReadyCallback {
     }
 
     /**
-     * To stop or pause the video
+     * To stop or pause the video when UI is paused
      * Keep the last position to play the video where it was stopped
      */
     override fun onPause() {
@@ -281,6 +290,10 @@ class DetailFragment : Fragment(R.layout.fragment_detail), OnMapReadyCallback {
         }
     }
 
+    /**
+     * To clean videoView listeners, mediaController and playBack
+     * when UI is destroyed
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         binding.videoView.setOnPreparedListener(null)
