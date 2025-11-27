@@ -1,45 +1,33 @@
 package com.openclassrooms.realestatemanager.provider
 
 import android.content.ContentProvider
-import android.content.ContentUris
 import android.content.ContentValues
-import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
 import com.openclassrooms.realestatemanager.AppApplication
+import com.openclassrooms.realestatemanager.data.GeocoderRepository
 import com.openclassrooms.realestatemanager.data.Repository
-import androidx.core.net.toUri
 
 class RealEstateContentProvider : ContentProvider() {
 
-    companion object {
-        //authority for the content provider : package name
-        private const val AUTHORITY = "com.openclassrooms.realestatemanager.provider"
-        
-        //the bas URI that will be use to access the provider
-        val CONTENT_URI: Uri = "content//$AUTHORITY/real_estate".toUri()
 
-        //URI Matcher codes
-        private const val REAL_ESTATES = 1
-        private const val REAL_ESTATE_ID = 2
-
-        //URI Matcher to make the difference between request for all items and only for one
-        private val uriMatcher = UriMatcher(UriMatcher.NO_MATCH).apply {
-            addURI(AUTHORITY, "real_estate", REAL_ESTATES)
-            addURI(AUTHORITY, "real_estate/#", REAL_ESTATE_ID)
-        }
-    }
-
-    private lateinit var repository: Repository
+    private lateinit var handlerContentProvider: HandlerContentProvider
 
     /**
-     * Initialize the content provider
-     * @return true if successfully loaded
+     * Initialize the content provider and his handler
+     * this is where we create our real dependencies
      */
     override fun onCreate(): Boolean {
         context?.let { context ->
             val application = context.applicationContext as AppApplication
-            repository = application.repository
+
+            val repository = Repository(
+                application.appDataBase,
+                GeocoderRepository(context)
+            )
+
+            handlerContentProvider = HandlerContentProvider(repository = repository)
+
         } ?: false
         return true
     }
@@ -47,6 +35,7 @@ class RealEstateContentProvider : ContentProvider() {
     /**
      * Method to handles query request
      * @return Cursor with requested data
+     * Using HandlerContentProvider
      */
     override fun query(
         uri: Uri,
@@ -56,16 +45,13 @@ class RealEstateContentProvider : ContentProvider() {
         sortOrder: String?
     ): Cursor {
 
-        val cursor: Cursor = when (uriMatcher.match(uri)) {
-            REAL_ESTATES -> repository.getAllRealEstatesWithCursor()
-            REAL_ESTATE_ID -> {
-                val id = ContentUris.parseId(uri)
-                repository.getOneRealEstateWithCursor(id)
-            }
-
-            else -> throw IllegalArgumentException("Unknown URI : $uri")
-        }
-
+        val cursor = handlerContentProvider.query(
+            uri,
+            projection,
+            selection,
+            selectionArgs,
+            sortOrder
+        )
         cursor.setNotificationUri(context?.contentResolver, uri)
         return cursor
 
@@ -73,13 +59,10 @@ class RealEstateContentProvider : ContentProvider() {
 
     /**
      * Returns the MIME type for the data at the given URI
+     * using HandlerContentProvider
      */
     override fun getType(uri: Uri): String {
-        return when (uriMatcher.match(uri)) {
-            REAL_ESTATES -> "vnd.android.cursor.dir/$AUTHORITY.real_estate"
-            REAL_ESTATE_ID -> "vnd.android.cursor.item/$AUTHORITY.real_estate"
-            else -> throw IllegalArgumentException("Unknown URI : $uri")
-        }
+        return handlerContentProvider.getType(uri)
     }
 
     override fun insert(

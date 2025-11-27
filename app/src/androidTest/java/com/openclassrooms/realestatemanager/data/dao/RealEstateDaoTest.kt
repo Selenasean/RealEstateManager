@@ -170,4 +170,6 @@ class RealEstateDaoTest {
         }
 
     }
+
+    //TODO : test with Cursor
 }
