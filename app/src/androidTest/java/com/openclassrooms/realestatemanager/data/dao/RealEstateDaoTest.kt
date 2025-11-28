@@ -7,6 +7,8 @@ import assertk.assertThat
 import assertk.assertions.containsExactly
 import assertk.assertions.extracting
 import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
+import assertk.assertions.isSameAs
 import assertk.assertions.isTrue
 import com.openclassrooms.realestatemanager.AppApplication
 import com.openclassrooms.realestatemanager.UtilsForInstrumentalTests
@@ -15,6 +17,7 @@ import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.data.model.RealEstateAgentDb
 import com.openclassrooms.realestatemanager.data.model.RealEstateDb
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.currentTime
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
@@ -33,15 +36,15 @@ class RealEstateDaoTest {
     private var agentId1: Long = 0
 
     //sample for test
-    val realEstateToCreate = UtilsForInstrumentalTests.fakeRealEstateDb(id = 0, surface = 123)
-    val realEstateToCreate2 = UtilsForInstrumentalTests.fakeRealEstateDb(id = 0, surface = 550)
+    private lateinit var realEstateToCreate: RealEstateDb
+    private lateinit var realEstateToCreate2: RealEstateDb
     private var generateId1: Long = 0
     private var generateId2: Long = 0
 
     @Before
     fun createDatabase()= runTest {
         database = Room
-            .inMemoryDatabaseBuilder(AppApplication.Companion.appContext, AppDataBase::class.java)
+            .inMemoryDatabaseBuilder(AppApplication.appContext, AppDataBase::class.java)
             .build()
 
         realEstateDao = database.realEstateDao()
@@ -55,6 +58,9 @@ class RealEstateDaoTest {
                 name = "Josie"
             )
         )
+
+        realEstateToCreate = UtilsForInstrumentalTests.fakeRealEstateDb(id = 0, surface = 123, agentId1)
+        realEstateToCreate2 = UtilsForInstrumentalTests.fakeRealEstateDb(id = 0, surface = 550, agentId1)
 
         generateId1 = realEstateDao.createRealEstate(realEstateToCreate)
         generateId2 = realEstateDao.createRealEstate(realEstateToCreate2)
@@ -171,5 +177,39 @@ class RealEstateDaoTest {
 
     }
 
-    //TODO : test with Cursor
+    @Test
+    fun get_all_realestates_with_cursor(){
+        //GIVEN
+        val returnedIds = mutableListOf<Long>()
+        //WHEN
+        val cursorResult = realEstateDao.getAllRealEstatesWithCursor()
+
+        //THEN
+        assertThat(cursorResult).isNotNull()
+        assertThat(cursorResult.count).isEqualTo(2)
+        assertThat(cursorResult.moveToFirst()).isTrue()
+        if(cursorResult.moveToFirst()){
+            do{
+                val id = cursorResult.getLong(cursorResult.getColumnIndexOrThrow("id"))
+                returnedIds.add(id)
+            } while(cursorResult.moveToNext())
+        }
+        assertThat(returnedIds).containsExactly(generateId1, generateId2)
+        cursorResult.close()
+    }
+
+    @Test
+    fun get_one_realestate_with_cursor(){
+        //WHEN
+        val cursorResult = realEstateDao.getOneRealEstateWithCursor(generateId2)
+        //THEN
+        assertThat(cursorResult).isNotNull()
+        assertThat(cursorResult.count).isEqualTo(1)
+        assertThat(cursorResult.moveToFirst()).isTrue()
+        val idColumnIndex = cursorResult.getColumnIndexOrThrow("id")
+        val actualId = cursorResult.getLong(idColumnIndex)
+        assertThat(actualId).isEqualTo(generateId2)
+        cursorResult.close()
+    }
+
 }

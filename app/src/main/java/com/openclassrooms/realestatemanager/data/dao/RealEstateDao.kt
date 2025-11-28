@@ -51,12 +51,10 @@ interface RealEstateDao {
 
 
     //CONTENT PROVIDER PART
-
-    @Query("SELECT * FROM realEstates LEFT JOIN photos ON realEstates.id = photos.realEstateId")
+    @Query("SELECT * FROM realEstates")
     fun getAllRealEstatesWithCursor() : Cursor
 
     @Query("SELECT * FROM realEstates " +
-            "LEFT JOIN photos ON realestates.id = photos.realEstateId " +
             "WHERE realEstates.id = :id")
     fun getOneRealEstateWithCursor(id: Long): Cursor
 

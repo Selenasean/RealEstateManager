@@ -11,7 +11,8 @@ object UtilsForInstrumentalTests {
 
     fun fakeRealEstateDb(
         id: Long,
-        surface: Int = 123
+        surface: Int = 123,
+        realEstateAgentId: Long = 1
     ) : RealEstateDb{
         return RealEstateDb(
             id = id,

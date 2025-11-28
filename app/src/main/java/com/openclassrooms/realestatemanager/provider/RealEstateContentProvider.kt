@@ -21,10 +21,7 @@ class RealEstateContentProvider : ContentProvider() {
         context?.let { context ->
             val application = context.applicationContext as AppApplication
 
-            val repository = Repository(
-                application.appDataBase,
-                GeocoderRepository(context)
-            )
+            val repository = application.repository
 
             handlerContentProvider = HandlerContentProvider(repository = repository)
 
