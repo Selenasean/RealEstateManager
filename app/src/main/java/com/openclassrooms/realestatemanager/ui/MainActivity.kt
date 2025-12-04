@@ -2,22 +2,16 @@ package com.openclassrooms.realestatemanager.ui
 
 
 import android.os.Bundle
-import android.util.Log
-import android.view.WindowInsetsController
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-
 import androidx.fragment.app.commit
 import com.openclassrooms.realestatemanager.AppApplication
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding
 import com.openclassrooms.realestatemanager.ui.list_map_details.LeftPanelFragment
-import com.openclassrooms.realestatemanager.ui.list_map_details.ListMapDetailViewModel
-import com.openclassrooms.realestatemanager.utils.Utils
-
-import java.time.Instant
 
 
 class MainActivity : AppCompatActivity() {
@@ -31,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //to deal with edge to edge
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main){ view, windowInsets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { view, windowInsets ->
             //get the insets for system bars (status and navigation)
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
 
@@ -43,18 +37,43 @@ class MainActivity : AppCompatActivity() {
         }
 
         //if its the first time MainActivity is launched, display Sliding Pane Layout
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             replaceFragment()
         }
-        
+
+        //request notification permission
+        requestPermissionLauncher()
+
     }
 
+    /**
+     * Method to make the LeftPanelFragment the first fragment displayed
+     * when the application is running
+     */
     private fun replaceFragment() {
         supportFragmentManager.commit {
             replace(binding.fragmentSlidingPanelayoutContainer.id, LeftPanelFragment.newInstance())
         }
     }
 
+
+    /**
+     * Launcher to request permission for notifications
+     */
+    private fun requestPermissionLauncher() {
+
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (!isGranted) {
+                Toast.makeText(
+                    AppApplication.appContext,
+                    "Notification permission denied, please enable permission.",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
+        }
+
+    }
 
 
 }

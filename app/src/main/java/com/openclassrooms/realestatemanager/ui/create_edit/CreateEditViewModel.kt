@@ -132,7 +132,7 @@ class CreateEditViewModel(
             }
 
         } else {
-
+            //it's an update
             if (realEstateId != null) {
                 val realEstateToUpdate = RealEstateToUpdate(
                     id = this.realEstateId.toLong(),

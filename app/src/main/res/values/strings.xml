@@ -95,5 +95,13 @@
     <string name="play_button">button to play the video</string>
     <string name="video_thumbnail">video\'s thumbnail, before the video is playing</string>
 
+    <string name="real_estate_created">The new real estate has been created successfully !</string>
+    <string name="real_estate_update">The real estate has been updated successfully !</string>
+    <string name="channel_name">channel name</string>
+    <string name="channel_description">channel description</string>
+    <string name="creation_notif">Creation succeed</string>
+    <string name="update_notif">Update succeed</string>
+    <string name="enable_notification_permission">Please enable notifications</string>
+
 
 </resources>

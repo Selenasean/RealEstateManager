@@ -50,7 +50,8 @@ object UtilsForUnitTests {
             realEstateAgentId = 1,
             dateCreated = LocalDateTime.of(LocalDate.of(2025, 8, 28), LocalTime.of(15, 0))
                 .toInstant(ZoneOffset.UTC),
-            dateOfSale = null
+            dateOfSale = null,
+            video = null
         )
     }
 
@@ -111,7 +112,8 @@ object UtilsForUnitTests {
             agentId = 2,
             dateCreated = LocalDateTime.of(LocalDate.of(2025, 8, 28), LocalTime.of(15, 0))
                 .toInstant(ZoneOffset.UTC),
-            dateOfSale =null
+            dateOfSale =null,
+            video = null
         )
     }
 
@@ -133,7 +135,8 @@ object UtilsForUnitTests {
             amenities = emptyList(),
             latitude = 48.862725,
             longitude = 2.287592,
-            dateOfSale = null
+            dateOfSale = null,
+            video = null
         )
 
     }

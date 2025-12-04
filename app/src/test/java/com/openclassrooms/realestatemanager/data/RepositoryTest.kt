@@ -376,7 +376,8 @@ class RepositoryTest {
                 dateOfSale = null,
                 realEstateAgentId = fakeRealEstateToCreate.agentId,
                 longitude = fakePosition.longitude,
-                latitude = fakePosition.latitude
+                latitude = fakePosition.latitude,
+                video = null
             ))
         }
     }

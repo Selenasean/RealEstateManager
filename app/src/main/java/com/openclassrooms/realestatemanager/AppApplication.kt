@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.preference.PreferenceDataStore
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
 import androidx.datastore.preferences.preferencesDataStore
@@ -53,7 +55,10 @@ class AppApplication : Application() {
         filterRepository = FilterRepository(dataStore)
 
 
+
     }
+
+
 
     companion object {
         lateinit var appContext: Context

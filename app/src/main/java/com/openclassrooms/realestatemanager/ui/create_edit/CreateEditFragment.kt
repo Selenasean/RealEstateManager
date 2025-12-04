@@ -3,7 +3,9 @@ package com.openclassrooms.realestatemanager.ui.create_edit
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -33,6 +35,7 @@ import com.openclassrooms.realestatemanager.data.model.Amenity
 import com.openclassrooms.realestatemanager.data.model.BuildingType
 import com.openclassrooms.realestatemanager.data.model.Status
 import com.openclassrooms.realestatemanager.databinding.FragmentCreateBinding
+import com.openclassrooms.realestatemanager.domain.notifications.NotificationHelper
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
 import com.openclassrooms.realestatemanager.ui.list_map_details.PhotosAdapter
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
@@ -64,6 +67,7 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
     private lateinit var typeAdapter: ArrayAdapter<String>
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentCreateBinding.bind(view)
@@ -81,7 +85,7 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         //settings for dropDown menus, viewModel & recyclerView
         dropDownMenusSettings(binding, context)
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect {
                     render(it, binding, context)
                 }
@@ -96,8 +100,7 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
             binding.textInputLytAddress.helperText = null
         }
 
-        //observe events to close creation dialog after real estate's creation succeed
-        //or to notify if there is internet
+        //observe events and do something according to it
         creationEventsResult(binding)
 
         //inputs listeners
@@ -112,7 +115,7 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
                         context.contentResolver.takePersistableUriPermission(uri, flag)
                     }
                     viewModel.addPhotoPicker(uris)
-                    
+
                 }
             }
 
@@ -179,14 +182,43 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         }
     }
 
+    /**
+     * Define the events observe to do something according to it
+     * @param binding, which is the binding of this fragment
+     */
     private fun creationEventsResult(binding: FragmentCreateBinding) {
+        // instantiate the class with notifications logic
+        val notificationHelper = NotificationHelper(requireContext())
+
         observeAsEvents(viewModel.isCreatedFlow) { event ->
             when (event) {
 
                 CreationEvents.isCreated -> {
-                    Toast.makeText(requireContext(), R.string.creation_succeed, Toast.LENGTH_SHORT)
-                        .show()
+                    //check notification permission and send notification for creation
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        when {
+                            ContextCompat.checkSelfPermission(
+                                requireContext(),
+                                android.Manifest.permission.POST_NOTIFICATIONS
+                            ) == PackageManager.PERMISSION_GRANTED -> {
+                                notificationHelper.sendCreationNotification()
+                            }
+
+                            else -> {
+                                //ask user to enable the permission
+                                Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.enable_notification_permission),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    } else {
+                        //no runtime permission needed for older versions
+                        notificationHelper.sendCreationNotification()
+                    }
                     dismiss()
+
                 }
 
                 CreationEvents.isInternetAvailable -> Toast.makeText(
@@ -195,8 +227,29 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
                 ).show()
 
                 CreationEvents.isUpdated -> {
-                    Toast.makeText(requireContext(), R.string.updated_succeed, Toast.LENGTH_SHORT)
-                        .show()
+                    //check notification permission and send notification for update
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        when {
+                            ContextCompat.checkSelfPermission(
+                                requireContext(),
+                                android.Manifest.permission.POST_NOTIFICATIONS
+                            ) == PackageManager.PERMISSION_GRANTED -> {
+                                notificationHelper.sendUpdateNotification()
+                            }
+
+                            else -> {
+                                //ask user to enable the permission
+                                Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.enable_notification_permission),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    } else {
+                        //no runtime permission needed for old versions
+                        notificationHelper.sendUpdateNotification()
+                    }
                     dismiss()
                 }
 
