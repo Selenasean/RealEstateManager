@@ -1,34 +1,39 @@
 package com.openclassrooms.realestatemanager.domain.notifications
 
+import android.Manifest
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
-import android.provider.Settings.Global.getString
+
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat.getSystemService
-import com.openclassrooms.realestatemanager.AppApplication
+import androidx.core.content.ContextCompat
+
 import com.openclassrooms.realestatemanager.R
+import okhttp3.internal.ignoreIoExceptions
 
 class NotificationHelper(private val context: Context) {
 
-    companion object{
+    companion object {
         private const val CHANNEL_ID = "real_estates_channel"
         private const val CHANNEL_NAME = "Real Estate Updates"
-        private const val NOTIFICATION_ID_CREATED =  1
+        private const val NOTIFICATION_ID_CREATED = 1
         private const val NOTIFICATION_ID_UPDATED = 2
     }
 
+    private val notificationManager: NotificationManagerCompat = NotificationManagerCompat.from(context)
 
-    init{
+    init {
         createNotificationChannel()
     }
 
     /**
      * Create notification channel : so your channel can be register with the system
      */
-    private fun createNotificationChannel(){
+    private fun createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is not in the Support Library.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -48,7 +53,7 @@ class NotificationHelper(private val context: Context) {
      * Build the notification to send when real estate is created
      * notify android system to display the notification
      */
-    fun sendCreationNotification(){
+    fun sendCreationNotification() {
         val creationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.logement)
             .setContentTitle(context.getString(R.string.creation_notif))
@@ -56,9 +61,7 @@ class NotificationHelper(private val context: Context) {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true) //to cancel the notification when user clicks on it
 
-        with(NotificationManagerCompat.from(context)){
-            notify(NOTIFICATION_ID_CREATED, creationBuilder.build())
-        }
+        sendNotification(creationBuilder.build(), NOTIFICATION_ID_CREATED)
 
     }
 
@@ -66,7 +69,7 @@ class NotificationHelper(private val context: Context) {
      * Build the notification to send when real estate is updated
      * notify android system to display the notification
      */
-    fun sendUpdateNotification(){
+    fun sendUpdateNotification() {
         val updateBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.logement)
             .setContentTitle(context.getString(R.string.update_notif))
@@ -74,11 +77,22 @@ class NotificationHelper(private val context: Context) {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true) //to cancel the notification when user clicks on it
 
-        with(NotificationManagerCompat.from(context)){
-            notify(NOTIFICATION_ID_UPDATED, updateBuilder.build())
-        }
+        sendNotification(updateBuilder.build(), NOTIFICATION_ID_UPDATED)
     }
 
+    fun sendNotification(notification: Notification, id: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            when (ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED) {
+                true ->   NotificationManagerCompat.from(context).notify(id, notification)
+                else -> {}
+            }
+        }else {
+            notificationManager.notify(id, notification)
+        }
 
 
+    }
 }

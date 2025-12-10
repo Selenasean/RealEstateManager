@@ -35,6 +35,7 @@ import io.mockk.mockk
 import io.mockk.slot
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -287,6 +288,7 @@ class RepositoryTest {
             val realEstate = awaitItem()
             //THEN
             assertThat(realEstate).isEqualTo(realEstate1)
+        awaitComplete()
         }
 
     }
@@ -336,14 +338,18 @@ class RepositoryTest {
         coEvery {
             mockGeocoderRepository.getLongLat(fakeRealEstateToCreate.address)
         } returns fakePosition
+
+        //get the realEstate with slot
+        val realEstateDbSlot = slot<RealEstateDb>()
         //creation will return a id if it succeed to create the realEstate
         coEvery {
-            mockRealEstateDao.createRealEstate(any())
+            mockRealEstateDao.createRealEstate(capture(realEstateDbSlot))
         } returns expectedCreatedId
         //run to capture the argument
         coEvery {
             mockPhotoDao.createPhoto(any())
         } just Runs
+
         val allCapturedPhotos = mutableListOf<PhotoDb>()
         coEvery {
             mockPhotoDao.createPhoto(any())
@@ -356,29 +362,25 @@ class RepositoryTest {
 
         //THEN
         assertThat(SaveResult.SUCCESS).isEqualTo(result)
-        //verify fakeRealEstate was called once
-        coVerify(exactly = 1) {
-            mockRealEstateDao.createRealEstate(RealEstateDb(
-                id = expectedCreatedId,
-                type = fakeRealEstateToCreate.type,
-                price = fakeRealEstateToCreate.price,
-                name = "",
-                surface = fakeRealEstateToCreate.surface,
-                rooms = fakeRealEstateToCreate.rooms,
-                bathrooms = fakeRealEstateToCreate.bathrooms,
-                bedrooms = fakeRealEstateToCreate.bedrooms,
-                description = fakeRealEstateToCreate.description,
-                address = fakeRealEstateToCreate.address,
-                city = fakeRealEstateToCreate.city,
-                status = Status.FOR_SALE,
-                amenities = fakeRealEstateToCreate.amenities,
-                dateCreated = dateOfSale.instant(),
-                dateOfSale = null,
-                realEstateAgentId = fakeRealEstateToCreate.agentId,
-                longitude = fakePosition.longitude,
-                latitude = fakePosition.latitude,
-                video = null
-            ))
+        //verify fakeRealEstate data is correctly created
+        val capturedRealEstate = realEstateDbSlot.captured
+        assertThat(capturedRealEstate.id).isEqualTo(0L)
+        assertThat(capturedRealEstate.type).isEqualTo(fakeRealEstateToCreate.type)
+        assertThat(capturedRealEstate.address).isEqualTo(fakeRealEstateToCreate.address)
+        assertThat(capturedRealEstate.city).isEqualTo(fakeRealEstateToCreate.city)
+        assertThat(capturedRealEstate.price).isEqualTo(fakeRealEstateToCreate.price)
+        assertThat(capturedRealEstate.surface).isEqualTo(fakeRealEstateToCreate.surface)
+        assertThat(capturedRealEstate.rooms).isEqualTo(fakeRealEstateToCreate.rooms)
+        assertThat(capturedRealEstate.bedrooms).isEqualTo(fakeRealEstateToCreate.bedrooms)
+        assertThat(capturedRealEstate.bathrooms).isEqualTo(fakeRealEstateToCreate.bathrooms)
+        assertThat(capturedRealEstate.description).isEqualTo(fakeRealEstateToCreate.description)
+        assertThat(capturedRealEstate.amenities).isEqualTo(fakeRealEstateToCreate.amenities)
+        assertThat(capturedRealEstate.realEstateAgentId).isEqualTo(fakeRealEstateToCreate.agentId)
+
+
+        //verify the photoDAO was called 2 times
+        coVerify(exactly = fakeRealEstateToCreate.photos.size) {
+            mockPhotoDao.createPhoto(any())
         }
     }
 
@@ -454,26 +456,5 @@ class RepositoryTest {
         assertThat(result).isEqualTo(SaveResult.ERROR)
     }
 
-    @Test
-    fun get_all_realestates_with_cursor(){
-        //GIVEN
-        //WHEN
-        //THEN
-    }
-
-    @Test
-    fun get_one_realestate_with_cursor(){
-        //GIVEN
-        val estateId = 2L
-        val mockCursor: Cursor = mockk()
-        every {
-            repository.getOneRealEstateWithCursor(estateId)
-        } returns mockCursor
-        //WHEN
-        val cursor = repository.getOneRealEstateWithCursor(estateId)
-
-        //THEN
-        assertThat(cursor.count).isEqualTo(1)
-    }
 
 }

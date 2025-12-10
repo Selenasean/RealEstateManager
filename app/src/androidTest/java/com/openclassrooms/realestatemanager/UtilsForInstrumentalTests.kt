@@ -33,6 +33,7 @@ object UtilsForInstrumentalTests {
             realEstateAgentId = 1,
             longitude = 34.000,
             latitude =34.000,
+            video = null
         )
     }
 

@@ -8,7 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
@@ -96,7 +96,6 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
         //create a realEstate
         binding.saveBtn.setOnClickListener {
             viewModel.saveRealEstate()
-            Log.i("CreateFragment", "onViewCreated:  create RealEstate")
             binding.textInputLytAddress.helperText = null
         }
 
@@ -178,7 +177,7 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
                 viewModel.updateStatus(Status.SOLD)
                 binding.datePickerLyt.visibility = View.VISIBLE
             }
-            Log.i("chipSold", "chip sold : $isChecked")
+
         }
     }
 
@@ -187,39 +186,14 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
      * @param binding, which is the binding of this fragment
      */
     private fun creationEventsResult(binding: FragmentCreateBinding) {
-        // instantiate the class with notifications logic
-        val notificationHelper = NotificationHelper(requireContext())
 
         observeAsEvents(viewModel.isCreatedFlow) { event ->
             when (event) {
 
                 CreationEvents.isCreated -> {
-                    //check notification permission and send notification for creation
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        when {
-                            ContextCompat.checkSelfPermission(
-                                requireContext(),
-                                android.Manifest.permission.POST_NOTIFICATIONS
-                            ) == PackageManager.PERMISSION_GRANTED -> {
-                                notificationHelper.sendCreationNotification()
-                            }
-
-                            else -> {
-                                //ask user to enable the permission
-                                Toast.makeText(
-                                    requireContext(),
-                                    getString(R.string.enable_notification_permission),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-                    } else {
-                        //no runtime permission needed for older versions
-                        notificationHelper.sendCreationNotification()
-                    }
                     dismiss()
-
                 }
+
 
                 CreationEvents.isInternetAvailable -> Toast.makeText(
                     requireContext(), R.string.no_internet,
@@ -227,29 +201,6 @@ class CreateEditFragment : BottomSheetDialogFragment(R.layout.fragment_create) {
                 ).show()
 
                 CreationEvents.isUpdated -> {
-                    //check notification permission and send notification for update
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        when {
-                            ContextCompat.checkSelfPermission(
-                                requireContext(),
-                                android.Manifest.permission.POST_NOTIFICATIONS
-                            ) == PackageManager.PERMISSION_GRANTED -> {
-                                notificationHelper.sendUpdateNotification()
-                            }
-
-                            else -> {
-                                //ask user to enable the permission
-                                Toast.makeText(
-                                    requireContext(),
-                                    getString(R.string.enable_notification_permission),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-                    } else {
-                        //no runtime permission needed for old versions
-                        notificationHelper.sendUpdateNotification()
-                    }
                     dismiss()
                 }
 

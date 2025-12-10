@@ -94,7 +94,6 @@ class RealEstateDaoTest {
 
     @Test
     fun delete_should_remove_from_db() = runTest {
-        //GIVEN
         //WHEN
         val realEstateToDelete = UtilsForInstrumentalTests.fakeRealEstateDb(id = generateId1)
         realEstateDao.deleteRealEstate(realEstateToDelete)

@@ -35,7 +35,6 @@ object Utils {
 
     }
 
-    //TODO : préférence user pour devise
     fun priceFormatter(
         price: Float,
         currencyCode: CurrencyCode,

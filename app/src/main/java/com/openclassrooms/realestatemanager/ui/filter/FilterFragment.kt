@@ -2,7 +2,7 @@ package com.openclassrooms.realestatemanager.ui.filter
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -114,7 +114,6 @@ class FilterFragment: BottomSheetDialogFragment(R.layout.fragment_filter) {
 
 
     private fun renderStatusChips(binding: FragmentFilterBinding, statusSelected: Status?) {
-        Log.i(TAG, " renderStatusChips: $statusSelected")
         if(statusSelected != null){
             binding.chipSold.isChecked = statusSelected == Status.SOLD
             binding.chipForSale.isChecked = statusSelected == Status.FOR_SALE

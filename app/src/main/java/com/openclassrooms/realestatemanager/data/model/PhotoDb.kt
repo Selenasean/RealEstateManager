@@ -18,5 +18,3 @@ data class PhotoDb(
     val urlPhoto : String,
     val label: String
 )
-
-//TODO : delete

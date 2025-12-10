@@ -122,7 +122,7 @@ class ListMapDetailViewModel(
      * Stock id value for opening the right DetailFragment
      */
     fun onRealEstateClick(id: String) {
-        println("click realestate =$id")
+
         _detailPaneIdStateFlow.value = id
         _eventsFlow.trySend(ListMapDetailEvent.OpenDetails)
 

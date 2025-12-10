@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.ui
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -9,6 +8,7 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.openclassrooms.realestatemanager.AppApplication
 import com.openclassrooms.realestatemanager.data.FilterRepository
+import com.openclassrooms.realestatemanager.domain.notifications.NotificationHelper
 import com.openclassrooms.realestatemanager.ui.create_edit.CreateEditViewModel
 import com.openclassrooms.realestatemanager.ui.filter.FilterViewModel
 import com.openclassrooms.realestatemanager.ui.list_map_details.ListMapDetailViewModel
@@ -45,6 +45,7 @@ class ViewModelFactory : ViewModelProvider.Factory {
         val application: AppApplication = extras[APPLICATION_KEY] as AppApplication
         val savedStateHandle: SavedStateHandle = extras.createSavedStateHandle()
         val connectivityChecker: ConnectivityChecker = application.connectivityChecker
+        val notificationHelper: NotificationHelper = application.notificationHelper
 
 
         if (modelClass.isAssignableFrom(ListMapDetailViewModel::class.java)) {
@@ -57,12 +58,12 @@ class ViewModelFactory : ViewModelProvider.Factory {
         }
         if (modelClass.isAssignableFrom(CreateEditViewModel::class.java)) {
             val realEstateId: String? = savedStateHandle["REAL_ESTATE_ID"]
-            Log.i("VMFact", "realEstateid: $realEstateId")
             return CreateEditViewModel(
                 realEstateId,
                 application.repository,
                 savedStateHandle,
-                connectivityChecker
+                connectivityChecker,
+                notificationHelper
             ) as T
         }
         if (modelClass.isAssignableFrom(FilterViewModel::class.java)) {

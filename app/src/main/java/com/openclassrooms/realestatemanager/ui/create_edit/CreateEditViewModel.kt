@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.create_edit
 
 import android.net.Uri
-import android.util.Log
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -17,6 +16,7 @@ import com.openclassrooms.realestatemanager.domain.PhotoChanges
 import com.openclassrooms.realestatemanager.domain.RealEstateAgent
 import com.openclassrooms.realestatemanager.domain.RealEstateToCreate
 import com.openclassrooms.realestatemanager.domain.RealEstateToUpdate
+import com.openclassrooms.realestatemanager.domain.notifications.NotificationHelper
 import com.openclassrooms.realestatemanager.utils.PhotoSelectedViewState
 import com.openclassrooms.realestatemanager.utils.events.CreationEvents
 import com.openclassrooms.realestatemanager.utils.internetConnectivity.ConnectivityChecker
@@ -33,7 +33,8 @@ class CreateEditViewModel(
     private val realEstateId: String?,
     private val repository: Repository,
     savedStateHandle: SavedStateHandle,
-    private val connectivityChecker: ConnectivityChecker
+    private val connectivityChecker: ConnectivityChecker,
+    private val notificationHelper: NotificationHelper
 ) : ViewModel() {
 
     companion object {
@@ -126,7 +127,11 @@ class CreateEditViewModel(
             viewModelScope.launch {
                 val result = repository.createRealEstate(realEstateToCreate)
                 when (result) {
-                    SaveResult.SUCCESS -> _isCreatedFlow.trySend(CreationEvents.isCreated)
+                    SaveResult.SUCCESS -> {
+                        _isCreatedFlow.trySend(CreationEvents.isCreated)
+                        notificationHelper.sendCreationNotification()
+                    }
+
                     SaveResult.ERROR -> _isCreatedFlow.trySend(CreationEvents.failure)
                 }
             }
@@ -157,7 +162,11 @@ class CreateEditViewModel(
                     val result =
                         repository.updateRealEstate(realEstateToUpdate)
                     when (result) {
-                        SaveResult.SUCCESS -> _isCreatedFlow.trySend(CreationEvents.isUpdated)
+                        SaveResult.SUCCESS -> {
+                            _isCreatedFlow.trySend(CreationEvents.isUpdated)
+                            notificationHelper.sendUpdateNotification()
+                        }
+
                         SaveResult.ERROR -> _isCreatedFlow.trySend(CreationEvents.failure)
                     }
 
@@ -177,7 +186,6 @@ class CreateEditViewModel(
     fun updateType(buildingType: BuildingType) {
         val currentState = _savedRealEstateMutableStateFlow.value
         _savedRealEstateMutableStateFlow.value = currentState.copy(type = buildingType)
-        Log.i("createVM", "typeBuilding : ${_savedRealEstateMutableStateFlow.value}")
     }
 
     /**
@@ -186,7 +194,6 @@ class CreateEditViewModel(
     fun updateAddress(address: String) {
         val currentState = _savedRealEstateMutableStateFlow.value
         _savedRealEstateMutableStateFlow.value = currentState.copy(address = address)
-        Log.i("createVM", "address :${_savedRealEstateMutableStateFlow.value}")
     }
 
     /**
@@ -195,7 +202,6 @@ class CreateEditViewModel(
     fun updateCity(city: String) {
         val currentState = _savedRealEstateMutableStateFlow.value
         _savedRealEstateMutableStateFlow.value = currentState.copy(city = city)
-        Log.i("createVM", "city :${_savedRealEstateMutableStateFlow.value}")
     }
 
     /**
@@ -204,7 +210,6 @@ class CreateEditViewModel(
     fun updatePrice(price: String) {
         val currentState = _savedRealEstateMutableStateFlow.value
         _savedRealEstateMutableStateFlow.value = currentState.copy(price = price)
-        Log.i("createVM", "price :${_savedRealEstateMutableStateFlow.value}")
     }
 
     /**
@@ -213,7 +218,6 @@ class CreateEditViewModel(
     fun updateSurface(surface: String) {
         val currentState = _savedRealEstateMutableStateFlow.value
         _savedRealEstateMutableStateFlow.value = currentState.copy(surface = surface)
-        Log.i("createVM", "surface :${_savedRealEstateMutableStateFlow.value}")
     }
 
     /**
@@ -222,7 +226,6 @@ class CreateEditViewModel(
     fun updateRooms(rooms: String) {
         val currentState = _savedRealEstateMutableStateFlow.value
         _savedRealEstateMutableStateFlow.value = currentState.copy(rooms = rooms)
-        Log.i("createVM", "rooms : ${_savedRealEstateMutableStateFlow.value}")
     }
 
     /**
@@ -231,7 +234,6 @@ class CreateEditViewModel(
     fun updateBedrooms(bedrooms: String) {
         val currentState = _savedRealEstateMutableStateFlow.value
         _savedRealEstateMutableStateFlow.value = currentState.copy(bedrooms = bedrooms)
-        Log.i("createVM", "bedrooms :${_savedRealEstateMutableStateFlow.value}")
     }
 
     /**
@@ -240,7 +242,6 @@ class CreateEditViewModel(
     fun updateBathrooms(bathrooms: String) {
         val currentState = _savedRealEstateMutableStateFlow.value
         _savedRealEstateMutableStateFlow.value = currentState.copy(bathrooms = bathrooms)
-        Log.i("createVM", "bathrooms :${_savedRealEstateMutableStateFlow.value}")
     }
 
     /**
@@ -250,7 +251,6 @@ class CreateEditViewModel(
         val currentState = _savedRealEstateMutableStateFlow.value
         _savedRealEstateMutableStateFlow.value =
             currentState.copy(description = description)
-        Log.i("createVM", "description :${_savedRealEstateMutableStateFlow.value}")
     }
 
     /**
@@ -267,7 +267,6 @@ class CreateEditViewModel(
         //update the state
         _savedRealEstateMutableStateFlow.value =
             currentState.copy(amenities = listAmenities)
-        Log.i("createVM", "amenities :${_savedRealEstateMutableStateFlow.value}")
     }
 
 
@@ -277,7 +276,6 @@ class CreateEditViewModel(
     fun updateStatus(status: Status) {
         val currentState = _savedRealEstateMutableStateFlow.value
         _savedRealEstateMutableStateFlow.value = currentState.copy(status = status)
-        Log.i("createVM", "status :${_savedRealEstateMutableStateFlow.value}")
     }
 
     /**
@@ -286,7 +284,6 @@ class CreateEditViewModel(
     fun updateAgentName(agent: RealEstateAgent) {
         val currentState = _savedRealEstateMutableStateFlow.value
         _savedRealEstateMutableStateFlow.value = currentState.copy(agent = agent)
-        Log.i("createVM", "agent :${_savedRealEstateMutableStateFlow.value}")
     }
 
     /**
@@ -322,7 +319,6 @@ class CreateEditViewModel(
 
         _savedRealEstateMutableStateFlow.value =
             currentState.copy(photos = selectedPhotos + currentState.photos)
-        Log.i("createVM", "photos :${_savedRealEstateMutableStateFlow.value}")
     }
 
     /**
@@ -342,11 +338,7 @@ class CreateEditViewModel(
         _photosChangedFlow.update { state ->
             state.copy(deleted = state.deleted + id)
         }
-        Log.i("createVM", "${photos}")
-        Log.i(
-            "createVM",
-            "photos without deleted one :${_savedRealEstateMutableStateFlow.value}"
-        )
+
     }
 
     /**
@@ -356,7 +348,7 @@ class CreateEditViewModel(
         val currentState = _savedRealEstateMutableStateFlow.value
         val photosState: List<PhotoSelectedViewState> = currentState.photos.map { photo ->
             if (photo.id == id) {
-                Log.i("VM", label)
+
                 photo.copy(label = label)
             } else {
                 photo
@@ -372,7 +364,6 @@ class CreateEditViewModel(
 
         _savedRealEstateMutableStateFlow.value =
             currentState.copy(photos = photosState)
-        Log.i("createVM", "labelUpdated :${_savedRealEstateMutableStateFlow.value}")
     }
 
     /**
@@ -392,10 +383,8 @@ class CreateEditViewModel(
         _photosChangedFlow.update { state ->
             state.copy(created = state.created + photoTaken.toPhoto())
         }
-        Log.i("VM", "$photoTaken")
 
         _savedRealEstateMutableStateFlow.value = currentState.copy(photos = photos)
-        Log.i("createVM", "photo taken :${_savedRealEstateMutableStateFlow.value}")
     }
 
     /**
@@ -414,6 +403,7 @@ class CreateEditViewModel(
             label = this.label
         )
     }
+
 }
 
 

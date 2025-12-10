@@ -1,8 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.filter
 
 
-import android.util.Log
-
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 
@@ -73,8 +71,7 @@ class FilterViewModel(
     fun updateCity(city: String) {
         val currentState = _state.value
         _state.value = currentState.copy(city = city)
-        Log.i("filter VM", "updateCity: ${_state.value}")
-    }
+       }
 
     fun updatePriceMin(priceMin: String) {
         val currentState = _state.value
@@ -82,8 +79,7 @@ class FilterViewModel(
             currentState.copy(priceMin = null)
         else _state.value =
             currentState.copy(priceMin = priceMin.toInt())
-        Log.i("filter VM", "updatePriceMin: ${_state.value}")
-    }
+       }
 
     fun updatePriceMax(priceMax: String) {
         val currentState = _state.value
@@ -91,8 +87,7 @@ class FilterViewModel(
             currentState.copy(priceMax = null)
         else _state.value =
             currentState.copy(priceMax = priceMax.toInt())
-        Log.i("filter VM", "updatePriceMax: ${_state.value}")
-    }
+      }
 
     fun updateSurfaceMin(surfaceMin: String) {
         val currentState = _state.value
@@ -100,8 +95,7 @@ class FilterViewModel(
             currentState.copy(surfaceMin = null)
         else _state.value =
             currentState.copy(surfaceMin = surfaceMin.toInt())
-        Log.i("filter VM", "updateSurfaceMin: ${_state.value}")
-    }
+        }
 
     fun updateSurfaceMax(surfaceMax: String) {
         val currentState = _state.value
@@ -109,8 +103,7 @@ class FilterViewModel(
             currentState.copy(surfaceMax = null)
         else _state.value =
             currentState.copy(surfaceMax = surfaceMax.toInt())
-        Log.i("filter VM", "updateSurfaceMax: ${_state.value}")
-    }
+        }
 
     fun updateTypeSelected(type: BuildingType, isChosen: Boolean) {
         val currentState = _state.value
@@ -127,8 +120,7 @@ class FilterViewModel(
     fun updateStatus(status: Status?) {
         val currentState = _state.value
         _state.value = currentState.copy(status = status)
-        Log.i("filter VM", "status: ${_state.value}")
-    }
+        }
 
     //MAPPING FUNCTION
     fun FilterState.toFilters() : Filters{

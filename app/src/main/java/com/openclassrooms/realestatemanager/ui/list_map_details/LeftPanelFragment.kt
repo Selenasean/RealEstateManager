@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.list_map_details
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -90,7 +89,6 @@ class LeftPanelFragment : Fragment() {
                         filterBottomSheet.show(it, FilterFragment.TAG
                         )
                     }
-                    Log.i("listEstateFragment", "filter")
                     true
                 }
 

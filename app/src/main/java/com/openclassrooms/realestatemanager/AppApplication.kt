@@ -17,6 +17,7 @@ import com.openclassrooms.realestatemanager.data.FilterRepository
 import com.openclassrooms.realestatemanager.data.GeocoderRepository
 import com.openclassrooms.realestatemanager.data.Repository
 import com.openclassrooms.realestatemanager.data.location.LocationRepository
+import com.openclassrooms.realestatemanager.domain.notifications.NotificationHelper
 import com.openclassrooms.realestatemanager.utils.internetConnectivity.ConnectivityChecker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -33,6 +34,7 @@ class AppApplication : Application() {
     lateinit var geocoderRepository: GeocoderRepository
     lateinit var connectivityChecker: ConnectivityChecker
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    lateinit var notificationHelper : NotificationHelper
     val dataStore by preferencesDataStore(name = "datastore")
 
 
@@ -54,7 +56,8 @@ class AppApplication : Application() {
         locationRepository = LocationRepository(fusedLocationProviderClient)
         filterRepository = FilterRepository(dataStore)
 
-
+        // instantiate the class with notifications logic
+        notificationHelper = NotificationHelper(appContext)
 
     }
 
