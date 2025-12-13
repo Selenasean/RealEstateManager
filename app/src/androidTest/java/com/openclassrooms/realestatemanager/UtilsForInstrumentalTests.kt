@@ -30,7 +30,7 @@ object UtilsForInstrumentalTests {
             amenities = listOf(Amenity.SCHOOL),
             dateCreated = Clock.systemUTC().instant(),
             dateOfSale = null,
-            realEstateAgentId = 1,
+            realEstateAgentId = realEstateAgentId,
             longitude = 34.000,
             latitude =34.000,
             video = null

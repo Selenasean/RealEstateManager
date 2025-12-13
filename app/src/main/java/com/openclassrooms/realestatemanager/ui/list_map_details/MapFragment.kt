@@ -85,7 +85,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                 0
             )
         }else{
-            map.isMyLocationEnabled = true;
+            map.isMyLocationEnabled = true
             zoomOnMap(map)
         }
 

@@ -20,8 +20,6 @@ import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
 import com.openclassrooms.realestatemanager.ui.ViewModelFactory
 import kotlinx.coroutines.launch
 
-// the fragment initialization parameters
-private const val ARG_PARAM1 = "param1"
 
 class ListFragment : Fragment(){
     

@@ -7,13 +7,13 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 
 import com.openclassrooms.realestatemanager.R
-import okhttp3.internal.ignoreIoExceptions
 
 class NotificationHelper(private val context: Context) {
 
@@ -70,6 +70,7 @@ class NotificationHelper(private val context: Context) {
      * notify android system to display the notification
      */
     fun sendUpdateNotification() {
+        Log.i("notification", "sendUpdateNotification: toggle method ")
         val updateBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.logement)
             .setContentTitle(context.getString(R.string.update_notif))
@@ -80,16 +81,15 @@ class NotificationHelper(private val context: Context) {
         sendNotification(updateBuilder.build(), NOTIFICATION_ID_UPDATED)
     }
 
-    fun sendNotification(notification: Notification, id: Int) {
+    private fun sendNotification(notification: Notification, id: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            when (ContextCompat.checkSelfPermission(
+            if (ContextCompat.checkSelfPermission(
                 context,
                 Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED) {
-                true ->   NotificationManagerCompat.from(context).notify(id, notification)
-                else -> {}
+                  notificationManager.notify(id, notification)
             }
-        }else {
+        } else {
             notificationManager.notify(id, notification)
         }
 

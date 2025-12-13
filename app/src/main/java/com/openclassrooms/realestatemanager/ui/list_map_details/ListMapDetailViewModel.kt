@@ -237,7 +237,6 @@ class ListMapDetailViewModel(
     /**
      * To check if location exist and send an Event to get the location in UI
      */
-    //TODO: this is not working
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     fun onLocationPermission() {
         viewModelScope.launch {

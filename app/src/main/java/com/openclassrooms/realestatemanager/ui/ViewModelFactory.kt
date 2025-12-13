@@ -62,7 +62,6 @@ class ViewModelFactory : ViewModelProvider.Factory {
                 realEstateId,
                 application.repository,
                 savedStateHandle,
-                connectivityChecker,
                 notificationHelper
             ) as T
         }

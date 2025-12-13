@@ -61,7 +61,6 @@ class MainActivity : AppCompatActivity() {
      * Launcher to request permission for notifications
      */
     private fun requestPermissionLauncher() {
-
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
             if (!isGranted) {
                 Toast.makeText(

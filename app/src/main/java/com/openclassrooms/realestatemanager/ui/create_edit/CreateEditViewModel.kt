@@ -33,7 +33,6 @@ class CreateEditViewModel(
     private val realEstateId: String?,
     private val repository: Repository,
     savedStateHandle: SavedStateHandle,
-    private val connectivityChecker: ConnectivityChecker,
     private val notificationHelper: NotificationHelper
 ) : ViewModel() {
 
